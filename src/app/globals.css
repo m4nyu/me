@@ -2,34 +2,34 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant light (&:is(.light *));
 
 :root {
-  
-  --background: oklch(1 0 0); 
-  --foreground: oklch(0 0 0); 
-  --card: oklch(0.97 0 0); 
-  --card-foreground: oklch(0 0 0); 
-  --popover: oklch(1 0 0); 
-  --popover-foreground: oklch(0 0 0); 
-  --primary: oklch(0 0 0); 
-  --primary-foreground: oklch(1 0 0); 
-  --secondary: oklch(0.97 0 0); 
-  --secondary-foreground: oklch(0 0 0); 
-  --muted: oklch(0.82 0 0); 
-  --muted-foreground: oklch(0 0 0); 
-  --accent: oklch(0.82 0 0); 
-  --accent-foreground: oklch(0 0 0); 
-  --destructive: oklch(0.55 0.22 25); 
-  --destructive-foreground: oklch(1 0 0); 
-  --border: oklch(0.82 0 0); 
-  --input: oklch(1 0 0); 
-  --ring: oklch(0 0 0); 
-  --chart-1: oklch(0 0 0); 
-  --chart-2: oklch(0.82 0 0); 
-  --chart-3: oklch(0.97 0 0); 
-  --chart-4: oklch(1 0 0); 
-  --chart-5: oklch(0 0 0); 
-  --radius: 0.25rem; 
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+  --card: oklch(0.97 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.82 0 0);
+  --muted-foreground: oklch(0 0 0);
+  --accent: oklch(0.82 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.82 0 0);
+  --input: oklch(1 0 0);
+  --ring: oklch(0 0 0);
+  --chart-1: oklch(0 0 0);
+  --chart-2: oklch(0.82 0 0);
+  --chart-3: oklch(0.97 0 0);
+  --chart-4: oklch(1 0 0);
+  --chart-5: oklch(0 0 0);
+  --radius: 0.25rem;
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0 0 0);
   --sidebar-primary: oklch(0 0 0);
@@ -41,16 +41,15 @@
 }
 
 .dark {
-  
   --background: oklch(0 0 0);
   --foreground: oklch(1 0 0);
   --card: oklch(0.03 0 0);
   --card-foreground: oklch(1 0 0);
   --popover: oklch(0 0 0);
   --popover-foreground: oklch(1 0 0);
-  
-  --primary: #ffffff; 
-  --primary-foreground: #000000; 
+
+  --primary: #ffffff;
+  --primary-foreground: #000000;
   --secondary: oklch(0.03 0 0);
   --secondary-foreground: oklch(1 0 0);
   --muted: oklch(0.18 0 0);
@@ -75,6 +74,42 @@
   --sidebar-accent-foreground: oklch(1 0 0);
   --sidebar-border: oklch(0.18 0 0);
   --sidebar-ring: oklch(1 0 0);
+}
+
+.light {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+  --card: oklch(0.97 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.82 0 0);
+  --muted-foreground: oklch(0.4 0 0);
+  --accent: oklch(0.82 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0 0 0);
+  --input: oklch(1 0 0);
+  --ring: oklch(0 0 0);
+  --chart-1: oklch(0 0 0);
+  --chart-2: oklch(0.82 0 0);
+  --chart-3: oklch(0.97 0 0);
+  --chart-4: oklch(1 0 0);
+  --chart-5: oklch(0 0 0);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0 0 0);
+  --sidebar-primary: oklch(0 0 0);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.82 0 0);
+  --sidebar-accent-foreground: oklch(0 0 0);
+  --sidebar-border: oklch(0 0 0);
+  --sidebar-ring: oklch(0 0 0);
 }
 
 @theme inline {
@@ -121,7 +156,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    
+
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -129,11 +164,10 @@
   }
   body {
     @apply bg-background text-foreground;
-    
+
     font-weight: 300;
   }
 
-  
   html {
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
@@ -144,7 +178,6 @@
     min-height: 100vh;
   }
 
-  
   .force-white-button {
     background-color: #ffffff !important;
     color: #000000 !important;
@@ -156,13 +189,12 @@
     color: #000000 !important;
   }
 
-  
   .scrollbar-hide {
-    -ms-overflow-style: none; 
-    scrollbar-width: none; 
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .scrollbar-hide::-webkit-scrollbar {
-    display: none; 
+    display: none;
   }
 }

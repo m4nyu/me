@@ -1,6 +1,6 @@
 "use client"
-import { useState, useRef, useCallback } from "react"
 import type React from "react"
+import { useCallback, useRef, useState } from "react"
 
 export const Mask = ({
   children,
@@ -37,20 +37,21 @@ export const Mask = ({
   return (
     <div
       ref={containerRef}
-      className={`relative h-screen w-full bg-black overflow-visible ${className || ""}`}
+      role="img"
+      className={`relative h-screen w-full bg-background overflow-visible ${className || ""}`}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {/* Default content - white text on black background */}
-      <div className="absolute inset-0 flex items-center justify-center text-white z-10">{revealText}</div>
+      <div className="absolute inset-0 flex items-center justify-center text-foreground z-10">{revealText}</div>
 
       {/* Masked content - black text on white background with higher z-index */}
       <div
-        className="absolute inset-0 flex items-center justify-center bg-white text-black transition-all duration-300 ease-out z-20 overflow-visible"
+        className="absolute inset-0 flex items-center justify-center bg-foreground text-background transition-all duration-300 ease-out z-20 overflow-visible"
         style={{
           clipPath: isHovered
-            ? `polygon(${mousePosition.x - revealSize/2}px ${mousePosition.y - revealSize/2}px, ${mousePosition.x + revealSize/2}px ${mousePosition.y - revealSize/2}px, ${mousePosition.x + revealSize/2}px ${mousePosition.y + revealSize/2}px, ${mousePosition.x - revealSize/2}px ${mousePosition.y + revealSize/2}px)`
+            ? `polygon(${mousePosition.x - revealSize / 2}px ${mousePosition.y - revealSize / 2}px, ${mousePosition.x + revealSize / 2}px ${mousePosition.y - revealSize / 2}px, ${mousePosition.x + revealSize / 2}px ${mousePosition.y + revealSize / 2}px, ${mousePosition.x - revealSize / 2}px ${mousePosition.y + revealSize / 2}px)`
             : `polygon(${mousePosition.x}px ${mousePosition.y}px, ${mousePosition.x}px ${mousePosition.y}px, ${mousePosition.x}px ${mousePosition.y}px, ${mousePosition.x}px ${mousePosition.y}px)`,
         }}
       >

@@ -4,23 +4,31 @@ import { Logo } from "@/components/logo"
 import { Picker } from "@/components/picker"
 
 export function Footer() {
-
   return (
-    <div className="h-screen bg-black text-white relative overflow-hidden">
+    <div className="h-screen bg-background text-foreground relative overflow-hidden">
       {/* Legal links and settings positioned directly over the logo and text */}
       <div className="absolute bottom-0 left-0 right-0 w-full px-8 sm:px-12 md:px-16 lg:px-20 z-20">
         <div className="max-w-7xl mx-auto relative">
           {/* Legal links positioned all the way to the left */}
           <div className="absolute -top-16 sm:-top-12 left-0 flex flex-row gap-3 sm:gap-8 md:gap-16 lg:gap-24">
-            <a href="#" className="text-gray-400 hover:text-white text-xs sm:text-sm font-light cursor-pointer transition-colors">
-            Imprint
-          </a>
-            <a href="#" className="text-gray-400 hover:text-white text-xs sm:text-sm font-light cursor-pointer transition-colors">
-            GDPR
-          </a>
-            <a href="#" className="text-gray-400 hover:text-white text-xs sm:text-sm font-light cursor-pointer transition-colors">
+            <button
+              type="button"
+              className="text-muted-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
+            >
+              Imprint
+            </button>
+            <button
+              type="button"
+              className="text-muted-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
+            >
+              GDPR
+            </button>
+            <button
+              type="button"
+              className="text-muted-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
+            >
               Terms of Service
-            </a>
+            </button>
           </div>
 
           {/* Theme, Language switcher and mode toggle positioned all the way to the right */}
@@ -39,8 +47,8 @@ export function Footer() {
           <div className="flex items-end justify-center space-x-1 md:space-x-2 lg:space-x-3 pb-0">
             {/* Logo with matrix animation */}
             <Logo size="medium" autoStart={false} />
-          
-            <span className="text-white font-thin text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[12rem] leading-none">
+
+            <span className="text-foreground font-thin text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[12rem] leading-none">
               4nuel
             </span>
           </div>

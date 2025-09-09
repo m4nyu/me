@@ -1,12 +1,12 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
-import { Header } from "@/components/header"
+import { useEffect, useRef, useState } from "react"
 import { Footer } from "@/components/footer"
-import { Wrap } from "@/components/wrap"
+import { Header } from "@/components/header"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Mask } from "@/components/ui/animations/mask"
 import { Card, CardHeader } from "@/components/ui/card"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Wrap } from "@/components/wrap"
 
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState(0)
@@ -85,7 +85,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white dark">
+    <div className="min-h-screen bg-background text-foreground">
       <Header activeSection={activeSection} />
 
       <div ref={scrollContainerRef} className="h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide">
@@ -96,27 +96,22 @@ export default function HomePage() {
                 <Mask
                   revealText={
                     <div className="max-w-4xl mx-auto text-center pt-32 px-4">
-                      <h1 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8 text-balance text-white">
+                      <h1 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8 text-balance text-foreground">
                         Professional Cloud Browser Solutions
                       </h1>
                       <p className="text-lg sm:text-xl text-gray-300 mb-12 max-w-2xl mx-auto text-pretty font-light">
-                        We provide cutting-edge cloud browser technology for businesses and developers. Scale your operations with
-                        our reliable, secure, and high-performance browser infrastructure.
+                        We provide cutting-edge cloud browser technology for businesses and developers. Scale your
+                        operations with our reliable, secure, and high-performance browser infrastructure.
                       </p>
                       <div className="flex justify-center">
                         <button
-                          className="cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors"
-                          style={{
-                            backgroundColor: "#ffffff",
-                            color: "#000000",
-                            border: "none",
-                            outline: "none",
-                          }}
+                          type="button"
+                          className="bg-foreground text-background border-0 outline-none cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors"
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#f3f4f6"
+                            e.currentTarget.classList.add("opacity-80")
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#ffffff"
+                            e.currentTarget.classList.remove("opacity-80")
                           }}
                         >
                           Get in Touch
@@ -125,28 +120,26 @@ export default function HomePage() {
                     </div>
                   }
                 >
-                  <div className="max-w-4xl mx-auto text-center pt-32 px-4" style={{ color: "#000000" }}>
-                    <h1 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8 text-balance" style={{ color: "#000000" }}>
+                  <div className="max-w-4xl mx-auto text-center pt-32 px-4 text-background">
+                    <h1 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8 text-balance text-background">
                       Advanced Browser Infrastructure
                     </h1>
-                    <p className="text-lg sm:text-xl mb-12 max-w-2xl mx-auto text-pretty font-light" style={{ color: "#333333" }}>
-                      Experience the future of cloud computing with our revolutionary browser technology that adapts to your
-                      needs.
+                    <p
+                      className="text-lg sm:text-xl mb-12 max-w-2xl mx-auto text-pretty font-light"
+                      className="text-muted-foreground"
+                    >
+                      Experience the future of cloud computing with our revolutionary browser technology that adapts to
+                      your needs.
                     </p>
                     <div className="flex justify-center">
                       <button
-                        className="cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors"
-                        style={{
-                          backgroundColor: "#000000",
-                          color: "#ffffff",
-                          border: "none",
-                          outline: "none",
-                        }}
+                        type="button"
+                        className="bg-background text-foreground border-0 outline-none cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors"
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "#1a1a1a"
+                          e.currentTarget.classList.add("opacity-80")
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "#000000"
+                          e.currentTarget.classList.remove("opacity-80")
                         }}
                       >
                         Get in Touch
@@ -160,7 +153,7 @@ export default function HomePage() {
 
           <div id="pricing" className="snap-section snap-start">
             <Wrap hasNav>
-              <section className="h-full bg-black text-white flex items-center justify-center px-6">
+              <section className="h-full bg-background text-foreground flex items-center justify-center px-6">
                 <div className="max-w-6xl w-full">
                   <div className="text-center mb-12">
                     <h2 className="text-5xl font-light mb-6">Pricing</h2>
@@ -178,13 +171,13 @@ export default function HomePage() {
                         features: ["Pay as you go", "Instant setup", "Basic support", "No commitments"],
                       },
                       {
-                        name: "Daily", 
+                        name: "Daily",
                         price: "$800",
                         period: "/day",
                         description: "Ideal for ongoing projects",
                         features: [
                           "Full day access",
-                          "Priority support", 
+                          "Priority support",
                           "Advanced features",
                           "24/7 availability",
                           "Custom configurations",
@@ -195,7 +188,7 @@ export default function HomePage() {
                         name: "Startups",
                         price: "Co-founder",
                         period: "",
-                        description: "Equity participation and ownership stake", 
+                        description: "Equity participation and ownership stake",
                         features: [
                           "Equity-based partnership",
                           "Active participation",
@@ -207,28 +200,31 @@ export default function HomePage() {
                     ].map((plan, index) => (
                       <Card
                         key={index}
-                        className={`relative bg-black border-2 aspect-square flex flex-col justify-center rounded-none ${
-                          plan.popular ? "border-white shadow-lg shadow-white/10" : "border-gray-600"
+                        className={`relative bg-background border-2 aspect-square flex flex-col justify-center rounded-none ${
+                          plan.popular ? "border-foreground shadow-lg" : "border-muted"
                         }`}
                       >
                         {plan.popular && (
                           <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                            <div className="bg-white text-black px-4 py-1 text-sm font-light">
+                            <div className="bg-foreground text-background px-4 py-1 text-sm font-light">
                               MOST POPULAR
                             </div>
                           </div>
                         )}
                         <CardHeader className="text-center pb-4 flex-1 flex flex-col justify-center">
-                          <h3 className="text-2xl font-light text-white mb-2">{plan.name}</h3>
+                          <h3 className="text-2xl font-light text-foreground mb-2">{plan.name}</h3>
                           <div className="mb-4">
-                            <span className="text-4xl font-light text-white">{plan.price}</span>
+                            <span className="text-4xl font-light text-foreground">{plan.price}</span>
                             <span className="text-lg font-light text-gray-400">{plan.period}</span>
                           </div>
                           <p className="text-gray-400 font-light text-sm mb-6">{plan.description}</p>
                           <ul className="space-y-2">
                             {plan.features.map((feature, featureIndex) => (
-                              <li key={featureIndex} className="flex items-start text-gray-300 font-light text-sm justify-center">
-                                <div className="w-1 h-1 bg-white mt-2 mr-3 flex-shrink-0"></div>
+                              <li
+                                key={featureIndex}
+                                className="flex items-start text-gray-300 font-light text-sm justify-center"
+                              >
+                                <div className="w-1 h-1 bg-foreground mt-2 mr-3 flex-shrink-0"></div>
                                 {feature}
                               </li>
                             ))}
@@ -244,7 +240,7 @@ export default function HomePage() {
 
           <div id="qa" className="snap-section snap-start">
             <Wrap hasNav>
-              <div className="w-full bg-black text-white" style={{ paddingBottom: '50px' }}>
+              <div className="w-full bg-background text-foreground" style={{ paddingBottom: "50px" }}>
                 <div className="w-full max-w-4xl mx-auto px-6">
                   <div className="text-center mb-8">
                     <h2 className="text-3xl md:text-4xl font-light mb-4">Questions</h2>
@@ -256,33 +252,34 @@ export default function HomePage() {
                     {[
                       {
                         question: "What types of services do I offer?",
-                        answer: "I specialize in full-stack web development, API design and implementation, cloud architecture, database optimization, and custom software solutions. Whether you need a new application built from scratch, legacy code modernization, or technical consulting, I can help bring your project to life.",
+                        answer:
+                          "I specialize in full-stack web development, API design and implementation, cloud architecture, database optimization, and custom software solutions. Whether you need a new application built from scratch, legacy code modernization, or technical consulting, I can help bring your project to life.",
                       },
                       {
                         question: "How do I approach new projects?",
-                        answer: "I begin with a thorough discovery phase to understand your requirements, followed by a detailed project proposal with clear milestones. I work in iterative sprints with regular check-ins, ensuring transparency and flexibility throughout the development process. Timelines are estimated based on project complexity and agreed upon before starting.",
+                        answer:
+                          "I begin with a thorough discovery phase to understand your requirements, followed by a detailed project proposal with clear milestones. I work in iterative sprints with regular check-ins, ensuring transparency and flexibility throughout the development process. Timelines are estimated based on project complexity and agreed upon before starting.",
                       },
                       {
                         question: "What is my pricing structure?",
-                        answer: "I offer flexible pricing models including hourly rates for short-term work, daily rates for ongoing projects, and equity-based partnerships for startups. Each project is unique, and I provide customized quotes based on scope, complexity, and timeline. Contact me for a detailed estimate tailored to your specific needs.",
+                        answer:
+                          "I offer flexible pricing models including hourly rates for short-term work, daily rates for ongoing projects, and equity-based partnerships for startups. Each project is unique, and I provide customized quotes based on scope, complexity, and timeline. Contact me for a detailed estimate tailored to your specific needs.",
                       },
                       {
                         question: "What technologies do I work with?",
-                        answer: "I'm proficient in modern web technologies including React, Next.js, Node.js, TypeScript, Python, and various databases. I also have experience with cloud platforms like AWS and GCP, containerization with Docker, and CI/CD pipelines. I stay current with industry trends and can adapt to your existing tech stack.",
+                        answer:
+                          "I'm proficient in modern web technologies including React, Next.js, Node.js, TypeScript, Python, and various databases. I also have experience with cloud platforms like AWS and GCP, containerization with Docker, and CI/CD pipelines. I stay current with industry trends and can adapt to your existing tech stack.",
                       },
                       {
                         question: "How do I ensure code quality?",
-                        answer: "I follow industry best practices including test-driven development, code reviews, and comprehensive documentation. All code is version-controlled, well-commented, and built with scalability in mind. I maintain clear communication throughout the project and provide post-launch support to ensure smooth deployment.",
+                        answer:
+                          "I follow industry best practices including test-driven development, code reviews, and comprehensive documentation. All code is version-controlled, well-commented, and built with scalability in mind. I maintain clear communication throughout the project and provide post-launch support to ensure smooth deployment.",
                       },
                     ].map((faq, index) => (
-                      <div
-                        key={index}
-                        className="mb-2"
-                        style={{ border: '1px solid white', padding: '0 16px' }}
-                      >
+                      <div key={index} className="mb-2 border border-foreground px-4">
                         <Accordion type="single" collapsible>
                           <AccordionItem value={`item-${index}`} className="border-0">
-                            <AccordionTrigger className="text-left text-sm md:text-base font-light hover:text-white py-3 hover:no-underline cursor-pointer">
+                            <AccordionTrigger className="text-left text-sm md:text-base font-light hover:text-foreground py-3 hover:no-underline cursor-pointer">
                               {faq.question}
                             </AccordionTrigger>
                             <AccordionContent className="text-gray-300 pb-3 text-xs md:text-sm leading-relaxed font-light">
@@ -307,12 +304,13 @@ export default function HomePage() {
       <div className="fixed right-1 sm:right-2 lg:right-4 top-1/2 -translate-y-1/2 z-40 md:hidden flex flex-col gap-1 sm:gap-2">
         {[0, 1, 2, 3].map((index) => (
           <button
+            type="button"
             key={index}
             onClick={() => scrollToSection(index)}
             className={`w-1 sm:w-2 h-6 sm:h-8 lg:h-10 transition-all duration-300 cursor-pointer border ${
               activeSection === index
-                ? "bg-white border-white shadow-lg"
-                : "bg-transparent border-white hover:border-white hover:bg-gray-800"
+                ? "bg-foreground border-foreground shadow-lg"
+                : "bg-transparent border-foreground hover:border-foreground hover:bg-muted"
             }`}
             aria-label={`Go to section ${index + 1}`}
           />
