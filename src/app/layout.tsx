@@ -4,6 +4,7 @@ import type React from "react"
 import { Suspense } from "react"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Favicon } from "@/components/favicon"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   description: "Created with v0",
   generator: "v0.app",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/light.svg",
   },
 }
 
@@ -30,6 +31,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${inter.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <Favicon />
           <Suspense fallback={null}>{children}</Suspense>
         </ThemeProvider>
       </body>

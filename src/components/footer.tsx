@@ -2,8 +2,11 @@
 
 import { Logo } from "@/components/logo"
 import { Picker } from "@/components/picker"
+import { useRouter } from "next/navigation"
 
 export function Footer() {
+  const router = useRouter()
+
   return (
     <div className="h-screen bg-background text-foreground relative overflow-hidden">
       {/* Legal links and settings positioned directly over the logo and text */}
@@ -13,18 +16,21 @@ export function Footer() {
           <div className="absolute -top-16 sm:-top-12 left-0 flex flex-row gap-3 sm:gap-8 md:gap-16 lg:gap-24">
             <button
               type="button"
+              onClick={() => router.push("/imprint")}
               className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
             >
               Imprint
             </button>
             <button
               type="button"
+              onClick={() => router.push("/gdpr")}
               className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
             >
               GDPR
             </button>
             <button
               type="button"
+              onClick={() => router.push("/terms")}
               className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
             >
               Terms of Service
