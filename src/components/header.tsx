@@ -40,7 +40,7 @@ export function Header({ activeSection = 0 }: HeaderProps) {
                 className={`${
                   getActiveNavItem("offer")
                     ? "text-foreground font-bold"
-                    : "text-muted-foreground hover:text-foreground font-light"
+                    : "text-foreground hover:text-foreground font-light"
                 } transition-all text-base cursor-pointer`}
               >
                 Offer
@@ -51,7 +51,7 @@ export function Header({ activeSection = 0 }: HeaderProps) {
                 className={`${
                   getActiveNavItem("pricing")
                     ? "text-foreground font-bold"
-                    : "text-muted-foreground hover:text-foreground font-light"
+                    : "text-foreground hover:text-foreground font-light"
                 } transition-all text-base cursor-pointer`}
               >
                 Pricing
@@ -62,7 +62,7 @@ export function Header({ activeSection = 0 }: HeaderProps) {
                 className={`${
                   getActiveNavItem("qa")
                     ? "text-foreground font-bold"
-                    : "text-muted-foreground hover:text-foreground font-light"
+                    : "text-foreground hover:text-foreground font-light"
                 } transition-all text-base cursor-pointer`}
               >
                 Q&A
