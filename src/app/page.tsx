@@ -99,7 +99,7 @@ export default function HomePage() {
                       <h1 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8 text-balance text-foreground">
                         Professional Cloud Browser Solutions
                       </h1>
-                      <p className="text-lg sm:text-xl text-gray-300 mb-12 max-w-2xl mx-auto text-pretty font-light">
+                      <p className="text-lg sm:text-xl text-foreground mb-12 max-w-2xl mx-auto text-pretty font-light">
                         We provide cutting-edge cloud browser technology for businesses and developers. Scale your
                         operations with our reliable, secure, and high-performance browser infrastructure.
                       </p>
@@ -120,14 +120,11 @@ export default function HomePage() {
                     </div>
                   }
                 >
-                  <div className="max-w-4xl mx-auto text-center pt-32 px-4 text-background">
+                  <div className="max-w-4xl mx-auto text-center pt-32 px-4">
                     <h1 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8 text-balance text-background">
                       Advanced Browser Infrastructure
                     </h1>
-                    <p
-                      className="text-lg sm:text-xl mb-12 max-w-2xl mx-auto text-pretty font-light"
-                      className="text-muted-foreground"
-                    >
+                    <p className="text-lg sm:text-xl text-background mb-12 max-w-2xl mx-auto text-pretty font-light">
                       Experience the future of cloud computing with our revolutionary browser technology that adapts to
                       your needs.
                     </p>
@@ -157,7 +154,7 @@ export default function HomePage() {
                 <div className="max-w-6xl w-full">
                   <div className="text-center mb-12">
                     <h2 className="text-5xl font-light mb-6">Pricing</h2>
-                    <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light">
+                    <p className="text-xl text-foreground max-w-2xl mx-auto font-light">
                       Choose the plan that best fits your business needs
                     </p>
                   </div>
@@ -200,31 +197,45 @@ export default function HomePage() {
                     ].map((plan, index) => (
                       <Card
                         key={index}
-                        className={`relative bg-background border-2 aspect-square flex flex-col justify-center rounded-none ${
-                          plan.popular ? "border-foreground shadow-lg" : "border-muted"
+                        className={`relative aspect-square flex flex-col justify-center rounded-none ${
+                          plan.popular 
+                            ? "bg-foreground border-2 border-foreground shadow-2xl transform scale-105" 
+                            : "bg-background border-2 border-foreground"
                         }`}
                       >
                         {plan.popular && (
-                          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                            <div className="bg-foreground text-background px-4 py-1 text-sm font-light">
+                          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                            <div className="bg-background text-foreground px-6 py-2 text-sm font-medium border border-foreground">
                               MOST POPULAR
                             </div>
                           </div>
                         )}
                         <CardHeader className="text-center pb-4 flex-1 flex flex-col justify-center">
-                          <h3 className="text-2xl font-light text-foreground mb-2">{plan.name}</h3>
+                          <h3 className={`text-2xl font-light mb-2 ${
+                            plan.popular ? "text-background" : "text-foreground"
+                          }`}>{plan.name}</h3>
                           <div className="mb-4">
-                            <span className="text-4xl font-light text-foreground">{plan.price}</span>
-                            <span className="text-lg font-light text-gray-400">{plan.period}</span>
+                            <span className={`text-4xl font-light ${
+                              plan.popular ? "text-background" : "text-foreground"
+                            }`}>{plan.price}</span>
+                            <span className={`text-lg font-light ${
+                              plan.popular ? "text-background" : "text-foreground"
+                            }`}>{plan.period}</span>
                           </div>
-                          <p className="text-gray-400 font-light text-sm mb-6">{plan.description}</p>
+                          <p className={`font-light text-sm mb-6 ${
+                            plan.popular ? "text-background" : "text-foreground"
+                          }`}>{plan.description}</p>
                           <ul className="space-y-2">
                             {plan.features.map((feature, featureIndex) => (
                               <li
                                 key={featureIndex}
-                                className="flex items-start text-gray-300 font-light text-sm justify-center"
+                                className={`flex items-start font-light text-sm justify-center ${
+                                  plan.popular ? "text-background" : "text-foreground"
+                                }`}
                               >
-                                <div className="w-1 h-1 bg-foreground mt-2 mr-3 flex-shrink-0"></div>
+                                <div className={`w-1 h-1 mt-2 mr-3 flex-shrink-0 ${
+                                  plan.popular ? "bg-background" : "bg-foreground"
+                                }`}></div>
                                 {feature}
                               </li>
                             ))}
@@ -244,7 +255,7 @@ export default function HomePage() {
                 <div className="w-full max-w-4xl mx-auto px-6">
                   <div className="text-center mb-8">
                     <h2 className="text-3xl md:text-4xl font-light mb-4">Questions</h2>
-                    <p className="text-sm md:text-base text-gray-400 max-w-2xl mx-auto font-light">
+                    <p className="text-sm md:text-base text-foreground max-w-2xl mx-auto font-light">
                       Everything you need to know about working together
                     </p>
                   </div>
@@ -282,7 +293,7 @@ export default function HomePage() {
                             <AccordionTrigger className="text-left text-sm md:text-base font-light hover:text-foreground py-3 hover:no-underline cursor-pointer">
                               {faq.question}
                             </AccordionTrigger>
-                            <AccordionContent className="text-gray-300 pb-3 text-xs md:text-sm leading-relaxed font-light">
+                            <AccordionContent className="text-foreground pb-3 text-xs md:text-sm leading-relaxed font-light">
                               {faq.answer}
                             </AccordionContent>
                           </AccordionItem>

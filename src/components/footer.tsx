@@ -13,29 +13,26 @@ export function Footer() {
           <div className="absolute -top-16 sm:-top-12 left-0 flex flex-row gap-3 sm:gap-8 md:gap-16 lg:gap-24">
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
+              className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
             >
               Imprint
             </button>
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
+              className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
             >
               GDPR
             </button>
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
+              className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
             >
               Terms of Service
             </button>
           </div>
 
-          {/* Theme, Language switcher and mode toggle positioned all the way to the right */}
+          {/* Language switcher and mode toggle positioned all the way to the right */}
           <div className="absolute -top-16 sm:-top-12 right-0 flex flex-row gap-3 sm:gap-4 md:gap-8 lg:gap-12">
-            {/* Theme selector */}
-            <Picker type="theme" />
-
             {/* Language switcher */}
             <Picker type="language" />
 
