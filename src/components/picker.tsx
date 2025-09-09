@@ -2,7 +2,7 @@
 
 import { Bot, Languages, Moon, Settings, Sun, X } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 interface Theme {
@@ -80,6 +80,174 @@ const themes: Theme[] = [
     },
   },
   {
+    name: "Ocean Deep",
+    colors: {
+      primary: "#06b6d4",
+      secondary: "#0891b2",
+      accent: "#0e7490",
+      background: "#0c1618",
+      foreground: "#f0fdff",
+      muted: "#164e63",
+      border: "#06b6d4",
+    },
+  },
+  {
+    name: "Forest Green",
+    colors: {
+      primary: "#10b981",
+      secondary: "#059669",
+      accent: "#047857",
+      background: "#0f1419",
+      foreground: "#f0fdf4",
+      muted: "#1f2937",
+      border: "#10b981",
+    },
+  },
+  {
+    name: "Deep Purple",
+    colors: {
+      primary: "#8b5cf6",
+      secondary: "#7c3aed",
+      accent: "#6d28d9",
+      background: "#1e1b4b",
+      foreground: "#faf5ff",
+      muted: "#312e81",
+      border: "#8b5cf6",
+    },
+  },
+  {
+    name: "Crimson Red",
+    colors: {
+      primary: "#ef4444",
+      secondary: "#dc2626",
+      accent: "#b91c1c",
+      background: "#1f1315",
+      foreground: "#fef2f2",
+      muted: "#374151",
+      border: "#ef4444",
+    },
+  },
+  {
+    name: "Amber Gold",
+    colors: {
+      primary: "#f59e0b",
+      secondary: "#d97706",
+      accent: "#b45309",
+      background: "#1c1917",
+      foreground: "#fffbeb",
+      muted: "#78716c",
+      border: "#f59e0b",
+    },
+  },
+  {
+    name: "Rose Pink",
+    colors: {
+      primary: "#f43f5e",
+      secondary: "#e11d48",
+      accent: "#be123c",
+      background: "#1f1114",
+      foreground: "#fff1f2",
+      muted: "#4c1d24",
+      border: "#f43f5e",
+    },
+  },
+  {
+    name: "Slate Gray",
+    colors: {
+      primary: "#64748b",
+      secondary: "#475569",
+      accent: "#334155",
+      background: "#0f172a",
+      foreground: "#f8fafc",
+      muted: "#1e293b",
+      border: "#64748b",
+    },
+  },
+  {
+    name: "Teal Mint",
+    colors: {
+      primary: "#14b8a6",
+      secondary: "#0d9488",
+      accent: "#0f766e",
+      background: "#042f2e",
+      foreground: "#f0fdfa",
+      muted: "#134e4a",
+      border: "#14b8a6",
+    },
+  },
+  {
+    name: "Indigo Night",
+    colors: {
+      primary: "#6366f1",
+      secondary: "#4f46e5",
+      accent: "#4338ca",
+      background: "#1e1b4b",
+      foreground: "#f0f4ff",
+      muted: "#312e81",
+      border: "#6366f1",
+    },
+  },
+  {
+    name: "Copper Bronze",
+    colors: {
+      primary: "#ea580c",
+      secondary: "#c2410c",
+      accent: "#9a3412",
+      background: "#1c1917",
+      foreground: "#fff7ed",
+      muted: "#78716c",
+      border: "#ea580c",
+    },
+  },
+  {
+    name: "Lime Electric",
+    colors: {
+      primary: "#84cc16",
+      secondary: "#65a30d",
+      accent: "#4d7c0f",
+      background: "#0f1419",
+      foreground: "#f7fee7",
+      muted: "#365314",
+      border: "#84cc16",
+    },
+  },
+  {
+    name: "Violet Dream",
+    colors: {
+      primary: "#a855f7",
+      secondary: "#9333ea",
+      accent: "#7e22ce",
+      background: "#2d1b69",
+      foreground: "#faf5ff",
+      muted: "#4c1d95",
+      border: "#a855f7",
+    },
+  },
+  {
+    name: "Cyan Ice",
+    colors: {
+      primary: "#22d3ee",
+      secondary: "#06b6d4",
+      accent: "#0891b2",
+      background: "#083344",
+      foreground: "#ecfeff",
+      muted: "#155e75",
+      border: "#22d3ee",
+    },
+  },
+  {
+    name: "Emerald Forest",
+    colors: {
+      primary: "#34d399",
+      secondary: "#10b981",
+      accent: "#059669",
+      background: "#022c22",
+      foreground: "#ecfdf5",
+      muted: "#065f46",
+      border: "#34d399",
+    },
+  },
+  {
     name: "High Contrast",
     colors: {
       primary: "#ffffff",
@@ -123,13 +291,29 @@ export function Picker({ type }: PickerProps) {
     setMounted(true)
   }, [])
 
-  const applyTheme = (selectedTheme: Theme) => {
+  const applyCSSVariables = useCallback((colors: Theme['colors']) => {
     const root = document.documentElement
-
-    // Apply theme colors as CSS custom properties
-    Object.entries(selectedTheme.colors).forEach(([key, value]) => {
+    const cssVariableMap = {
+      background: '--background',
+      foreground: '--foreground',
+      primary: '--primary',
+      secondary: '--secondary',
+      accent: '--accent',
+      muted: '--muted',
+      border: '--border'
+    }
+    
+    Object.entries(colors).forEach(([key, value]) => {
+      // Set both the prefixed version for custom use and the mapped version for Tailwind
       root.style.setProperty(`--color-${key}`, value)
+      if (cssVariableMap[key as keyof typeof cssVariableMap]) {
+        root.style.setProperty(cssVariableMap[key as keyof typeof cssVariableMap], value)
+      }
     })
+  }, [])
+
+  const applyTheme = (selectedTheme: Theme) => {
+    applyCSSVariables(selectedTheme.colors)
 
     // Store theme selection in localStorage
     localStorage.setItem("selected-theme", selectedTheme.name)
@@ -146,22 +330,17 @@ export function Picker({ type }: PickerProps) {
         const themeObj = themes.find((t) => t.name === savedTheme)
         if (themeObj) {
           setSelectedTheme(themeObj.name)
-          // Apply the theme colors
-          Object.entries(themeObj.colors).forEach(([key, value]) => {
-            document.documentElement.style.setProperty(`--color-${key}`, value)
-          })
+          applyCSSVariables(themeObj.colors)
         }
       } else {
         // Apply default theme if none saved
         const defaultTheme = themes.find((t) => t.name === "Default")
         if (defaultTheme) {
-          Object.entries(defaultTheme.colors).forEach(([key, value]) => {
-            document.documentElement.style.setProperty(`--color-${key}`, value)
-          })
+          applyCSSVariables(defaultTheme.colors)
         }
       }
     }
-  }, [mounted])
+  }, [mounted, applyCSSVariables])
 
   const selectLanguage = (lang: string) => {
     setSelectedLang(lang)
@@ -243,7 +422,7 @@ export function Picker({ type }: PickerProps) {
               <DialogTitle className="text-foreground font-light text-xl">Choose a Theme</DialogTitle>
             </DialogHeader>
             <div className="grid gap-6 py-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
                 {themes.map((theme) => (
                   <button
                     key={theme.name}
@@ -261,7 +440,7 @@ export function Picker({ type }: PickerProps) {
                     </div>
                     <div
                       className={`text-[10px] font-medium transition-colors whitespace-nowrap ${
-                        selectedTheme === theme.name ? "text-background" : "text-white group-hover:text-background"
+                        selectedTheme === theme.name ? "text-background" : "text-foreground group-hover:text-background"
                       }`}
                     >
                       {theme.name}
@@ -338,19 +517,19 @@ export function Picker({ type }: PickerProps) {
                   type="button"
                   onClick={() => selectLanguage(language.code)}
                   className={`group relative border p-4 hover:bg-foreground transition-all duration-200 cursor-pointer flex items-center gap-3 ${
-                    selectedLang === language.code ? "bg-foreground border-white" : "bg-transparent border-white"
+                    selectedLang === language.code ? "bg-foreground border-foreground" : "bg-transparent border-foreground"
                   }`}
                 >
                   <div
                     className={`text-sm font-bold min-w-[1.5rem] text-center transition-colors ${
-                      selectedLang === language.code ? "text-background" : "text-white group-hover:text-background"
+                      selectedLang === language.code ? "text-background" : "text-foreground group-hover:text-background"
                     }`}
                   >
                     {language.code}
                   </div>
                   <div
                     className={`text-[10px] font-medium transition-colors whitespace-nowrap ${
-                      selectedLang === language.code ? "text-background" : "text-white group-hover:text-background"
+                      selectedLang === language.code ? "text-background" : "text-foreground group-hover:text-background"
                     }`}
                   >
                     {language.name}
