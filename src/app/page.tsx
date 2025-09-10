@@ -401,46 +401,44 @@ export default function HomePage() {
                     </p>
                   </div>
                   <div className="w-full">
-                    {[
-                      {
-                        question: "What types of services do I offer?",
-                        answer:
-                          "I specialize in full-stack web development, API design and implementation, cloud architecture, database optimization, and custom software solutions. Whether you need a new application built from scratch, legacy code modernization, or technical consulting, I can help bring your project to life.",
-                      },
-                      {
-                        question: "How do I approach new projects?",
-                        answer:
-                          "I begin with a thorough discovery phase to understand your requirements, followed by a detailed project proposal with clear milestones. I work in iterative sprints with regular check-ins, ensuring transparency and flexibility throughout the development process. Timelines are estimated based on project complexity and agreed upon before starting.",
-                      },
-                      {
-                        question: "What is my pricing structure?",
-                        answer:
-                          "I offer flexible pricing models including hourly rates for short-term work, daily rates for ongoing projects, and equity-based partnerships for startups. Each project is unique, and I provide customized quotes based on scope, complexity, and timeline. Contact me for a detailed estimate tailored to your specific needs.",
-                      },
-                      {
-                        question: "What technologies do I work with?",
-                        answer:
-                          "I'm proficient in modern web technologies including React, Next.js, Node.js, TypeScript, Python, and various databases. I also have experience with cloud platforms like AWS and GCP, containerization with Docker, and CI/CD pipelines. I stay current with industry trends and can adapt to your existing tech stack.",
-                      },
-                      {
-                        question: "How do I ensure code quality?",
-                        answer:
-                          "I follow industry best practices including test-driven development, code reviews, and comprehensive documentation. All code is version-controlled, well-commented, and built with scalability in mind. I maintain clear communication throughout the project and provide post-launch support to ensure smooth deployment.",
-                      },
-                    ].map((faq, index) => (
-                      <div key={index} className="mb-2 border border-foreground px-4">
-                        <Accordion type="single" collapsible>
-                          <AccordionItem value={`item-${index}`} className="border-0">
-                            <AccordionTrigger className="text-left text-sm md:text-base font-light hover:text-foreground py-3 hover:no-underline cursor-pointer">
-                              {faq.question}
-                            </AccordionTrigger>
-                            <AccordionContent className="text-foreground pb-3 text-xs md:text-sm leading-relaxed font-light">
-                              {faq.answer}
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      </div>
-                    ))}
+                    <Accordion type="single" collapsible className="border border-foreground">
+                      {[
+                        {
+                          question: "What types of services do I offer?",
+                          answer:
+                            "I specialize in full-stack web development, API design and implementation, cloud architecture, database optimization, and custom software solutions. Whether you need a new application built from scratch, legacy code modernization, or technical consulting, I can help bring your project to life.",
+                        },
+                        {
+                          question: "How do I approach new projects?",
+                          answer:
+                            "I begin with a thorough discovery phase to understand your requirements, followed by a detailed project proposal with clear milestones. I work in iterative sprints with regular check-ins, ensuring transparency and flexibility throughout the development process. Timelines are estimated based on project complexity and agreed upon before starting.",
+                        },
+                        {
+                          question: "What is my pricing structure?",
+                          answer:
+                            "I offer flexible pricing models including hourly rates for short-term work, daily rates for ongoing projects, and equity-based partnerships for startups. Each project is unique, and I provide customized quotes based on scope, complexity, and timeline. Contact me for a detailed estimate tailored to your specific needs.",
+                        },
+                        {
+                          question: "What technologies do I work with?",
+                          answer:
+                            "I'm proficient in modern web technologies including React, Next.js, Node.js, TypeScript, Python, and various databases. I also have experience with cloud platforms like AWS and GCP, containerization with Docker, and CI/CD pipelines. I stay current with industry trends and can adapt to your existing tech stack.",
+                        },
+                        {
+                          question: "How do I ensure code quality?",
+                          answer:
+                            "I follow industry best practices including test-driven development, code reviews, and comprehensive documentation. All code is version-controlled, well-commented, and built with scalability in mind. I maintain clear communication throughout the project and provide post-launch support to ensure smooth deployment.",
+                        },
+                      ].map((faq, index, array) => (
+                        <AccordionItem key={index} value={`item-${index}`} className={`px-4 ${index < array.length - 1 ? 'border-b border-foreground' : ''}`}>
+                          <AccordionTrigger className="text-left text-sm md:text-base font-light hover:text-foreground py-3 hover:no-underline cursor-pointer">
+                            {faq.question}
+                          </AccordionTrigger>
+                          <AccordionContent className="text-foreground pb-3 text-xs md:text-sm leading-relaxed font-light">
+                            {faq.answer}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
                   </div>
                 </div>
               </div>
