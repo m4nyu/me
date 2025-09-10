@@ -43,10 +43,8 @@ export const Mask = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Default content - white text on black background */}
       <div className="absolute inset-0 flex items-center justify-center text-foreground z-10">{revealText}</div>
 
-      {/* Masked content - black text on white background with higher z-index */}
       <div
         className="absolute inset-0 flex items-center justify-center bg-foreground text-background transition-all duration-300 ease-out z-20 overflow-visible"
         style={{

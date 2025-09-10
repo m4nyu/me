@@ -8,7 +8,7 @@ interface SectionProps {
   hasNav?: boolean
 }
 
-export function Wrap({ children, className = "", hasNav = false }: SectionProps) {
+export function Structure({ children, className = "", hasNav = false }: SectionProps) {
   if (hasNav) {
     return (
       <div

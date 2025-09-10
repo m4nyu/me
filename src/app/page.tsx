@@ -6,10 +6,19 @@ import { Header } from "@/components/header"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Mask } from "@/components/ui/animations/mask"
 import { Card, CardHeader } from "@/components/ui/card"
-import { Wrap } from "@/components/wrap"
+import { Structure } from "@/components/structure"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselApi,
+} from "@/components/ui/carousel"
 
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState(0)
+  const [api, setApi] = useState<CarouselApi>()
+  const [current, setCurrent] = useState(0)
+  const [count, setCount] = useState(0)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -77,6 +86,17 @@ export default function HomePage() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!api) return
+
+    setCount(api.scrollSnapList().length)
+    setCurrent(api.selectedScrollSnap() + 1)
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1)
+    })
+  }, [api])
+
   const scrollToSection = (index: number) => {
     const sections = document.querySelectorAll(".snap-section")
     if (sections[index]) {
@@ -91,7 +111,7 @@ export default function HomePage() {
       <div ref={scrollContainerRef} className="h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide">
         <main className="w-full">
           <div id="offer" className="snap-section snap-start">
-            <Wrap>
+            <Structure>
               <div className="relative">
                 <Mask
                   revealText={
@@ -145,20 +165,138 @@ export default function HomePage() {
                   </div>
                 </Mask>
               </div>
-            </Wrap>
+            </Structure>
           </div>
 
           <div id="pricing" className="snap-section snap-start">
-            <Wrap hasNav>
-              <section className="h-full bg-background text-foreground flex items-center justify-center px-6">
-                <div className="max-w-6xl w-full">
-                  <div className="text-center mb-12">
-                    <h2 className="text-5xl font-light mb-6">Pricing</h2>
-                    <p className="text-xl text-foreground max-w-2xl mx-auto font-light">
+            <Structure hasNav>
+              <section className="h-full bg-background text-foreground flex flex-col justify-center px-6 py-8">
+                <div className="max-w-6xl w-full mx-auto">
+                  <div className="text-center mb-8 md:mb-12">
+                    <h2 className="text-3xl md:text-5xl font-light mb-4 md:mb-6">Pricing</h2>
+                    <p className="text-sm md:text-xl text-foreground max-w-2xl mx-auto font-light">
                       Choose the plan that best fits your business needs
                     </p>
                   </div>
-                  <div className="grid md:grid-cols-3 gap-8">
+                  <Carousel 
+                    className="flex-1 md:hidden"
+                    setApi={setApi}
+                    opts={{
+                      align: "center",
+                      loop: false,
+                      dragFree: false,
+                      containScroll: "trimSnaps",
+                      slidesToScroll: 1,
+                    }}
+                  >
+                    <CarouselContent className="-ml-2 md:-ml-4">
+                      {[
+                      {
+                        name: "Hourly",
+                        price: "$100",
+                        period: "/hour",
+                        description: "Perfect for quick tasks and testing",
+                        features: ["Pay as you go", "Instant setup", "Basic support", "No commitments"],
+                      },
+                      {
+                        name: "Daily",
+                        price: "$800",
+                        period: "/day",
+                        description: "Ideal for ongoing projects",
+                        features: [
+                          "Full day access",
+                          "Priority support",
+                          "Advanced features",
+                          "24/7 availability",
+                          "Custom configurations",
+                        ],
+                        popular: true,
+                      },
+                      {
+                        name: "Startups",
+                        price: "Co-founder",
+                        period: "",
+                        description: "Equity participation and ownership stake",
+                        features: [
+                          "Equity-based partnership",
+                          "Active participation",
+                          "Long-term commitment",
+                          "Shared ownership",
+                          "Strategic involvement",
+                        ],
+                      },
+                      ].map((plan, index) => (
+                        <CarouselItem key={index} className="pl-2 md:pl-4">
+                          <div className="p-1">
+                            <Card
+                          className={`relative w-full max-w-sm aspect-square flex flex-col justify-center rounded-none ${
+                            plan.popular 
+                              ? "bg-foreground border-2 border-foreground shadow-2xl transform scale-105" 
+                              : "bg-background border-2 border-foreground"
+                          }`}
+                        >
+                          {plan.popular && (
+                            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 z-10">
+                              <div className="bg-background text-foreground px-6 py-2 text-sm font-medium border border-foreground">
+                                MOST POPULAR
+                              </div>
+                            </div>
+                          )}
+                          <CardHeader className="text-center pb-4 flex-1 flex flex-col justify-center pt-12">
+                            <h3 className={`text-2xl font-light mb-2 ${
+                              plan.popular ? "text-background" : "text-foreground"
+                            }`}>{plan.name}</h3>
+                            <div className="mb-4">
+                              <span className={`text-4xl font-light ${
+                                plan.popular ? "text-background" : "text-foreground"
+                              }`}>{plan.price}</span>
+                              <span className={`text-lg font-light ${
+                                plan.popular ? "text-background" : "text-foreground"
+                              }`}>{plan.period}</span>
+                            </div>
+                            <p className={`font-light text-sm mb-6 ${
+                              plan.popular ? "text-background" : "text-foreground"
+                            }`}>{plan.description}</p>
+                            <ul className="space-y-2">
+                              {plan.features.map((feature, featureIndex) => (
+                                <li
+                                  key={featureIndex}
+                                  className={`flex items-start font-light text-sm justify-center ${
+                                    plan.popular ? "text-background" : "text-foreground"
+                                  }`}
+                                >
+                                  <div className={`w-1 h-1 mt-2 mr-3 flex-shrink-0 ${
+                                    plan.popular ? "bg-background" : "bg-foreground"
+                                  }`}></div>
+                                  {feature}
+                                </li>
+                              ))}
+                            </ul>
+                            </CardHeader>
+                          </Card>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
+                
+                <div className="flex justify-center mt-4 gap-2 md:hidden">
+                  {Array.from({ length: count }, (_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => api?.scrollTo(index)}
+                      className={`w-2 h-2 transition-all ${
+                        index + 1 === current
+                          ? "bg-foreground"
+                          : "bg-foreground opacity-30 hover:opacity-60"
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+                  
+                <div className="hidden md:grid md:grid-cols-3 gap-8">
                     {[
                       {
                         name: "Hourly",
@@ -246,11 +384,11 @@ export default function HomePage() {
                   </div>
                 </div>
               </section>
-            </Wrap>
+            </Structure>
           </div>
 
           <div id="qa" className="snap-section snap-start">
-            <Wrap hasNav>
+            <Structure hasNav>
               <div className="w-full bg-background text-foreground" style={{ paddingBottom: "50px" }}>
                 <div className="w-full max-w-4xl mx-auto px-6">
                   <div className="text-center mb-8">
@@ -303,7 +441,7 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-            </Wrap>
+            </Structure>
           </div>
 
           <div id="footer" className="snap-section snap-start">
@@ -312,13 +450,13 @@ export default function HomePage() {
         </main>
       </div>
 
-      <div className="fixed right-1 sm:right-2 lg:right-4 top-1/2 -translate-y-1/2 z-40 md:hidden flex flex-col gap-1 sm:gap-2">
+      <div className="fixed right-2 sm:right-3 lg:right-4 top-1/2 -translate-y-1/2 z-40 md:hidden flex flex-col gap-2">
         {[0, 1, 2, 3].map((index) => (
           <button
             type="button"
             key={index}
             onClick={() => scrollToSection(index)}
-            className={`w-1 sm:w-2 h-6 sm:h-8 lg:h-10 transition-all duration-300 cursor-pointer border ${
+            className={`w-2 sm:w-3 h-8 sm:h-10 lg:h-12 transition-all duration-300 cursor-pointer border ${
               activeSection === index
                 ? "bg-foreground border-foreground shadow-lg"
                 : "bg-transparent border-foreground hover:border-foreground hover:bg-muted"

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google"
 import type React from "react"
 import { Suspense } from "react"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/theme"
 import { Favicon } from "@/components/favicon"
 
 const inter = Inter({

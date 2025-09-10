@@ -198,7 +198,6 @@
     display: none;
   }
 
-  /* Text selection styles for legal pages */
   .legal-page-content {
     user-select: text !important;
     -webkit-user-select: text !important;
@@ -213,7 +212,6 @@
     -ms-user-select: text !important;
   }
 
-  /* Light mode text selection */
   .legal-page-content::selection {
     background-color: #000000;
     color: #ffffff;
@@ -224,7 +222,6 @@
     color: #ffffff;
   }
 
-  /* Dark mode text selection */
   .dark .legal-page-content::selection {
     background-color: #ffffff;
     color: #000000;

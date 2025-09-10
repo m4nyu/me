@@ -20,11 +20,11 @@ const languages = [
   { code: "AR", name: "العربية" },
 ]
 
-interface PickerProps {
+interface LangProps {
   type: "language" | "mode"
 }
 
-export function Picker({ type }: PickerProps) {
+export function Lang({ type }: LangProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [selectedLang, setSelectedLang] = useState("EN")
   const { theme, setTheme } = useTheme()
@@ -44,7 +44,6 @@ export function Picker({ type }: PickerProps) {
     if (favicon) {
       favicon.href = isDark ? "/favicon.svg" : "/favicon-light.svg"
     } else {
-      // Create favicon link if it doesn't exist
       const newFavicon = document.createElement("link")
       newFavicon.rel = "icon"
       newFavicon.href = isDark ? "/favicon.svg" : "/favicon-light.svg"
@@ -62,7 +61,6 @@ export function Picker({ type }: PickerProps) {
     }
   }
 
-  // Update favicon when theme changes
   useEffect(() => {
     if (mounted) {
       const isDark =
@@ -71,7 +69,6 @@ export function Picker({ type }: PickerProps) {
     }
   }, [theme, mounted, updateFavicon])
 
-  // Listen for system theme changes
   useEffect(() => {
     if (mounted && theme === "system") {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
