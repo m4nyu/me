@@ -23,7 +23,7 @@ export default function ImprintPage() {
       <main className="max-w-4xl mx-auto px-6 pb-12 legal-page-content">
         <div className="mb-12">
           <h1 className="text-4xl font-light mb-8">Imprint</h1>
-          
+
           <div className="space-y-8 font-light">
             <section>
               <h2 className="text-xl font-medium mb-4">Information according to § 5 TMG</h2>
@@ -60,26 +60,38 @@ export default function ImprintPage() {
 
             <section>
               <h2 className="text-xl font-medium mb-4">Disclaimer</h2>
-              
+
               <div className="space-y-4">
                 <div>
                   <h3 className="font-medium mb-2">Liability for Contents</h3>
                   <p className="text-sm leading-relaxed">
-                    As service providers, we are liable for own contents of these websites according to Sec. 7, para. 1 of the TMG (Telemediengesetz – Tele Media Act by German law). However, according to Sec. 8 to 10 of the TMG, we as service providers are not under obligation to monitor external information provided or stored on our website. Once we have become aware of a specific infringement of law, we will immediately remove the content in question. Any liability concerning this matter can only be assumed from the point in time at which the infringement becomes known to us.
+                    As service providers, we are liable for own contents of these websites according to Sec. 7, para. 1
+                    of the TMG (Telemediengesetz – Tele Media Act by German law). However, according to Sec. 8 to 10 of
+                    the TMG, we as service providers are not under obligation to monitor external information provided
+                    or stored on our website. Once we have become aware of a specific infringement of law, we will
+                    immediately remove the content in question. Any liability concerning this matter can only be assumed
+                    from the point in time at which the infringement becomes known to us.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="font-medium mb-2">Liability for Links</h3>
                   <p className="text-sm leading-relaxed">
-                    Our website contains links to the websites of third parties ("external links"). As the contents of these websites are not under our control, we cannot assume any liability for such external content. In all cases, the provider of information of the linked websites is liable for the content and accuracy of the information provided. At the point in time when the links were placed, no infringements of the law were recognisable to us. As soon as an infringement of the law becomes known to us, we will immediately remove the link in question.
+                    Our website contains links to the websites of third parties ("external links"). As the contents of
+                    these websites are not under our control, we cannot assume any liability for such external content.
+                    In all cases, the provider of information of the linked websites is liable for the content and
+                    accuracy of the information provided. At the point in time when the links were placed, no
+                    infringements of the law were recognisable to us. As soon as an infringement of the law becomes
+                    known to us, we will immediately remove the link in question.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="font-medium mb-2">Copyright</h3>
                   <p className="text-sm leading-relaxed">
-                    The content and works published on this website are governed by the copyright laws of Germany. Any duplication, processing, distribution or any form of utilisation beyond the scope of copyright law shall require the prior written consent of the author or authors in question.
+                    The content and works published on this website are governed by the copyright laws of Germany. Any
+                    duplication, processing, distribution or any form of utilisation beyond the scope of copyright law
+                    shall require the prior written consent of the author or authors in question.
                   </p>
                 </div>
               </div>

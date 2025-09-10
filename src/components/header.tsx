@@ -32,45 +32,7 @@ export function Header({ activeSection = 0 }: HeaderProps) {
             <Logo size="small" autoStart={true} />
             <span className="text-foreground font-light text-xl">4nuel</span>
           </div>
-
-          <div className="flex-1 flex justify-center">
-            <div className="flex items-center space-x-8">
-              <Button
-                type="button"
-                onClick={() => scrollToSection("offer")}
-                className={`${
-                  getActiveNavItem("offer")
-                    ? "text-foreground font-bold"
-                    : "text-foreground hover:text-foreground font-light"
-                } transition-all text-base cursor-pointer p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent`}
-              >
-                Offer
-              </Button>
-              <Button
-                type="button"
-                onClick={() => scrollToSection("pricing")}
-                className={`${
-                  getActiveNavItem("pricing")
-                    ? "text-foreground font-bold"
-                    : "text-foreground hover:text-foreground font-light"
-                } transition-all text-base cursor-pointer p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent`}
-              >
-                Pricing
-              </Button>
-              <Button
-                type="button"
-                onClick={() => scrollToSection("qa")}
-                className={`${
-                  getActiveNavItem("qa")
-                    ? "text-foreground font-bold"
-                    : "text-foreground hover:text-foreground font-light"
-                } transition-all text-base cursor-pointer p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent`}
-              >
-                Q&A
-              </Button>
-            </div>
-          </div>
-
+          a <div className="flex-1"></div>l
           <div className="flex items-center space-x-3">
             <Button
               type="button"

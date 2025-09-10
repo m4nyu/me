@@ -3,8 +3,9 @@
 import { Bot, Languages, Moon, Sun, X } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 const languages = [
   { code: "EN", name: "English" },
@@ -91,19 +92,24 @@ export function Lang({ type }: LangProps) {
       <Button
         type="button"
         onClick={cycleMode}
-        className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors flex items-center gap-1 sm:gap-2 p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent"
+        className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-all flex items-center gap-1 sm:gap-2 p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"
         aria-label="Toggle dark/light/auto mode"
       >
         <div className="w-[14px] h-[14px] sm:w-4 sm:h-4 flex items-center justify-center">
           {theme === "dark" ? (
-            <Moon size={14} className="sm:w-4 sm:h-4" />
+            <Moon size={14} className="sm:w-4 sm:h-4 text-foreground" />
           ) : theme === "light" ? (
-            <Sun size={14} className="sm:w-4 sm:h-4" />
+            <Sun size={14} className="sm:w-4 sm:h-4 text-foreground" />
           ) : (
-            <Bot size={14} className="sm:w-4 sm:h-4" />
+            <Bot size={14} className="sm:w-4 sm:h-4 text-foreground" />
           )}
         </div>
-        <span className="hidden sm:inline capitalize w-8 text-left">{theme === "system" ? "Auto" : theme}</span>
+        <Badge
+          variant="outline"
+          className="inline-flex rounded-md px-1 sm:px-2 py-0 text-[10px] sm:text-xs font-light border-0 text-foreground capitalize"
+        >
+          {theme === "system" ? "Auto" : theme}
+        </Badge>
       </Button>
     )
   }
@@ -113,10 +119,15 @@ export function Lang({ type }: LangProps) {
       <DialogTrigger asChild>
         <Button
           type="button"
-          className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors flex items-center gap-1 sm:gap-2 p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent"
+          className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-all flex items-center gap-1 sm:gap-2 p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"
         >
-          <Languages size={14} className="sm:w-4 sm:h-4" />
-          <span className="hidden sm:inline">{selectedLang}</span>
+          <Languages size={14} className="sm:w-4 sm:h-4 text-foreground" />
+          <Badge
+            variant="outline"
+            className="inline-flex rounded-md px-1 sm:px-2 py-0 text-[10px] sm:text-xs font-light border-0 text-foreground"
+          >
+            {selectedLang}
+          </Badge>
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -144,7 +155,9 @@ export function Lang({ type }: LangProps) {
                   type="button"
                   onClick={() => selectLanguage(language.code)}
                   className={`group relative border p-4 hover:bg-foreground transition-all duration-200 cursor-pointer flex items-center gap-3 h-auto rounded-none shadow-none ${
-                    selectedLang === language.code ? "bg-foreground border-foreground" : "bg-transparent border-foreground"
+                    selectedLang === language.code
+                      ? "bg-foreground border-foreground"
+                      : "bg-transparent border-foreground"
                   }`}
                 >
                   <div
