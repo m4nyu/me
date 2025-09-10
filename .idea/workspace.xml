@@ -6,19 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="d24d176e-2fc0-489c-8b14-23341d42eedf" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bun.lock" beforeDir="false" afterPath="$PROJECT_DIR$/bun.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/gdpr/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/gdpr/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/imprint/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/imprint/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/favicon.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/favicon.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/terms/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/terms/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/footer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/picker.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/theme-provider.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/animations/mask.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/animations/mask.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/wrap.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/i18n-context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/i18n-context.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/lang.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/lang.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/logo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/logo.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +88,7 @@
       <workItem from="1757267840505" duration="776000" />
       <workItem from="1757278847695" duration="18662000" />
       <workItem from="1757408518591" duration="13568000" />
-      <workItem from="1757488778384" duration="2862000" />
+      <workItem from="1757488778384" duration="4731000" />
     </task>
     <servers />
   </component>
