@@ -1,6 +1,7 @@
 "use client"
 
 import { Logo } from "@/components/logo"
+import { Button } from "@/components/ui/button"
 
 interface HeaderProps {
   activeSection?: number
@@ -34,46 +35,46 @@ export function Header({ activeSection = 0 }: HeaderProps) {
 
           <div className="flex-1 flex justify-center">
             <div className="flex items-center space-x-8">
-              <button
+              <Button
                 type="button"
                 onClick={() => scrollToSection("offer")}
                 className={`${
                   getActiveNavItem("offer")
                     ? "text-foreground font-bold"
                     : "text-foreground hover:text-foreground font-light"
-                } transition-all text-base cursor-pointer`}
+                } transition-all text-base cursor-pointer p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent`}
               >
                 Offer
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={() => scrollToSection("pricing")}
                 className={`${
                   getActiveNavItem("pricing")
                     ? "text-foreground font-bold"
                     : "text-foreground hover:text-foreground font-light"
-                } transition-all text-base cursor-pointer`}
+                } transition-all text-base cursor-pointer p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent`}
               >
                 Pricing
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={() => scrollToSection("qa")}
                 className={`${
                   getActiveNavItem("qa")
                     ? "text-foreground font-bold"
                     : "text-foreground hover:text-foreground font-light"
-                } transition-all text-base cursor-pointer`}
+                } transition-all text-base cursor-pointer p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent`}
               >
                 Q&A
-              </button>
+              </Button>
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
-            <button
+            <Button
               type="button"
-              className="bg-foreground text-background border-0 outline-none cursor-pointer text-base px-6 py-3 font-light transition-colors"
+              className="bg-foreground text-background border-0 outline-none cursor-pointer text-base px-6 py-3 font-light transition-colors h-auto rounded-none shadow-none hover:bg-foreground"
               onMouseEnter={(e) => {
                 e.currentTarget.classList.add("opacity-80")
               }}
@@ -82,7 +83,7 @@ export function Header({ activeSection = 0 }: HeaderProps) {
               }}
             >
               Get in Touch
-            </button>
+            </Button>
           </div>
         </div>
       </nav>
@@ -94,9 +95,9 @@ export function Header({ activeSection = 0 }: HeaderProps) {
             <span className="text-foreground font-light text-base">4nuel</span>
           </div>
 
-          <button
+          <Button
             type="button"
-            className="bg-foreground text-background border-0 outline-none cursor-pointer text-sm px-4 py-2 font-light transition-colors"
+            className="bg-foreground text-background border-0 outline-none cursor-pointer text-sm px-4 py-2 font-light transition-colors h-auto rounded-none shadow-none hover:bg-foreground"
             onMouseEnter={(e) => {
               e.currentTarget.classList.add("opacity-80")
             }}
@@ -105,7 +106,7 @@ export function Header({ activeSection = 0 }: HeaderProps) {
             }}
           >
             Get in Touch
-          </button>
+          </Button>
         </div>
       </nav>
     </header>

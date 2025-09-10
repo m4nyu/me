@@ -2,6 +2,7 @@
 
 import { Logo } from "@/components/logo"
 import { Lang } from "@/components/lang"
+import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 
 export function Footer() {
@@ -12,27 +13,27 @@ export function Footer() {
       <div className="absolute bottom-0 left-0 right-0 w-full px-8 sm:px-12 md:px-16 lg:px-20 z-20">
         <div className="max-w-7xl mx-auto relative">
           <div className="absolute -top-16 sm:-top-12 left-0 flex flex-row gap-3 sm:gap-8 md:gap-16 lg:gap-24">
-            <button
+            <Button
               type="button"
               onClick={() => router.push("/imprint")}
-              className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
+              className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent"
             >
               Imprint
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={() => router.push("/gdpr")}
-              className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
+              className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent"
             >
               GDPR
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={() => router.push("/terms")}
-              className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors"
+              className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent"
             >
               Terms of Service
-            </button>
+            </Button>
           </div>
 
           <div className="absolute -top-16 sm:-top-12 right-0 flex flex-row gap-3 sm:gap-4 md:gap-8 lg:gap-12">

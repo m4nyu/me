@@ -4,6 +4,7 @@ import { Bot, Languages, Moon, Sun, X } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 
 const languages = [
   { code: "EN", name: "English" },
@@ -87,10 +88,10 @@ export function Lang({ type }: LangProps) {
     }
 
     return (
-      <button
+      <Button
         type="button"
         onClick={cycleMode}
-        className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors flex items-center gap-1 sm:gap-2"
+        className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors flex items-center gap-1 sm:gap-2 p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent"
         aria-label="Toggle dark/light/auto mode"
       >
         <div className="w-[14px] h-[14px] sm:w-4 sm:h-4 flex items-center justify-center">
@@ -103,33 +104,33 @@ export function Lang({ type }: LangProps) {
           )}
         </div>
         <span className="hidden sm:inline capitalize w-8 text-left">{theme === "system" ? "Auto" : theme}</span>
-      </button>
+      </Button>
     )
   }
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <button
+        <Button
           type="button"
-          className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors flex items-center gap-1 sm:gap-2"
+          className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-colors flex items-center gap-1 sm:gap-2 p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent"
         >
           <Languages size={14} className="sm:w-4 sm:h-4" />
           <span className="hidden sm:inline">{selectedLang}</span>
-        </button>
+        </Button>
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[400px] bg-background border-foreground text-foreground max-h-[80vh] rounded-none p-0"
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button
+          <Button
             type="button"
-            className="absolute top-4 right-4 z-50 cursor-pointer hover:opacity-70 transition-opacity p-1"
+            className="absolute top-4 right-4 z-50 cursor-pointer hover:opacity-70 transition-opacity p-1 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent"
             aria-label="Close dialog"
           >
             <X className="w-4 h-4 text-foreground pointer-events-none" />
-          </button>
+          </Button>
         </DialogClose>
         <div className="overflow-y-auto max-h-[80vh] p-4 pt-2">
           <DialogHeader className="flex flex-row items-center justify-between relative mt-2">
@@ -138,11 +139,11 @@ export function Lang({ type }: LangProps) {
           <div className="grid gap-6 py-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
               {languages.map((language) => (
-                <button
+                <Button
                   key={language.code}
                   type="button"
                   onClick={() => selectLanguage(language.code)}
-                  className={`group relative border p-4 hover:bg-foreground transition-all duration-200 cursor-pointer flex items-center gap-3 ${
+                  className={`group relative border p-4 hover:bg-foreground transition-all duration-200 cursor-pointer flex items-center gap-3 h-auto rounded-none shadow-none ${
                     selectedLang === language.code ? "bg-foreground border-foreground" : "bg-transparent border-foreground"
                   }`}
                 >
@@ -160,7 +161,7 @@ export function Lang({ type }: LangProps) {
                   >
                     {language.name}
                   </div>
-                </button>
+                </Button>
               ))}
             </div>
           </div>

@@ -141,3 +141,4 @@ export function Logo({ size = "medium", className = "", autoStart = true }: Anim
     </div>
   )
 }
+

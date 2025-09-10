@@ -7,6 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Mask } from "@/components/ui/animations/mask"
 import { Card, CardHeader } from "@/components/ui/card"
 import { Structure } from "@/components/structure"
+import { Button } from "@/components/ui/button"
 import {
   Carousel,
   CarouselContent,
@@ -124,9 +125,9 @@ export default function HomePage() {
                         operations with our reliable, secure, and high-performance browser infrastructure.
                       </p>
                       <div className="flex justify-center">
-                        <button
+                        <Button
                           type="button"
-                          className="bg-foreground text-background border-0 outline-none cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors"
+                          className="bg-foreground text-background border-0 outline-none cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors h-auto rounded-none shadow-none hover:bg-foreground"
                           onMouseEnter={(e) => {
                             e.currentTarget.classList.add("opacity-80")
                           }}
@@ -135,7 +136,7 @@ export default function HomePage() {
                           }}
                         >
                           Get in Touch
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   }
@@ -149,9 +150,9 @@ export default function HomePage() {
                       your needs.
                     </p>
                     <div className="flex justify-center">
-                      <button
+                      <Button
                         type="button"
-                        className="bg-background text-foreground border-0 outline-none cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors"
+                        className="bg-background text-foreground border-0 outline-none cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors h-auto rounded-none shadow-none hover:bg-background"
                         onMouseEnter={(e) => {
                           e.currentTarget.classList.add("opacity-80")
                         }}
@@ -160,7 +161,7 @@ export default function HomePage() {
                         }}
                       >
                         Get in Touch
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </Mask>
@@ -282,15 +283,17 @@ export default function HomePage() {
                 
                 <div className="flex justify-center mt-4 gap-2 md:hidden">
                   {Array.from({ length: count }, (_, index) => (
-                    <button
+                    <Button
                       key={index}
                       type="button"
                       onClick={() => api?.scrollTo(index)}
-                      className={`w-2 h-2 transition-all ${
+                      className={`w-2 h-2 transition-all p-0 rounded-none shadow-none border-0 ${
                         index + 1 === current
                           ? "bg-foreground"
                           : "bg-foreground opacity-30 hover:opacity-60"
                       }`}
+                      variant="ghost"
+                      size="icon"
                       aria-label={`Go to slide ${index + 1}`}
                     />
                   ))}
@@ -452,15 +455,16 @@ export default function HomePage() {
 
       <div className="fixed right-2 sm:right-3 lg:right-4 top-1/2 -translate-y-1/2 z-40 md:hidden flex flex-col gap-2">
         {[0, 1, 2, 3].map((index) => (
-          <button
+          <Button
             type="button"
             key={index}
             onClick={() => scrollToSection(index)}
-            className={`w-2 sm:w-3 h-8 sm:h-10 lg:h-12 transition-all duration-300 cursor-pointer border ${
+            className={`w-2 sm:w-3 h-8 sm:h-10 lg:h-12 transition-all duration-300 cursor-pointer border p-0 rounded-none shadow-none ${
               activeSection === index
                 ? "bg-foreground border-foreground shadow-lg"
                 : "bg-transparent border-foreground hover:border-foreground hover:bg-muted"
             }`}
+            variant="ghost"
             aria-label={`Go to section ${index + 1}`}
           />
         ))}
