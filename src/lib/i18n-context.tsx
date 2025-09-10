@@ -14,19 +14,16 @@ const I18nContext = createContext<I18nContextType | null>(null)
 
 const translations: Record<Locale, Record<string, string>> = {
   en: {
-    // Navigation
     "nav.offer": "Offer",
     "nav.pricing": "Pricing", 
     "nav.qa": "Q&A",
     
-    // Hero
     "hero.title": "Professional Cloud Browser Solutions",
     "hero.subtitle": "We provide cutting-edge cloud browser technology for businesses and developers. Scale your operations with our reliable, secure, and high-performance browser infrastructure.",
     "hero.cta": "Get in Touch",
     "hero.maskTitle": "Advanced Browser Infrastructure",
     "hero.maskSubtitle": "Experience the future of cloud computing with our revolutionary browser technology that adapts to your needs.",
     
-    // Pricing
     "pricing.title": "Pricing",
     "pricing.subtitle": "Choose the plan that best fits your business needs",
     "pricing.mostPopular": "MOST POPULAR",
@@ -57,7 +54,6 @@ const translations: Record<Locale, Record<string, string>> = {
     "pricing.startup.feature4": "Shared ownership",
     "pricing.startup.feature5": "Strategic involvement",
     
-    // Q&A
     "qa.title": "Questions",
     "qa.subtitle": "Everything you need to know about working together",
     "qa.services.question": "What types of services do I offer?",
@@ -71,16 +67,13 @@ const translations: Record<Locale, Record<string, string>> = {
     "qa.quality.question": "How do I ensure code quality?",
     "qa.quality.answer": "I follow industry best practices including test-driven development, code reviews, and comprehensive documentation. All code is version-controlled, well-commented, and built with scalability in mind. I maintain clear communication throughout the project and provide post-launch support to ensure smooth deployment.",
     
-    // Footer
     "footer.imprint": "Imprint",
     "footer.gdpr": "GDPR",
     "footer.terms": "Terms of Service",
     "footer.brandName": "4nuel",
     
-    // Language picker
     "language.choose": "Choose Language",
     
-    // Mode
     "mode.dark": "Dark",
     "mode.light": "Light", 
     "mode.auto": "Auto",
@@ -144,7 +137,6 @@ const translations: Record<Locale, Record<string, string>> = {
     "mode.light": "Hell",
     "mode.auto": "Auto",
   },
-  // Add more languages as needed - keeping it concise for now
   fr: {
     "nav.offer": "Offre",
     "nav.pricing": "Tarifs",
@@ -204,7 +196,6 @@ const translations: Record<Locale, Record<string, string>> = {
     "mode.light": "Clair",
     "mode.auto": "Auto",
   },
-  // Simplified versions for other languages
   es: {
     "nav.offer": "Oferta",
     "nav.pricing": "Precios",
@@ -232,7 +223,6 @@ const translations: Record<Locale, Record<string, string>> = {
     "footer.imprint": "Aviso Legal", "footer.gdpr": "RGPD", "footer.terms": "Términos de Servicio", "footer.brandName": "4nuel",
     "language.choose": "Elegir Idioma", "mode.dark": "Oscuro", "mode.light": "Claro", "mode.auto": "Auto",
   },
-  // Add minimal entries for other languages to prevent errors
   it: { "nav.offer": "Offerta", "nav.pricing": "Prezzi", "nav.qa": "Domande", "hero.title": "Soluzioni Browser Cloud Professionali", "hero.subtitle": "Forniamo tecnologia browser cloud all'avanguardia.", "hero.cta": "Contattaci", "hero.maskTitle": "Infrastruttura Browser Avanzata", "hero.maskSubtitle": "Sperimenta il futuro del cloud computing.", "pricing.title": "Prezzi", "pricing.subtitle": "Scegli il piano migliore", "pricing.mostPopular": "PIÙ POPOLARE", "pricing.hourly.name": "Orario", "pricing.hourly.price": "90€", "pricing.hourly.period": "/ora", "pricing.hourly.description": "Perfetto per compiti rapidi", "pricing.hourly.feature1": "Pagamento per utilizzo", "pricing.hourly.feature2": "Configurazione istantanea", "pricing.hourly.feature3": "Supporto base", "pricing.hourly.feature4": "Nessun impegno", "pricing.daily.name": "Giornaliero", "pricing.daily.price": "720€", "pricing.daily.period": "/giorno", "pricing.daily.description": "Ideale per progetti in corso", "pricing.daily.feature1": "Accesso tutto il giorno", "pricing.daily.feature2": "Supporto prioritario", "pricing.daily.feature3": "Funzionalità avanzate", "pricing.daily.feature4": "Disponibilità 24/7", "pricing.daily.feature5": "Configurazioni personalizzate", "pricing.startup.name": "Startups", "pricing.startup.price": "Co-fondatore", "pricing.startup.period": "", "pricing.startup.description": "Partecipazione azionaria", "pricing.startup.feature1": "Partnership basata su equity", "pricing.startup.feature2": "Partecipazione attiva", "pricing.startup.feature3": "Impegno a lungo termine", "pricing.startup.feature4": "Proprietà condivisa", "pricing.startup.feature5": "Coinvolgimento strategico", "qa.title": "Domande", "qa.subtitle": "Tutto quello che devi sapere", "qa.services.question": "Che tipi di servizi offro?", "qa.services.answer": "Mi specializzo nello sviluppo web full-stack.", "qa.approach.question": "Come affronto nuovi progetti?", "qa.approach.answer": "Inizio con una fase di scoperta approfondita.", "qa.pricingInfo.question": "Qual è la mia struttura dei prezzi?", "qa.pricingInfo.answer": "Offro modelli di prezzo flessibili.", "qa.technologies.question": "Con quali tecnologie lavoro?", "qa.technologies.answer": "Sono competente nelle moderne tecnologie web.", "qa.quality.question": "Come assicuro la qualità del codice?", "qa.quality.answer": "Seguo le migliori pratiche del settore.", "footer.imprint": "Note legali", "footer.gdpr": "GDPR", "footer.terms": "Termini di Servizio", "footer.brandName": "4nuel", "language.choose": "Scegli Lingua", "mode.dark": "Scuro", "mode.light": "Chiaro", "mode.auto": "Auto" },
   pt: { "nav.offer": "Oferta", "nav.pricing": "Preços", "nav.qa": "Perguntas", "hero.title": "Soluções Profissionais de Navegador em Nuvem", "hero.subtitle": "Fornecemos tecnologia de navegador em nuvem de ponta.", "hero.cta": "Entre em Contato", "hero.maskTitle": "Infraestrutura de Navegador Avançada", "hero.maskSubtitle": "Experimente o futuro da computação em nuvem.", "pricing.title": "Preços", "pricing.subtitle": "Escolha o plano que melhor se adapta", "pricing.mostPopular": "MAIS POPULAR", "pricing.hourly.name": "Por Hora", "pricing.hourly.price": "R$500", "pricing.hourly.period": "/hora", "pricing.hourly.description": "Perfeito para tarefas rápidas", "pricing.hourly.feature1": "Pagamento por uso", "pricing.hourly.feature2": "Configuração instantânea", "pricing.hourly.feature3": "Suporte básico", "pricing.hourly.feature4": "Sem compromissos", "pricing.daily.name": "Diário", "pricing.daily.price": "R$4000", "pricing.daily.period": "/dia", "pricing.daily.description": "Ideal para projetos em andamento", "pricing.daily.feature1": "Acesso o dia todo", "pricing.daily.feature2": "Suporte prioritário", "pricing.daily.feature3": "Recursos avançados", "pricing.daily.feature4": "Disponibilidade 24/7", "pricing.daily.feature5": "Configurações personalizadas", "pricing.startup.name": "Startups", "pricing.startup.price": "Co-fundador", "pricing.startup.period": "", "pricing.startup.description": "Participação acionária", "pricing.startup.feature1": "Parceria baseada em equity", "pricing.startup.feature2": "Participação ativa", "pricing.startup.feature3": "Compromisso de longo prazo", "pricing.startup.feature4": "Propriedade compartilhada", "pricing.startup.feature5": "Envolvimento estratégico", "qa.title": "Perguntas", "qa.subtitle": "Tudo o que você precisa saber", "qa.services.question": "Que tipos de serviços ofereço?", "qa.services.answer": "Especializo-me em desenvolvimento web full-stack.", "qa.approach.question": "Como abordo novos projetos?", "qa.approach.answer": "Começo com uma fase de descoberta completa.", "qa.pricingInfo.question": "Qual é minha estrutura de preços?", "qa.pricingInfo.answer": "Ofereço modelos de preços flexíveis.", "qa.technologies.question": "Com quais tecnologias trabalho?", "qa.technologies.answer": "Sou proficiente em tecnologias web modernas.", "qa.quality.question": "Como garanto a qualidade do código?", "qa.quality.answer": "Sigo as melhores práticas da indústria.", "footer.imprint": "Dados legais", "footer.gdpr": "LGPD", "footer.terms": "Termos de Serviço", "footer.brandName": "4nuel", "language.choose": "Escolher Idioma", "mode.dark": "Escuro", "mode.light": "Claro", "mode.auto": "Auto" },
   nl: { "nav.offer": "Aanbod", "nav.pricing": "Prijzen", "nav.qa": "Vragen", "hero.title": "Professionele Cloud Browser Oplossingen", "hero.subtitle": "We bieden geavanceerde cloud browser technologie.", "hero.cta": "Neem Contact Op", "hero.maskTitle": "Geavanceerde Browser Infrastructuur", "hero.maskSubtitle": "Ervaar de toekomst van cloud computing.", "pricing.title": "Prijzen", "pricing.subtitle": "Kies het plan dat het beste past", "pricing.mostPopular": "MEEST POPULAIR", "pricing.hourly.name": "Per Uur", "pricing.hourly.price": "€90", "pricing.hourly.period": "/uur", "pricing.hourly.description": "Perfect voor snelle taken", "pricing.hourly.feature1": "Betaal per gebruik", "pricing.hourly.feature2": "Directe installatie", "pricing.hourly.feature3": "Basis ondersteuning", "pricing.hourly.feature4": "Geen verplichtingen", "pricing.daily.name": "Dagelijks", "pricing.daily.price": "€720", "pricing.daily.period": "/dag", "pricing.daily.description": "Ideaal voor lopende projecten", "pricing.daily.feature1": "Toegang hele dag", "pricing.daily.feature2": "Prioriteit ondersteuning", "pricing.daily.feature3": "Geavanceerde functies", "pricing.daily.feature4": "24/7 beschikbaarheid", "pricing.daily.feature5": "Aangepaste configuraties", "pricing.startup.name": "Startups", "pricing.startup.price": "Medeoprichter", "pricing.startup.period": "", "pricing.startup.description": "Eigenkapitaal participatie", "pricing.startup.feature1": "Op eigenkapital gebaseerd partnerschap", "pricing.startup.feature2": "Actieve deelname", "pricing.startup.feature3": "Lange termijn commitment", "pricing.startup.feature4": "Gedeeld eigendom", "pricing.startup.feature5": "Strategische betrokkenheid", "qa.title": "Vragen", "qa.subtitle": "Alles wat je moet weten", "qa.services.question": "Welke diensten bied ik aan?", "qa.services.answer": "Ik specialiseer me in full-stack webontwikkeling.", "qa.approach.question": "Hoe benader ik nieuwe projecten?", "qa.approach.answer": "Ik begin met een grondige ontdekkingsfase.", "qa.pricingInfo.question": "Wat is mijn prijsstructuur?", "qa.pricingInfo.answer": "Ik bied flexibele prijsmodellen aan.", "qa.technologies.question": "Met welke technologieën werk ik?", "qa.technologies.answer": "Ik ben bedreven in moderne webtechnologieën.", "qa.quality.question": "Hoe zorg ik voor codekwaliteit?", "qa.quality.answer": "Ik volg de beste praktijken van de industrie.", "footer.imprint": "Colofon", "footer.gdpr": "AVG", "footer.terms": "Servicevoorwaarden", "footer.brandName": "4nuel", "language.choose": "Kies Taal", "mode.dark": "Donker", "mode.light": "Licht", "mode.auto": "Auto" },
