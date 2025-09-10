@@ -1,26 +1,37 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+import { useTheme } from "next-themes"
 import { useEffect, useRef, useState } from "react"
-import { Footer } from "@/components/footer"
-import { Header } from "@/components/header"
+import { Lang } from "@/components/lang"
+import { Logo } from "@/components/logo"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Mask } from "@/components/ui/animations/mask"
-import { Card, CardHeader } from "@/components/ui/card"
-import { Structure } from "@/components/structure"
 import { Button } from "@/components/ui/button"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselApi,
-} from "@/components/ui/carousel"
+import { Carousel, type CarouselApi, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState(0)
-  const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(0)
-  const [count, setCount] = useState(0)
+  const [mobileApi, setMobileApi] = useState<CarouselApi>()
+  const [mobileCurrent, setMobileCurrent] = useState(0)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
+  const { theme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Mobile carousel API
+  useEffect(() => {
+    if (!mobileApi) return
+
+    setMobileCurrent(mobileApi.selectedScrollSnap())
+
+    mobileApi.on("select", () => {
+      setMobileCurrent(mobileApi.selectedScrollSnap())
+    })
+  }, [mobileApi])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -87,17 +98,6 @@ export default function HomePage() {
     }
   }, [])
 
-  useEffect(() => {
-    if (!api) return
-
-    setCount(api.scrollSnapList().length)
-    setCurrent(api.selectedScrollSnap() + 1)
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1)
-    })
-  }, [api])
-
   const scrollToSection = (index: number) => {
     const sections = document.querySelectorAll(".snap-section")
     if (sections[index]) {
@@ -106,331 +106,402 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Header activeSection={activeSection} />
+    <>
+      {/* Mobile Carousel Layout */}
+      <div className="lg:hidden h-screen bg-foreground dark:bg-foreground text-black relative overflow-hidden">
+        {/* Mode indicator in top right corner */}
+        {mounted && (
+          <div className="fixed top-4 right-4 z-50 bg-white border border-black px-2 py-1 text-xs font-light text-black">
+            {theme === "system" ? `Auto (${resolvedTheme})` : theme}
+          </div>
+        )}
 
-      <div ref={scrollContainerRef} className="h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide">
-        <main className="w-full">
-          <div id="offer" className="snap-section snap-start">
-            <Structure>
-              <div className="relative">
-                <Mask
-                  revealText={
-                    <div className="max-w-4xl mx-auto text-center pt-32 px-4">
-                      <h1 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8 text-balance text-foreground">
-                        Professional Cloud Browser Solutions
-                      </h1>
-                      <p className="text-lg sm:text-xl text-foreground mb-12 max-w-2xl mx-auto text-pretty font-light">
-                        We provide cutting-edge cloud browser technology for businesses and developers. Scale your
-                        operations with our reliable, secure, and high-performance browser infrastructure.
-                      </p>
-                      <div className="flex justify-center">
-                        <Button
-                          type="button"
-                          className="bg-foreground text-background border-0 outline-none cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors h-auto rounded-none shadow-none hover:bg-foreground"
-                          onMouseEnter={(e) => {
-                            e.currentTarget.classList.add("opacity-80")
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.classList.remove("opacity-80")
-                          }}
-                        >
-                          Get in Touch
-                        </Button>
-                      </div>
+        {/* Carousel Container */}
+        <Carousel
+          className="h-full w-full mb-12"
+          setApi={setMobileApi}
+          opts={{
+            align: "start",
+            loop: false,
+            dragFree: false,
+          }}
+        >
+          <CarouselContent className="h-full -ml-0 flex">
+            {/* Section 1: Main content */}
+            <CarouselItem className="h-full pl-0">
+              <div className="w-full h-full p-3 pb-16">
+                <div className="w-full h-full flex flex-col justify-between bg-background rounded-xl p-4 overflow-hidden">
+                  {/* Main content */}
+                  <div className="text-center flex-1 flex flex-col justify-center">
+                    <div className="flex items-center justify-center space-x-3 mb-4">
+                      <Logo size="medium" autoStart={true} />
+                      <span className="text-5xl font-thin text-foreground">4nuel</span>
                     </div>
-                  }
-                >
-                  <div className="max-w-4xl mx-auto text-center pt-32 px-4">
-                    <h1 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8 text-balance text-background">
-                      Advanced Browser Infrastructure
-                    </h1>
-                    <p className="text-lg sm:text-xl text-background mb-12 max-w-2xl mx-auto text-pretty font-light">
-                      Experience the future of cloud computing with our revolutionary browser technology that adapts to
-                      your needs.
+                    <h1 className="text-lg font-light mb-3 text-foreground">Lead Software Engineer</h1>
+                    <p className="text-xs text-foreground mb-4 font-light leading-relaxed px-2">
+                      Specializing in AI/ML deep tech architecture. Proficient in C, Rust, Go, JS/TS, Python, and Zig.
+                      Let's build cutting-edge solutions together.
                     </p>
-                    <div className="flex justify-center">
+                  </div>
+
+                  {/* Footer at bottom */}
+                  <div className="flex items-end justify-between w-full pb-4">
+                    {/* Legal links on the left */}
+                    <div className="flex flex-row gap-3">
                       <Button
                         type="button"
-                        className="bg-background text-foreground border-0 outline-none cursor-pointer text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-light transition-colors h-auto rounded-none shadow-none hover:bg-background"
-                        onMouseEnter={(e) => {
-                          e.currentTarget.classList.add("opacity-80")
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.classList.remove("opacity-80")
-                        }}
+                        onClick={() => router.push("/imprint")}
+                        className="text-foreground hover:text-foreground text-xs font-light cursor-pointer transition-all p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"
                       >
-                        Get in Touch
+                        Imprint
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={() => router.push("/gdpr")}
+                        className="text-foreground hover:text-foreground text-xs font-light cursor-pointer transition-all p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"
+                      >
+                        GDPR
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={() => router.push("/terms")}
+                        className="text-foreground hover:text-foreground text-xs font-light cursor-pointer transition-all p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"
+                      >
+                        Terms of Service
                       </Button>
                     </div>
+
+                    {/* Theme and Language switchers on the right */}
+                    <div className="flex flex-row gap-2">
+                      <Lang type="mode" />
+                      <Lang type="language" />
+                    </div>
                   </div>
-                </Mask>
+                </div>
               </div>
-            </Structure>
-          </div>
+            </CarouselItem>
 
-          <div id="pricing" className="snap-section snap-start">
-            <Structure hasNav>
-              <section className="h-full bg-background text-foreground flex flex-col justify-center px-6 py-8">
-                <div className="max-w-6xl w-full mx-auto">
-                  <div className="text-center mb-8 md:mb-12">
-                    <h2 className="text-3xl md:text-5xl font-light mb-4 md:mb-6">Pricing</h2>
-                    <p className="text-sm md:text-xl text-foreground max-w-2xl mx-auto font-light">
-                      Choose the plan that best fits your business needs
+            {/* Section 2: Offer */}
+            <CarouselItem className="h-full pl-0">
+              <div className="w-full h-full p-3 pb-16">
+                <div className="w-full h-full flex flex-col justify-center bg-background rounded-xl p-4 overflow-hidden">
+                  <div className="max-w-2xl mx-auto text-center px-4">
+                    <h2 className="text-lg font-light mb-3 text-foreground">Professional Cloud Browser Solutions</h2>
+                    <p className="text-xs text-foreground mb-4 font-light leading-relaxed">
+                      We provide cutting-edge cloud browser technology for businesses and developers. Scale your
+                      operations with our reliable, secure, and high-performance browser infrastructure.
                     </p>
-                  </div>
-                  <Carousel 
-                    className="flex-1 md:hidden"
-                    setApi={setApi}
-                    opts={{
-                      align: "center",
-                      loop: false,
-                      dragFree: false,
-                      containScroll: "trimSnaps",
-                      slidesToScroll: 1,
-                    }}
-                  >
-                    <CarouselContent className="-ml-2 md:-ml-4">
-                      {[
-                      {
-                        name: "Hourly",
-                        price: "$100",
-                        period: "/hour",
-                        description: "Perfect for quick tasks and testing",
-                        features: ["Pay as you go", "Instant setup", "Basic support", "No commitments"],
-                      },
-                      {
-                        name: "Daily",
-                        price: "$800",
-                        period: "/day",
-                        description: "Ideal for ongoing projects",
-                        features: [
-                          "Full day access",
-                          "Priority support",
-                          "Advanced features",
-                          "24/7 availability",
-                          "Custom configurations",
-                        ],
-                        popular: true,
-                      },
-                      {
-                        name: "Startups",
-                        price: "Co-founder",
-                        period: "",
-                        description: "Equity participation and ownership stake",
-                        features: [
-                          "Equity-based partnership",
-                          "Active participation",
-                          "Long-term commitment",
-                          "Shared ownership",
-                          "Strategic involvement",
-                        ],
-                      },
-                      ].map((plan, index) => (
-                        <CarouselItem key={index} className="pl-2 md:pl-4">
-                          <div className="p-1">
-                            <Card
-                          className={`relative w-full max-w-sm aspect-square flex flex-col justify-center rounded-none ${
-                            plan.popular 
-                              ? "bg-foreground border-2 border-foreground shadow-2xl transform scale-105" 
-                              : "bg-background border-2 border-foreground"
-                          }`}
-                        >
-                          {plan.popular && (
-                            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 z-10">
-                              <div className="bg-background text-foreground px-6 py-2 text-sm font-medium border border-foreground">
-                                MOST POPULAR
-                              </div>
-                            </div>
-                          )}
-                          <CardHeader className="text-center pb-4 flex-1 flex flex-col justify-center pt-12">
-                            <h3 className={`text-2xl font-light mb-2 ${
-                              plan.popular ? "text-background" : "text-foreground"
-                            }`}>{plan.name}</h3>
-                            <div className="mb-4">
-                              <span className={`text-4xl font-light ${
-                                plan.popular ? "text-background" : "text-foreground"
-                              }`}>{plan.price}</span>
-                              <span className={`text-lg font-light ${
-                                plan.popular ? "text-background" : "text-foreground"
-                              }`}>{plan.period}</span>
-                            </div>
-                            <p className={`font-light text-sm mb-6 ${
-                              plan.popular ? "text-background" : "text-foreground"
-                            }`}>{plan.description}</p>
-                            <ul className="space-y-2">
-                              {plan.features.map((feature, featureIndex) => (
-                                <li
-                                  key={featureIndex}
-                                  className={`flex items-start font-light text-sm justify-center ${
-                                    plan.popular ? "text-background" : "text-foreground"
-                                  }`}
-                                >
-                                  <div className={`w-1 h-1 mt-2 mr-3 flex-shrink-0 ${
-                                    plan.popular ? "bg-background" : "bg-foreground"
-                                  }`}></div>
-                                  {feature}
-                                </li>
-                              ))}
-                            </ul>
-                            </CardHeader>
-                          </Card>
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                </Carousel>
-                
-                <div className="flex justify-center mt-4 gap-2 md:hidden">
-                  {Array.from({ length: count }, (_, index) => (
                     <Button
-                      key={index}
                       type="button"
-                      onClick={() => api?.scrollTo(index)}
-                      className={`w-2 h-2 transition-all p-0 rounded-none shadow-none border-0 ${
-                        index + 1 === current
-                          ? "bg-foreground"
-                          : "bg-foreground opacity-30 hover:opacity-60"
-                      }`}
-                      variant="ghost"
-                      size="icon"
-                      aria-label={`Go to slide ${index + 1}`}
-                    />
-                  ))}
-                </div>
-                  
-                <div className="hidden md:grid md:grid-cols-3 gap-8">
-                    {[
-                      {
-                        name: "Hourly",
-                        price: "$100",
-                        period: "/hour",
-                        description: "Perfect for quick tasks and testing",
-                        features: ["Pay as you go", "Instant setup", "Basic support", "No commitments"],
-                      },
-                      {
-                        name: "Daily",
-                        price: "$800",
-                        period: "/day",
-                        description: "Ideal for ongoing projects",
-                        features: [
-                          "Full day access",
-                          "Priority support",
-                          "Advanced features",
-                          "24/7 availability",
-                          "Custom configurations",
-                        ],
-                        popular: true,
-                      },
-                      {
-                        name: "Startups",
-                        price: "Co-founder",
-                        period: "",
-                        description: "Equity participation and ownership stake",
-                        features: [
-                          "Equity-based partnership",
-                          "Active participation",
-                          "Long-term commitment",
-                          "Shared ownership",
-                          "Strategic involvement",
-                        ],
-                      },
-                    ].map((plan, index) => (
-                      <Card
-                        key={index}
-                        className={`relative aspect-square flex flex-col justify-center rounded-none ${
-                          plan.popular 
-                            ? "bg-foreground border-2 border-foreground shadow-2xl transform scale-105" 
-                            : "bg-background border-2 border-foreground"
-                        }`}
-                      >
-                        {plan.popular && (
-                          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                            <div className="bg-background text-foreground px-6 py-2 text-sm font-medium border border-foreground">
-                              MOST POPULAR
-                            </div>
-                          </div>
-                        )}
-                        <CardHeader className="text-center pb-4 flex-1 flex flex-col justify-center">
-                          <h3 className={`text-2xl font-light mb-2 ${
-                            plan.popular ? "text-background" : "text-foreground"
-                          }`}>{plan.name}</h3>
-                          <div className="mb-4">
-                            <span className={`text-4xl font-light ${
-                              plan.popular ? "text-background" : "text-foreground"
-                            }`}>{plan.price}</span>
-                            <span className={`text-lg font-light ${
-                              plan.popular ? "text-background" : "text-foreground"
-                            }`}>{plan.period}</span>
-                          </div>
-                          <p className={`font-light text-sm mb-6 ${
-                            plan.popular ? "text-background" : "text-foreground"
-                          }`}>{plan.description}</p>
-                          <ul className="space-y-2">
-                            {plan.features.map((feature, featureIndex) => (
-                              <li
-                                key={featureIndex}
-                                className={`flex items-start font-light text-sm justify-center ${
-                                  plan.popular ? "text-background" : "text-foreground"
-                                }`}
-                              >
-                                <div className={`w-1 h-1 mt-2 mr-3 flex-shrink-0 ${
-                                  plan.popular ? "bg-background" : "bg-foreground"
-                                }`}></div>
-                                {feature}
-                              </li>
-                            ))}
-                          </ul>
-                        </CardHeader>
-                      </Card>
-                    ))}
+                      className="bg-foreground text-background border-0 outline-none cursor-pointer text-xs px-3 py-2 font-light transition-colors h-auto rounded-none shadow-none hover:bg-foreground"
+                      onMouseEnter={(e) => {
+                        e.currentTarget.classList.add("opacity-80")
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.classList.remove("opacity-80")
+                      }}
+                    >
+                      Get in Touch
+                    </Button>
                   </div>
                 </div>
-              </section>
-            </Structure>
-          </div>
+              </div>
+            </CarouselItem>
 
-          <div id="qa" className="snap-section snap-start">
-            <Structure hasNav>
-              <div className="w-full bg-background text-foreground" style={{ paddingBottom: "50px" }}>
-                <div className="w-full max-w-4xl mx-auto px-6">
-                  <div className="text-center mb-8">
-                    <h2 className="text-3xl md:text-4xl font-light mb-4">Questions</h2>
-                    <p className="text-sm md:text-base text-foreground max-w-2xl mx-auto font-light">
-                      Everything you need to know about working together
-                    </p>
+            {/* Section 3: Pricing */}
+            <CarouselItem className="h-full pl-0">
+              <div className="w-full h-full p-3 pb-16">
+                <div className="w-full h-full flex flex-col justify-center bg-background rounded-xl p-4 overflow-hidden">
+                  <div className="w-full px-4">
+                    <div className="text-center mb-6">
+                      <h2 className="text-lg font-light mb-2 text-foreground">Pricing</h2>
+                      <p className="text-xs text-foreground max-w-xl mx-auto font-light">
+                        Choose the plan that best fits your business needs
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4 max-w-md mx-auto">
+                      <div className="p-4 text-center border border-foreground">
+                        <h3 className="text-lg font-light mb-2 text-foreground">Hourly</h3>
+                        <div className="mb-2">
+                          <span className="text-xl font-light text-foreground">$100</span>
+                          <span className="text-xs text-foreground">/hour</span>
+                        </div>
+                        <p className="text-xs font-light text-foreground">Perfect for quick tasks</p>
+                      </div>
+                      <div className="border border-foreground p-4 text-center bg-foreground text-background">
+                        <h3 className="text-lg font-light mb-2">Daily</h3>
+                        <div className="mb-2">
+                          <span className="text-xl font-light">$800</span>
+                          <span className="text-xs">/day</span>
+                        </div>
+                        <p className="text-xs font-light">Ideal for ongoing projects</p>
+                      </div>
+                      <div className="p-4 text-center border border-foreground">
+                        <h3 className="text-lg font-light mb-2 text-foreground">Startups</h3>
+                        <div className="mb-2">
+                          <span className="text-lg font-light text-foreground">Co-founder</span>
+                        </div>
+                        <p className="text-xs font-light text-foreground">Equity participation</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-full">
+                </div>
+              </div>
+            </CarouselItem>
+
+            {/* Section 4: Q&A */}
+            <CarouselItem className="h-full pl-0">
+              <div className="w-full h-full p-3 pb-16">
+                <div className="w-full h-full flex flex-col justify-center bg-background rounded-xl p-4 overflow-y-auto">
+                  <div className="w-full px-4 max-w-2xl mx-auto">
+                    <div className="text-center mb-4">
+                      <h2 className="text-lg font-light mb-2 text-foreground">Questions</h2>
+                      <p className="text-xs text-foreground font-light">
+                        Everything you need to know about working together
+                      </p>
+                    </div>
                     <Accordion type="single" collapsible className="border border-foreground">
                       {[
                         {
                           question: "What types of services do I offer?",
                           answer:
-                            "I specialize in full-stack web development, API design and implementation, cloud architecture, database optimization, and custom software solutions. Whether you need a new application built from scratch, legacy code modernization, or technical consulting, I can help bring your project to life.",
+                            "I specialize in full-stack web development, API design and implementation, cloud architecture, database optimization, and custom software solutions.",
                         },
                         {
                           question: "How do I approach new projects?",
                           answer:
-                            "I begin with a thorough discovery phase to understand your requirements, followed by a detailed project proposal with clear milestones. I work in iterative sprints with regular check-ins, ensuring transparency and flexibility throughout the development process. Timelines are estimated based on project complexity and agreed upon before starting.",
+                            "I begin with a thorough discovery phase to understand your requirements, followed by a detailed project proposal with clear milestones.",
                         },
                         {
                           question: "What is my pricing structure?",
                           answer:
-                            "I offer flexible pricing models including hourly rates for short-term work, daily rates for ongoing projects, and equity-based partnerships for startups. Each project is unique, and I provide customized quotes based on scope, complexity, and timeline. Contact me for a detailed estimate tailored to your specific needs.",
+                            "I offer flexible pricing models including hourly rates for short-term work, daily rates for ongoing projects, and equity-based partnerships for startups.",
                         },
                         {
                           question: "What technologies do I work with?",
                           answer:
-                            "I'm proficient in modern web technologies including React, Next.js, Node.js, TypeScript, Python, and various databases. I also have experience with cloud platforms like AWS and GCP, containerization with Docker, and CI/CD pipelines. I stay current with industry trends and can adapt to your existing tech stack.",
+                            "I'm proficient in modern web technologies including React, Next.js, Node.js, TypeScript, Python, and various databases.",
+                        },
+                      ].map((faq, index) => (
+                        <AccordionItem
+                          key={index}
+                          value={`item-${index}`}
+                          className="px-4 border-b border-foreground last:border-b-0"
+                        >
+                          <AccordionTrigger className="text-left text-sm font-light hover:text-foreground py-3 hover:no-underline cursor-pointer text-foreground">
+                            {faq.question}
+                          </AccordionTrigger>
+                          <AccordionContent className="text-foreground pb-3 text-xs leading-relaxed font-light">
+                            {faq.answer}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+          </CarouselContent>
+        </Carousel>
+
+        {/* Section Indicators */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-1">
+          {[0, 1, 2, 3].map((index) => (
+            <button
+              key={index}
+              onClick={() => mobileApi?.scrollTo(index)}
+              className={`w-3 h-3 transition-all duration-300 touch-manipulation cursor-pointer border rounded-none shadow-none ${
+                mobileCurrent === index
+                  ? "bg-white border-white dark:bg-black dark:border-black shadow-lg w-10 h-3"
+                  : "bg-transparent border-white dark:border-black"
+              }`}
+              aria-label={`Go to section ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden lg:grid min-h-screen bg-foreground dark:bg-foreground text-black grid-cols-5 selectable-content relative">
+        {/* Mode indicator in top right corner */}
+        {mounted && (
+          <div className="fixed top-4 right-4 z-50 bg-white border border-black px-3 py-1 text-xs font-light text-black">
+            {theme === "system" ? `Auto (${resolvedTheme})` : theme}
+          </div>
+        )}
+
+        {/* Left Column - Fixed - 2/5 width on desktop */}
+        <div className="h-screen p-6 lg:pl-10 lg:pr-3 col-span-2 bg-foreground dark:bg-foreground">
+          <div className="p-8 w-full h-full flex flex-col justify-between bg-background rounded-2xl">
+            {/* Main content */}
+            <div className="text-center flex-1 flex flex-col justify-center">
+              <div className="flex items-center justify-center space-x-4 mb-8">
+                <Logo size="medium" autoStart={true} />
+                <span className="text-4xl md:text-6xl lg:text-8xl xl:text-9xl font-thin text-foreground">4nuel</span>
+              </div>
+              <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-4 lg:mb-6 text-foreground">
+                Lead Software Engineer
+              </h1>
+              <p className="text-xs md:text-sm lg:text-base xl:text-lg text-foreground mb-6 lg:mb-8 font-light leading-relaxed">
+                Specializing in AI/ML deep tech architecture. Proficient in C, Rust, Go, JS/TS, Python, and Zig. Let's
+                build cutting-edge solutions together.
+              </p>
+            </div>
+
+            {/* Footer at bottom */}
+            <div className="flex items-end justify-between w-full pb-0">
+              {/* Legal links on the left */}
+              <div className="flex flex-row gap-2 sm:gap-4 md:gap-6 lg:gap-8">
+                <Button
+                  type="button"
+                  onClick={() => router.push("/imprint")}
+                  className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-all p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"
+                >
+                  Imprint
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => router.push("/gdpr")}
+                  className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-all p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"
+                >
+                  GDPR
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => router.push("/terms")}
+                  className="text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-all p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"
+                >
+                  Terms of Service
+                </Button>
+              </div>
+
+              {/* Theme and Language switchers on the right */}
+              <div className="flex flex-row gap-1 sm:gap-2 md:gap-3 lg:gap-4">
+                <Lang type="mode" />
+                <Lang type="language" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column - Scrollable - 3/5 width on desktop */}
+        <div className="h-screen relative col-span-3 p-6 lg:pl-3 lg:pr-10 bg-foreground dark:bg-foreground">
+          <div className="h-full bg-background rounded-2xl overflow-hidden">
+            <div
+              ref={scrollContainerRef}
+              className="h-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide bg-background rounded-2xl"
+            >
+              <main className="w-full bg-background">
+                <div
+                  id="offer"
+                  className="snap-section snap-start h-screen flex items-center justify-center bg-background"
+                >
+                  <div className="max-w-2xl mx-auto text-center px-4 lg:px-8">
+                    <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-4 lg:mb-6 text-foreground">
+                      Professional Cloud Browser Solutions
+                    </h2>
+                    <p className="text-xs md:text-sm lg:text-base xl:text-lg text-foreground mb-6 lg:mb-8 font-light leading-relaxed">
+                      We provide cutting-edge cloud browser technology for businesses and developers. Scale your
+                      operations with our reliable, secure, and high-performance browser infrastructure.
+                    </p>
+                    <Button
+                      type="button"
+                      className="bg-foreground text-background border-0 outline-none cursor-pointer text-xs md:text-sm lg:text-base px-4 lg:px-6 py-2 lg:py-3 font-light transition-colors h-auto rounded-none shadow-none hover:bg-foreground"
+                      onMouseEnter={(e) => {
+                        e.currentTarget.classList.add("opacity-80")
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.classList.remove("opacity-80")
+                      }}
+                    >
+                      Get in Touch
+                    </Button>
+                  </div>
+                </div>
+
+                <div
+                  id="pricing"
+                  className="snap-section snap-start h-screen flex items-center justify-center bg-background"
+                >
+                  <div className="w-full px-4 lg:px-8">
+                    <div className="text-center mb-6 lg:mb-8">
+                      <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-3 lg:mb-4 text-foreground">
+                        Pricing
+                      </h2>
+                      <p className="text-xs md:text-sm lg:text-base xl:text-lg text-foreground max-w-xl mx-auto font-light">
+                        Choose the plan that best fits your business needs
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                      <div className="p-6 text-center border border-foreground">
+                        <h3 className="text-xl font-light mb-2 text-foreground">Hourly</h3>
+                        <div className="mb-4">
+                          <span className="text-2xl font-light text-foreground">$100</span>
+                          <span className="text-sm text-foreground">/hour</span>
+                        </div>
+                        <p className="text-sm font-light text-foreground">Perfect for quick tasks</p>
+                      </div>
+                      <div className="border border-foreground p-6 text-center bg-foreground text-background">
+                        <h3 className="text-xl font-light mb-2">Daily</h3>
+                        <div className="mb-4">
+                          <span className="text-2xl font-light">$800</span>
+                          <span className="text-sm">/day</span>
+                        </div>
+                        <p className="text-sm font-light">Ideal for ongoing projects</p>
+                      </div>
+                      <div className="p-6 text-center border border-foreground">
+                        <h3 className="text-xl font-light mb-2 text-foreground">Startups</h3>
+                        <div className="mb-4">
+                          <span className="text-xl font-light text-foreground">Co-founder</span>
+                        </div>
+                        <p className="text-sm font-light text-foreground">Equity participation</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  id="qa"
+                  className="snap-section snap-start h-screen flex items-center justify-center bg-background"
+                >
+                  <div className="w-full px-4 lg:px-8 max-w-2xl mx-auto">
+                    <div className="text-center mb-4 lg:mb-6">
+                      <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-3 lg:mb-4 text-foreground">
+                        Questions
+                      </h2>
+                      <p className="text-xs md:text-sm lg:text-base xl:text-lg text-foreground font-light">
+                        Everything you need to know about working together
+                      </p>
+                    </div>
+                    <Accordion type="single" collapsible className="border border-foreground">
+                      {[
+                        {
+                          question: "What types of services do I offer?",
+                          answer:
+                            "I specialize in full-stack web development, API design and implementation, cloud architecture, database optimization, and custom software solutions.",
                         },
                         {
-                          question: "How do I ensure code quality?",
+                          question: "How do I approach new projects?",
                           answer:
-                            "I follow industry best practices including test-driven development, code reviews, and comprehensive documentation. All code is version-controlled, well-commented, and built with scalability in mind. I maintain clear communication throughout the project and provide post-launch support to ensure smooth deployment.",
+                            "I begin with a thorough discovery phase to understand your requirements, followed by a detailed project proposal with clear milestones.",
+                        },
+                        {
+                          question: "What is my pricing structure?",
+                          answer:
+                            "I offer flexible pricing models including hourly rates for short-term work, daily rates for ongoing projects, and equity-based partnerships for startups.",
+                        },
+                        {
+                          question: "What technologies do I work with?",
+                          answer:
+                            "I'm proficient in modern web technologies including React, Next.js, Node.js, TypeScript, Python, and various databases.",
                         },
                       ].map((faq, index, array) => (
-                        <AccordionItem key={index} value={`item-${index}`} className={`px-4 ${index < array.length - 1 ? 'border-b border-foreground' : ''}`}>
-                          <AccordionTrigger className="text-left text-sm md:text-base font-light hover:text-foreground py-3 hover:no-underline cursor-pointer">
+                        <AccordionItem
+                          key={index}
+                          value={`item-${index}`}
+                          className="px-4 border-b border-foreground last:border-b-0"
+                        >
+                          <AccordionTrigger className="text-left text-sm md:text-base font-light hover:text-foreground py-3 hover:no-underline cursor-pointer text-foreground">
                             {faq.question}
                           </AccordionTrigger>
                           <AccordionContent className="text-foreground pb-3 text-xs md:text-sm leading-relaxed font-light">
@@ -441,32 +512,28 @@ export default function HomePage() {
                     </Accordion>
                   </div>
                 </div>
-              </div>
-            </Structure>
-          </div>
+              </main>
+            </div>
 
-          <div id="footer" className="snap-section snap-start">
-            <Footer />
+            {/* Section Navigation - Right Column - Hidden on mobile */}
+            <div className="absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-40 flex-col gap-1 hidden lg:flex">
+              {[0, 1, 2].map((index) => (
+                <button
+                  type="button"
+                  key={index}
+                  onClick={() => scrollToSection(index)}
+                  className={`w-3 h-3 transition-all duration-300 cursor-pointer border rounded-none shadow-none ${
+                    activeSection === index
+                      ? "bg-white border-white dark:bg-black dark:border-black shadow-lg w-3 h-10"
+                      : "bg-transparent border-white dark:border-black hover:bg-transparent"
+                  }`}
+                  aria-label={`Go to section ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
-        </main>
+        </div>
       </div>
-
-      <div className="fixed right-2 sm:right-3 lg:right-4 top-1/2 -translate-y-1/2 z-40 md:hidden flex flex-col gap-2">
-        {[0, 1, 2, 3].map((index) => (
-          <Button
-            type="button"
-            key={index}
-            onClick={() => scrollToSection(index)}
-            className={`w-2 sm:w-3 h-8 sm:h-10 lg:h-12 transition-all duration-300 cursor-pointer border p-0 rounded-none shadow-none ${
-              activeSection === index
-                ? "bg-foreground border-foreground shadow-lg"
-                : "bg-transparent border-foreground hover:border-foreground hover:bg-muted"
-            }`}
-            variant="ghost"
-            aria-label={`Go to section ${index + 1}`}
-          />
-        ))}
-      </div>
-    </div>
+    </>
   )
 }

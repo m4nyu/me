@@ -7,13 +7,13 @@
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0 0 0);
-  --card: oklch(0.97 0 0);
+  --card: oklch(1 0 0);
   --card-foreground: oklch(0 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0 0 0);
   --primary: oklch(0 0 0);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(1 0 0);
   --secondary-foreground: oklch(0 0 0);
   --muted: oklch(0.82 0 0);
   --muted-foreground: oklch(0 0 0);
@@ -21,7 +21,7 @@
   --accent-foreground: oklch(0 0 0);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.82 0 0);
+  --border: oklch(1 0 0);
   --input: oklch(1 0 0);
   --ring: oklch(0 0 0);
   --chart-1: oklch(0 0 0);
@@ -36,7 +36,7 @@
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.82 0 0);
   --sidebar-accent-foreground: oklch(0 0 0);
-  --sidebar-border: oklch(0.82 0 0);
+  --sidebar-border: oklch(1 0 0);
   --sidebar-ring: oklch(0 0 0);
 }
 
@@ -79,14 +79,14 @@
 .light {
   --background: oklch(1 0 0);
   --foreground: oklch(0 0 0);
-  --card: oklch(0.97 0 0);
+  --card: oklch(1 0 0);
   --card-foreground: oklch(0 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0 0 0);
 
   --primary: #000000;
   --primary-foreground: #ffffff;
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(1 0 0);
   --secondary-foreground: oklch(0 0 0);
   --muted: oklch(0.4 0 0);
   --muted-foreground: oklch(0.2 0 0);
@@ -94,7 +94,7 @@
   --accent-foreground: oklch(0 0 0);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0 0 0);
+  --border: oklch(1 0 0);
   --input: oklch(1 0 0);
   --ring: oklch(0 0 0);
   --chart-1: oklch(0 0 0);
@@ -108,7 +108,7 @@
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.82 0 0);
   --sidebar-accent-foreground: oklch(0 0 0);
-  --sidebar-border: oklch(0 0 0);
+  --sidebar-border: oklch(1 0 0);
   --sidebar-ring: oklch(0 0 0);
 }
 
@@ -228,6 +228,40 @@
   }
 
   .dark .legal-page-content ::-moz-selection {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  .selectable-content {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+  }
+
+  .selectable-content * {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+  }
+
+  .selectable-content::selection {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  .selectable-content ::-moz-selection {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  .dark .selectable-content::selection {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  .dark .selectable-content ::-moz-selection {
     background-color: #ffffff;
     color: #000000;
   }

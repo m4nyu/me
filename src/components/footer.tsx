@@ -1,9 +1,9 @@
 "use client"
 
-import { Logo } from "@/components/logo"
-import { Lang } from "@/components/lang"
-import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { Lang } from "@/components/lang"
+import { Logo } from "@/components/logo"
+import { Button } from "@/components/ui/button"
 
 export function Footer() {
   const router = useRouter()
