@@ -1,0 +1,292 @@
+/* CSS Variables */
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+}
+
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+}
+
+.light {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+}
+
+/* Base Styles */
+* {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Allow clicks on interactive elements */
+button, a, label, input, select, textarea {
+  user-select: auto;
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  pointer-events: auto;
+}
+
+body {
+  font-weight: 300;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for mobile swipe container */
+#mobile-swipe-container::-webkit-scrollbar {
+  display: none;
+}
+
+.selectable-content {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
+.selectable-content * {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
+.selectable-content::selection {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.selectable-content ::-moz-selection {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.dark .selectable-content::selection {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.dark .selectable-content ::-moz-selection {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Pure CSS interactivity - NO JavaScript */
+
+/* Accordion using details/summary with JavaScript */
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-item {
+  overflow: hidden;
+}
+
+.accordion-item summary {
+  transition: all 0.2s ease;
+}
+
+.accordion-item .accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-item[open] summary .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.accordion-chevron {
+  transition: transform 0.2s ease;
+}
+
+/* CSS-only Drawer using checkbox */
+.drawer-wrapper {
+  position: relative;
+}
+
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.drawer-content {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 51;
+  background: var(--background);
+  border-top: 1px solid var(--foreground);
+  max-height: 80vh;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.drawer-toggle:checked ~ .drawer-overlay {
+  display: block;
+  opacity: 1;
+}
+
+.drawer-toggle:checked ~ .drawer-content {
+  transform: translateY(0);
+}
+
+/* CSS-only Carousel using radio buttons */
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.carousel-slides {
+  display: flex;
+  height: 100%;
+  transition: transform 300ms ease;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  flex-shrink: 0;
+}
+
+/* Radio button controls (hidden) */
+#slide1:checked ~ .carousel-slides {
+  transform: translateX(0%);
+}
+
+#slide2:checked ~ .carousel-slides {
+  transform: translateX(-100%);
+}
+
+#slide3:checked ~ .carousel-slides {
+  transform: translateX(-200%);
+}
+
+/* Indicator styling */
+#slide1:checked ~ .carousel-indicators .indicator:nth-child(1),
+#slide2:checked ~ .carousel-indicators .indicator:nth-child(2),
+#slide3:checked ~ .carousel-indicators .indicator:nth-child(3) {
+  background-color: white;
+  border-color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  width: 2.5rem;
+  height: 0.75rem;
+}
+
+.dark #slide1:checked ~ .carousel-indicators .indicator:nth-child(1),
+.dark #slide2:checked ~ .carousel-indicators .indicator:nth-child(2),
+.dark #slide3:checked ~ .carousel-indicators .indicator:nth-child(3) {
+  background-color: black;
+  border-color: black;
+}
+
+/* Mobile scroll indicators */
+.mobile-scroll-dot.active {
+  background-color: white;
+  border-color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  width: 2.5rem;
+  height: 0.75rem;
+}
+
+.dark .mobile-scroll-dot.active {
+  background-color: black;
+  border-color: black;
+}
+
+/* Desktop navigation indicators */
+.desktop-nav-dot.active {
+  background-color: white;
+  border-color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  width: 0.75rem;
+  height: 2.5rem;
+}
+
+.dark .desktop-nav-dot.active {
+  background-color: black;
+  border-color: black;
+}
+
+/* Logo tile animation */
+@keyframes tile-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.logo-tile {
+  animation: tile-reveal 0.1s ease-in forwards;
+  opacity: 0;
+}
+
+/* Stagger animation delays via nth-child - All 36 tiles */
+.animated-logo .logo-tile:nth-child(1) { animation-delay: 0.826s; }
+.animated-logo .logo-tile:nth-child(2) { animation-delay: 0.028s; }
+.animated-logo .logo-tile:nth-child(3) { animation-delay: 0.704s; }
+.animated-logo .logo-tile:nth-child(4) { animation-delay: 0.441s; }
+.animated-logo .logo-tile:nth-child(5) { animation-delay: 0.530s; }
+.animated-logo .logo-tile:nth-child(6) { animation-delay: 0.409s; }
+.animated-logo .logo-tile:nth-child(7) { animation-delay: 1.441s; }
+.animated-logo .logo-tile:nth-child(8) { animation-delay: 0.028s; }
+.animated-logo .logo-tile:nth-child(9) { animation-delay: 0.053s; }
+.animated-logo .logo-tile:nth-child(10) { animation-delay: 0.658s; }
+.animated-logo .logo-tile:nth-child(11) { animation-delay: 1.355s; }
+.animated-logo .logo-tile:nth-child(12) { animation-delay: 0.471s; }
+.animated-logo .logo-tile:nth-child(13) { animation-delay: 0.926s; }
+.animated-logo .logo-tile:nth-child(14) { animation-delay: 1.343s; }
+.animated-logo .logo-tile:nth-child(15) { animation-delay: 0.495s; }
+.animated-logo .logo-tile:nth-child(16) { animation-delay: 1.078s; }
+.animated-logo .logo-tile:nth-child(17) { animation-delay: 0.827s; }
+.animated-logo .logo-tile:nth-child(18) { animation-delay: 0.959s; }
+.animated-logo .logo-tile:nth-child(19) { animation-delay: 1.948s; }
+.animated-logo .logo-tile:nth-child(20) { animation-delay: 0.640s; }
+.animated-logo .logo-tile:nth-child(21) { animation-delay: 0.696s; }
+.animated-logo .logo-tile:nth-child(22) { animation-delay: 0.368s; }
+.animated-logo .logo-tile:nth-child(23) { animation-delay: 1.615s; }
+.animated-logo .logo-tile:nth-child(24) { animation-delay: 0.539s; }
+.animated-logo .logo-tile:nth-child(25) { animation-delay: 1.173s; }
+.animated-logo .logo-tile:nth-child(26) { animation-delay: 0.585s; }
+.animated-logo .logo-tile:nth-child(27) { animation-delay: 1.323s; }
+.animated-logo .logo-tile:nth-child(28) { animation-delay: 1.196s; }
+.animated-logo .logo-tile:nth-child(29) { animation-delay: 0.384s; }
+.animated-logo .logo-tile:nth-child(30) { animation-delay: 1.879s; }
+.animated-logo .logo-tile:nth-child(31) { animation-delay: 1.269s; }
+.animated-logo .logo-tile:nth-child(32) { animation-delay: 1.844s; }
+.animated-logo .logo-tile:nth-child(33) { animation-delay: 1.042s; }
+.animated-logo .logo-tile:nth-child(34) { animation-delay: 0.227s; }
+.animated-logo .logo-tile:nth-child(35) { animation-delay: 1.801s; }
+.animated-logo .logo-tile:nth-child(36) { animation-delay: 1.645s; }
