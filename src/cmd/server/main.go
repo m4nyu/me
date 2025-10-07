@@ -22,7 +22,7 @@ func main() {
 	r.Use(middleware.CookieMiddleware)
 
 	// Static files
-	fileServer := http.FileServer(http.Dir("./static"))
+	fileServer := http.FileServer(http.Dir("./src/static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 
 	// Language routes - explicit routes for each language
