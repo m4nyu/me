@@ -1,6 +1,7 @@
 package components
 
 import (
+	"engineer/src/internal/i18n"
 	"fmt"
 
 	g "maragu.dev/gomponents"
@@ -17,48 +18,90 @@ type HomePageProps struct {
 func HomePage(props HomePageProps) g.Node {
 	faqItems := []AccordionItem{
 		{
-			Question: "What's the biggest myth in software engineering?",
-			Answer:   "That there's always a 'right' technology or architecture. Every choice is a trade-off. The best solution depends on your constraints, team, and business context. Being unopinionated means choosing the right tool for the job, not the trendy one.",
+			Question: i18n.T(props.CurrentLang, "faq_q1"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a1"),
 		},
 		{
-			Question: "What's your take on AI/ML in production?",
-			Answer:   "Most companies don't need custom models—they need better data pipelines and inference infrastructure. Focus on deployment, monitoring, and iteration speed. The model is often the easy part; productionizing it is where the real engineering happens.",
+			Question: i18n.T(props.CurrentLang, "faq_q2"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a2"),
 		},
 		{
-			Question: "How do you approach technical debt?",
-			Answer:   "Technical debt is a financial metaphor—treat it like one. Some debt is strategic. The key is knowing the interest rate: high-traffic code with mounting complexity needs immediate attention. Low-touch systems? Let them be until they need to change.",
+			Question: i18n.T(props.CurrentLang, "faq_q3"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a3"),
 		},
 		{
-			Question: "What's the most underrated skill?",
-			Answer:   "Deleting code. The best engineers know what NOT to build. Every line of code is a liability—it needs to be tested, maintained, and understood. The most elegant solution is often the one that requires no code at all.",
+			Question: i18n.T(props.CurrentLang, "faq_q4"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a4"),
 		},
 		{
-			Question: "Testing philosophy?",
-			Answer:   "Test the contracts, not the implementation. Focus on integration tests over unit tests for business logic. Perfect coverage is a vanity metric. What matters is confidence in your ability to ship without breaking things.",
+			Question: i18n.T(props.CurrentLang, "faq_q5"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a5"),
 		},
 		{
-			Question: "What drives your technical decisions?",
-			Answer:   "Business value first, technical elegance second. The best architecture is the one that ships on time and scales when needed. Optimize for iteration speed early, performance later. Premature optimization kills more projects than premature scaling.",
+			Question: i18n.T(props.CurrentLang, "faq_q6"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a6"),
 		},
 		{
-			Question: "Thoughts on the future of programming?",
-			Answer:   "AI will amplify good engineers and expose bad ones. The fundamentals—algorithms, systems thinking, trade-off analysis—matter more than ever. Tools change, but problem-solving is timeless. Focus on understanding deeply, not learning frameworks shallowly.",
+			Question: i18n.T(props.CurrentLang, "faq_q7"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a7"),
 		},
 		{
-			Question: "Static or dynamic typing?",
-			Answer:   "Use types where they add value: at system boundaries, in critical paths, and for team coordination. Don't dogmatically type everything. Python with type hints beats TypeScript with 'any' everywhere. The goal is clarity, not ceremony.",
+			Question: i18n.T(props.CurrentLang, "faq_q8"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a8"),
 		},
 		{
-			Question: "Database choices?",
-			Answer:   "Postgres for 90% of use cases. Start simple, scale vertically, then horizontally. Most 'scale' problems are actually query optimization problems. NoSQL for specific workloads where relational doesn't fit. Multi-database architectures are organizational complexity you probably don't need.",
+			Question: i18n.T(props.CurrentLang, "faq_q9"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a9"),
 		},
 		{
-			Question: "Performance vs. readability?",
-			Answer:   "Readable code first, fast code when you measure a problem. Premature optimization is evil, but so is ignoring algorithmic complexity. Profile before you optimize. Most performance issues are at architectural level—choose the right algorithm, not clever micro-optimizations.",
+			Question: i18n.T(props.CurrentLang, "faq_q10"),
+			Answer:   i18n.T(props.CurrentLang, "faq_a10"),
 		},
 	}
 
 	return g.Group([]g.Node{
+		// Component-specific styles
+		g.El("style", g.Raw(`
+			/* Scrollbar hiding */
+			.scrollbar-hide {
+				-ms-overflow-style: none;
+				scrollbar-width: none;
+			}
+
+			.scrollbar-hide::-webkit-scrollbar,
+			#mobile-swipe-container::-webkit-scrollbar {
+				display: none;
+			}
+
+			/* Selectable content */
+			.selectable-content,
+			.selectable-content * {
+				user-select: text !important;
+				-webkit-user-select: text !important;
+				-moz-user-select: text !important;
+				-ms-user-select: text !important;
+			}
+
+			.selectable-content::selection {
+				background-color: #000000;
+				color: #ffffff;
+			}
+
+			.selectable-content ::-moz-selection {
+				background-color: #000000;
+				color: #ffffff;
+			}
+
+			.dark .selectable-content::selection {
+				background-color: #ffffff;
+				color: #000000;
+			}
+
+			.dark .selectable-content ::-moz-selection {
+				background-color: #ffffff;
+				color: #000000;
+			}
+		`)),
 		// Mobile Carousel Layout
 		MobileCarouselLayout(props, faqItems),
 		// Desktop Layout
@@ -75,20 +118,20 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 		ID("mobile-carousel"),
 		// Carousel Container
 		Div(
-			Class("carousel-container h-full w-full mb-12"),
+			Class("relative overflow-hidden h-full w-full mb-12"),
 			// Hidden radio buttons for carousel control
 			Input(Type("radio"), ID("slide1"), Name("mobile-carousel"), Checked(), g.Attr("style", "display: none;")),
 			Input(Type("radio"), ID("slide2"), Name("mobile-carousel"), g.Attr("style", "display: none;")),
 			Input(Type("radio"), ID("slide3"), Name("mobile-carousel"), g.Attr("style", "display: none;")),
 			// Slides wrapper
 			Div(
-				Class("carousel-slides h-full"),
+				Class("carousel-slides flex h-full transition-transform duration-300 ease-in-out"),
 				// Section 1: Main content
 				MobileSection1Swiper(props),
 				// Section 2: Core Strengths
-				MobileSection3Swiper(),
+				MobileSection3Swiper(props),
 				// Section 3: Opinions
-				MobileSection4Swiper(faqItems),
+				MobileSection4Swiper(props, faqItems),
 			),
 			// Section Indicators
 			Div(
@@ -100,6 +143,39 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 				}),
 			),
 		),
+		// Minimal custom styles (only radio button states that Tailwind can't handle)
+		g.El("style", g.Raw(`
+			/* Radio button controls */
+			#slide1:checked ~ .carousel-slides {
+				transform: translateX(0%);
+			}
+
+			#slide2:checked ~ .carousel-slides {
+				transform: translateX(-100%);
+			}
+
+			#slide3:checked ~ .carousel-slides {
+				transform: translateX(-200%);
+			}
+
+			/* Active indicator styling */
+			#slide1:checked ~ .carousel-indicators .indicator:nth-child(1),
+			#slide2:checked ~ .carousel-indicators .indicator:nth-child(2),
+			#slide3:checked ~ .carousel-indicators .indicator:nth-child(3) {
+				background-color: white;
+				border-color: white;
+				box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+				width: 2.5rem;
+				height: 0.75rem;
+			}
+
+			.dark #slide1:checked ~ .carousel-indicators .indicator:nth-child(1),
+			.dark #slide2:checked ~ .carousel-indicators .indicator:nth-child(2),
+			.dark #slide3:checked ~ .carousel-indicators .indicator:nth-child(3) {
+				background-color: black;
+				border-color: black;
+			}
+		`)),
 		// JavaScript for swipe detection
 		g.El("script", g.Raw(`
 			(function() {
@@ -228,7 +304,7 @@ func CarouselDot(index int) g.Node {
 // Mobile Sections (Carousel Slides)
 func MobileSection1Swiper(props HomePageProps) g.Node {
 	return Div(
-		Class("carousel-slide h-full w-full"),
+		Class("min-w-full flex-shrink-0 h-full w-full"),
 		Div(
 			Class("w-full h-full p-3 pb-8"),
 			Div(
@@ -241,10 +317,10 @@ func MobileSection1Swiper(props HomePageProps) g.Node {
 						Logo("medium"),
 						Span(Class("text-5xl font-thin text-foreground"), g.Text("4nuel")),
 					),
-					H1(Class("text-lg font-light mb-3 text-foreground"), g.Text("I am unopinionated, therefore I am")),
+					H1(Class("text-lg font-light mb-3 text-foreground"), g.Text(i18n.T(props.CurrentLang, "tagline"))),
 					P(
 						Class("text-xs text-foreground mb-4 font-light leading-relaxed px-2"),
-						g.Text("I take systems from SOA to serverless, monolithic to microservices. From MVP to production and scaling. I specialize in AI/ML training and inference, distributed systems, and service architecture."),
+						g.Text(i18n.T(props.CurrentLang, "intro_desc")),
 					),
 				),
 				// Footer
@@ -262,19 +338,19 @@ func MobileSection1Swiper(props HomePageProps) g.Node {
 	)
 }
 
-func MobileSection2Swiper() g.Node {
+func MobileSection2Swiper(props HomePageProps) g.Node {
 	return Div(
-		Class("carousel-slide h-full w-full"),
+		Class("min-w-full flex-shrink-0 h-full w-full"),
 		Div(
 			Class("w-full h-full p-3 pb-8"),
 			Div(
 				Class("w-full h-full flex flex-col justify-center bg-background rounded-xl p-4 overflow-hidden"),
 				Div(
 					Class("max-w-2xl mx-auto text-center px-4"),
-					H2(Class("text-lg font-light mb-3 text-foreground"), g.Text("I am unopinionated, therefore I am")),
+					H2(Class("text-lg font-light mb-3 text-foreground"), g.Text(i18n.T(props.CurrentLang, "tagline"))),
 					P(
 						Class("text-xs text-foreground mb-4 font-light leading-relaxed"),
-						g.Text("I take systems from SOA to serverless, monolithic to microservices. From MVP to production and scaling. I specialize in AI/ML training and inference, distributed systems, and service architecture."),
+						g.Text(i18n.T(props.CurrentLang, "intro_desc")),
 					),
 				),
 			),
@@ -282,9 +358,9 @@ func MobileSection2Swiper() g.Node {
 	)
 }
 
-func MobileSection3Swiper() g.Node {
+func MobileSection3Swiper(props HomePageProps) g.Node {
 	return Div(
-		Class("carousel-slide h-full w-full"),
+		Class("min-w-full flex-shrink-0 h-full w-full"),
 		Div(
 			Class("w-full h-full p-3 pb-8 overflow-hidden"),
 			Div(
@@ -293,14 +369,14 @@ func MobileSection3Swiper() g.Node {
 					Class("w-full px-2"),
 					Div(
 						Class("text-center mb-4"),
-						H2(Class("text-base font-light mb-1 text-foreground"), g.Text("Core Strengths")),
-						P(Class("text-[10px] text-foreground max-w-xl mx-auto font-light"), g.Text("Technologies and domains I excel in")),
+						H2(Class("text-base font-light mb-1 text-foreground"), g.Text(i18n.T(props.CurrentLang, "core_strengths"))),
+						P(Class("text-[10px] text-foreground max-w-xl mx-auto font-light"), g.Text(i18n.T(props.CurrentLang, "core_strengths_subtitle"))),
 					),
 					Div(
 						Class("grid grid-cols-1 gap-2 max-w-md mx-auto"),
-						MobilePricingCard("Services", "C, Rust, Zig", "", "Performance-critical services", false),
-						MobilePricingCard("Web", "Go, JS/TS", "", "Pulumi, Terraform | Cloud & IaC", false),
-						MobilePricingCard("AI/ML", "Python", "", "ML, RL, SNNs, Liquid NNs", false),
+						MobilePricingCard(i18n.T(props.CurrentLang, "services_title"), i18n.T(props.CurrentLang, "services_lang"), "", i18n.T(props.CurrentLang, "services_desc"), false),
+						MobilePricingCard(i18n.T(props.CurrentLang, "web_title"), i18n.T(props.CurrentLang, "web_lang"), "", i18n.T(props.CurrentLang, "web_desc"), false),
+						MobilePricingCard(i18n.T(props.CurrentLang, "aiml_title"), i18n.T(props.CurrentLang, "aiml_lang"), "", i18n.T(props.CurrentLang, "aiml_desc"), false),
 					),
 				),
 			),
@@ -308,9 +384,9 @@ func MobileSection3Swiper() g.Node {
 	)
 }
 
-func MobileSection4Swiper(faqItems []AccordionItem) g.Node {
+func MobileSection4Swiper(props HomePageProps, faqItems []AccordionItem) g.Node {
 	return Div(
-		Class("carousel-slide h-full w-full"),
+		Class("min-w-full flex-shrink-0 h-full w-full"),
 		Div(
 			Class("w-full h-full p-3 pb-8"),
 			Div(
@@ -319,8 +395,8 @@ func MobileSection4Swiper(faqItems []AccordionItem) g.Node {
 					Class("w-full px-4 max-w-2xl mx-auto"),
 					Div(
 						Class("text-center mb-4"),
-						H2(Class("text-lg font-light mb-2 text-foreground"), g.Text("Opinions")),
-						P(Class("text-xs text-foreground font-light"), g.Text("Thoughts on engineering, architecture, and technology")),
+						H2(Class("text-lg font-light mb-2 text-foreground"), g.Text(i18n.T(props.CurrentLang, "opinions"))),
+						P(Class("text-xs text-foreground font-light"), g.Text(i18n.T(props.CurrentLang, "opinions_subtitle"))),
 					),
 					Accordion("border border-foreground", faqItems),
 				),
@@ -336,7 +412,7 @@ func DesktopLayout(props HomePageProps, faqItems []AccordionItem) g.Node {
 		// Left Column - Fixed
 		DesktopLeftColumn(props),
 		// Right Column - Scrollable
-		DesktopRightColumn(faqItems),
+		DesktopRightColumn(props, faqItems),
 	)
 }
 
@@ -355,11 +431,11 @@ func DesktopLeftColumn(props HomePageProps) g.Node {
 				),
 				H1(
 					Class("text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-4 lg:mb-6 text-foreground"),
-					g.Text("I am unopinionated, therefore I am"),
+					g.Text(i18n.T(props.CurrentLang, "tagline")),
 				),
 				P(
 					Class("text-xs md:text-sm lg:text-base xl:text-lg text-foreground mb-6 lg:mb-8 font-light leading-relaxed"),
-					g.Text("I take systems from SOA to serverless, monolithic to microservices. From MVP to production and scaling. I specialize in AI/ML training and inference, distributed systems, and service architecture."),
+					g.Text(i18n.T(props.CurrentLang, "intro_desc")),
 				),
 			),
 			// Footer
@@ -376,7 +452,7 @@ func DesktopLeftColumn(props HomePageProps) g.Node {
 	)
 }
 
-func DesktopRightColumn(faqItems []AccordionItem) g.Node {
+func DesktopRightColumn(props HomePageProps, faqItems []AccordionItem) g.Node {
 	return Div(
 		Class("h-screen relative col-span-3 p-6 lg:pl-3 lg:pr-10 bg-foreground dark:bg-foreground"),
 		Div(
@@ -388,9 +464,9 @@ func DesktopRightColumn(faqItems []AccordionItem) g.Node {
 				Main(
 					Class("w-full bg-background"),
 					// Section 1: Core Strengths
-					DesktopSkillsSection(),
+					DesktopSkillsSection(props),
 					// Section 2: Opinions
-					DesktopQASection(faqItems),
+					DesktopQASection(props, faqItems),
 				),
 			),
 			// Section Navigation Dots
@@ -401,11 +477,26 @@ func DesktopRightColumn(faqItems []AccordionItem) g.Node {
 					DesktopSectionDot(1),
 				}),
 			),
+			// Desktop navigation indicator active state
+			g.El("style", g.Raw(`
+				.desktop-nav-dot.active {
+					background-color: white;
+					border-color: white;
+					box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+					width: 0.75rem;
+					height: 2.5rem;
+				}
+
+				.dark .desktop-nav-dot.active {
+					background-color: black;
+					border-color: black;
+				}
+			`)),
 			// JavaScript for scroll-based indicator highlighting
 			g.El("script", g.Raw(`
 				(function() {
 					const container = document.getElementById('scroll-container');
-					const sections = container.querySelectorAll('.snap-section');
+					const sections = container.querySelectorAll('.snap-start');
 					const dots = document.querySelectorAll('.desktop-nav-dot');
 
 					function updateActiveIndicator() {
@@ -489,7 +580,7 @@ func DesktopSection(id, title, description string, withButton bool) g.Node {
 
 	return Div(
 		ID(id),
-		Class("snap-section snap-start h-screen flex items-center justify-center bg-background"),
+		Class("snap-start snap-always min-h-screen h-screen flex items-center justify-center bg-background"),
 		Div(
 			Class("max-w-2xl mx-auto text-center px-4 lg:px-8"),
 			g.Group(children),
@@ -497,37 +588,37 @@ func DesktopSection(id, title, description string, withButton bool) g.Node {
 	)
 }
 
-func DesktopSkillsSection() g.Node {
+func DesktopSkillsSection(props HomePageProps) g.Node {
 	return Div(
 		ID("skills"),
-		Class("snap-section snap-start h-screen flex items-center justify-center bg-background"),
+		Class("snap-start snap-always min-h-screen h-screen flex items-center justify-center bg-background"),
 		Div(
 			Class("w-full px-4 lg:px-8"),
 			Div(
 				Class("text-center mb-6 lg:mb-8"),
-				H2(Class("text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-3 lg:mb-4 text-foreground"), g.Text("Core Strengths")),
-				P(Class("text-xs md:text-sm lg:text-base xl:text-lg text-foreground max-w-xl mx-auto font-light"), g.Text("Technologies and domains I excel in")),
+				H2(Class("text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-3 lg:mb-4 text-foreground"), g.Text(i18n.T(props.CurrentLang, "core_strengths"))),
+				P(Class("text-xs md:text-sm lg:text-base xl:text-lg text-foreground max-w-xl mx-auto font-light"), g.Text(i18n.T(props.CurrentLang, "core_strengths_subtitle"))),
 			),
 			Div(
 				Class("grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto"),
-				PricingCard("Services", "C, Rust, Zig", "", "Performance-critical services", false),
-				PricingCard("Web", "Go, JS/TS", "", "Pulumi, Terraform | Cloud & IaC", false),
-				PricingCard("AI/ML", "Python", "", "ML, RL, SNNs, Liquid NNs", false),
+				PricingCard(i18n.T(props.CurrentLang, "services_title"), i18n.T(props.CurrentLang, "services_lang"), "", i18n.T(props.CurrentLang, "services_desc"), false),
+				PricingCard(i18n.T(props.CurrentLang, "web_title"), i18n.T(props.CurrentLang, "web_lang"), "", i18n.T(props.CurrentLang, "web_desc"), false),
+				PricingCard(i18n.T(props.CurrentLang, "aiml_title"), i18n.T(props.CurrentLang, "aiml_lang"), "", i18n.T(props.CurrentLang, "aiml_desc"), false),
 			),
 		),
 	)
 }
 
-func DesktopQASection(faqItems []AccordionItem) g.Node {
+func DesktopQASection(props HomePageProps, faqItems []AccordionItem) g.Node {
 	return Div(
 		ID("qa"),
-		Class("snap-section snap-start h-screen flex items-center justify-center bg-background"),
+		Class("snap-start snap-always min-h-screen h-screen flex items-center justify-center bg-background"),
 		Div(
 			Class("w-full px-4 lg:px-8 max-w-2xl mx-auto"),
 			Div(
 				Class("text-center mb-4 lg:mb-6"),
-				H2(Class("text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-3 lg:mb-4 text-foreground"), g.Text("Opinions")),
-				P(Class("text-xs md:text-sm lg:text-base xl:text-lg text-foreground font-light"), g.Text("Thoughts on engineering, architecture, and technology")),
+				H2(Class("text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-3 lg:mb-4 text-foreground"), g.Text(i18n.T(props.CurrentLang, "opinions"))),
+				P(Class("text-xs md:text-sm lg:text-base xl:text-lg text-foreground font-light"), g.Text(i18n.T(props.CurrentLang, "opinions_subtitle"))),
 			),
 			Accordion("border border-foreground", faqItems),
 		),

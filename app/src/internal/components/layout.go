@@ -24,13 +24,14 @@ func BaseLayout(title string, theme string, content ...g.Node) g.Node {
 		faviconPath = "/static/dark.svg"
 	}
 
-	bodyContent := append([]g.Node{Class("font-sans antialiased")}, content...)
+	bodyContent := append([]g.Node{Class("font-sans antialiased font-light bg-background text-foreground select-none")}, content...)
 
 	return Doctype(
 		HTML(
 			Lang("en"),
-			Class(themeClass),
+			Class(themeClass+" scroll-smooth"),
 			g.Attr("suppressHydrationWarning", ""),
+			g.Attr("style", "scroll-snap-type: y mandatory; scroll-behavior: smooth;"),
 			Head(
 				Meta(Charset("utf-8")),
 				Meta(Name("viewport"), Content("width=device-width, initial-scale=1.0")),
@@ -55,6 +56,18 @@ func BaseLayout(title string, theme string, content ...g.Node) g.Node {
 
 				// Custom styles
 				Link(Rel("stylesheet"), Href("/static/css/globals.css")),
+
+				// Global overrides for interactive elements
+				g.El("style", g.Raw(`
+					/* Allow selection on interactive elements */
+					button, a, label, input, select, textarea {
+						user-select: auto;
+						-webkit-user-select: auto;
+						-moz-user-select: auto;
+						-ms-user-select: auto;
+						pointer-events: auto;
+					}
+				`)),
 			),
 			Body(
 				bodyContent...,

@@ -71,10 +71,65 @@ func Logo(size string) g.Node {
 		}
 	}
 
-	return Div(
-		Class(sizeClass+" flex-shrink-0 relative animated-logo"),
-		g.Group(tiles),
-	)
+	return g.Group([]g.Node{
+		// Component-specific styles
+		g.El("style", g.Raw(`
+			@keyframes tile-reveal {
+				from {
+					opacity: 0;
+				}
+				to {
+					opacity: 1;
+				}
+			}
+
+			.logo-tile {
+				animation: tile-reveal 0.1s ease-in forwards;
+				opacity: 0;
+			}
+
+			.animated-logo .logo-tile:nth-child(1) { animation-delay: 0.826s; }
+			.animated-logo .logo-tile:nth-child(2) { animation-delay: 0.028s; }
+			.animated-logo .logo-tile:nth-child(3) { animation-delay: 0.704s; }
+			.animated-logo .logo-tile:nth-child(4) { animation-delay: 0.441s; }
+			.animated-logo .logo-tile:nth-child(5) { animation-delay: 0.530s; }
+			.animated-logo .logo-tile:nth-child(6) { animation-delay: 0.409s; }
+			.animated-logo .logo-tile:nth-child(7) { animation-delay: 1.441s; }
+			.animated-logo .logo-tile:nth-child(8) { animation-delay: 0.028s; }
+			.animated-logo .logo-tile:nth-child(9) { animation-delay: 0.053s; }
+			.animated-logo .logo-tile:nth-child(10) { animation-delay: 0.658s; }
+			.animated-logo .logo-tile:nth-child(11) { animation-delay: 1.355s; }
+			.animated-logo .logo-tile:nth-child(12) { animation-delay: 0.471s; }
+			.animated-logo .logo-tile:nth-child(13) { animation-delay: 0.926s; }
+			.animated-logo .logo-tile:nth-child(14) { animation-delay: 1.343s; }
+			.animated-logo .logo-tile:nth-child(15) { animation-delay: 0.495s; }
+			.animated-logo .logo-tile:nth-child(16) { animation-delay: 1.078s; }
+			.animated-logo .logo-tile:nth-child(17) { animation-delay: 0.827s; }
+			.animated-logo .logo-tile:nth-child(18) { animation-delay: 0.959s; }
+			.animated-logo .logo-tile:nth-child(19) { animation-delay: 1.948s; }
+			.animated-logo .logo-tile:nth-child(20) { animation-delay: 0.640s; }
+			.animated-logo .logo-tile:nth-child(21) { animation-delay: 0.696s; }
+			.animated-logo .logo-tile:nth-child(22) { animation-delay: 0.368s; }
+			.animated-logo .logo-tile:nth-child(23) { animation-delay: 1.615s; }
+			.animated-logo .logo-tile:nth-child(24) { animation-delay: 0.539s; }
+			.animated-logo .logo-tile:nth-child(25) { animation-delay: 1.173s; }
+			.animated-logo .logo-tile:nth-child(26) { animation-delay: 0.585s; }
+			.animated-logo .logo-tile:nth-child(27) { animation-delay: 1.323s; }
+			.animated-logo .logo-tile:nth-child(28) { animation-delay: 1.196s; }
+			.animated-logo .logo-tile:nth-child(29) { animation-delay: 0.384s; }
+			.animated-logo .logo-tile:nth-child(30) { animation-delay: 1.879s; }
+			.animated-logo .logo-tile:nth-child(31) { animation-delay: 1.269s; }
+			.animated-logo .logo-tile:nth-child(32) { animation-delay: 1.844s; }
+			.animated-logo .logo-tile:nth-child(33) { animation-delay: 1.042s; }
+			.animated-logo .logo-tile:nth-child(34) { animation-delay: 0.227s; }
+			.animated-logo .logo-tile:nth-child(35) { animation-delay: 1.801s; }
+			.animated-logo .logo-tile:nth-child(36) { animation-delay: 1.645s; }
+		`)),
+		Div(
+			Class(sizeClass+" flex-shrink-0 relative animated-logo"),
+			g.Group(tiles),
+		),
+	})
 }
 
 func init() {
