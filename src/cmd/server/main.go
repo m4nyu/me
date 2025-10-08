@@ -43,6 +43,9 @@ func main() {
 	r.Post("/api/theme", handlers.SetTheme)
 	r.Post("/api/lang", handlers.SetLanguage)
 
+	// Live reload WebSocket endpoint (development only)
+	r.Get("/livereload", middleware.LiveReloadHandler)
+
 	port := ":3000"
 	fmt.Printf("Server starting on http://localhost%s\n", port)
 	if err := http.ListenAndServe(port, r); err != nil {

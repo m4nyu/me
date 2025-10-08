@@ -70,7 +70,39 @@ func BaseLayout(title string, theme string, content ...g.Node) g.Node {
 				`)),
 			),
 			Body(
-				bodyContent...,
+				append(bodyContent,
+					// Live reload script (development only)
+					Script(g.Raw(`
+						(function() {
+							let ws;
+							let reloadOnReconnect = false;
+
+							function connect() {
+								ws = new WebSocket('ws://' + location.host + '/livereload');
+
+								ws.onopen = function() {
+									console.log('[LiveReload] Connected');
+									if (reloadOnReconnect) {
+										console.log('[LiveReload] Reloading page...');
+										location.reload();
+									}
+								};
+
+								ws.onclose = function() {
+									console.log('[LiveReload] Disconnected. Reconnecting...');
+									reloadOnReconnect = true;
+									setTimeout(connect, 1000);
+								};
+
+								ws.onerror = function() {
+									ws.close();
+								};
+							}
+
+							connect();
+						})();
+					`)),
+				)...,
 			),
 		),
 	)

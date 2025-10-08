@@ -2,16 +2,16 @@
 
 # Default target
 dev: ## Start development server with hot reloading
-	@~/go/bin/air
+	@~/go/bin/air -c air.toml
 
 build: ## Build the application
-	@go build -o ./tmp/main ./src/cmd/server
+	@go build -o ./.air/main ./src/cmd/server
 
 run: build ## Build and run the application
-	@./tmp/main
+	@./.air/main
 
 clean: ## Clean build artifacts
-	@rm -rf tmp/
+	@rm -rf .air/
 	@rm -f build-errors.log
 	@echo "Cleaned build artifacts"
 
