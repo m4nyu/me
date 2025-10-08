@@ -84,7 +84,7 @@ func getUbuntuImage(ctx *pulumi.Context, cfg *Config) (string, error) {
 }
 
 func loadCloudInitScript() (string, error) {
-	cloudInitBytes, err := os.ReadFile("scripts/init.sh")
+	cloudInitBytes, err := os.ReadFile("../scripts/init.sh")
 	if err != nil {
 		return "", fmt.Errorf("failed to read init script: %w", err)
 	}
