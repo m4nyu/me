@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d24d176e-2fc0-489c-8b14-23341d42eedf" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/Pulumi.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/Pulumi.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/infra/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +93,7 @@
       <workItem from="1759319888494" duration="14000" />
       <workItem from="1759339447981" duration="16734000" />
       <workItem from="1759736135416" duration="7000" />
-      <workItem from="1759736177052" duration="25257000" />
+      <workItem from="1759736177052" duration="31494000" />
     </task>
     <servers />
   </component>
