@@ -103,7 +103,7 @@ func find_image(ctx *pulumi.Context, cfg *Config) (string, error) {
 }
 
 func load_script() (string, error) {
-	bytes, err := os.ReadFile("../scripts/init.sh")
+	bytes, err := os.ReadFile("scripts/init.sh")
 	if err != nil {
 		return "", fmt.Errorf("script read failed: %w", err)
 	}

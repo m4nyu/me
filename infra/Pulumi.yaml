@@ -1,6 +1,4 @@
 name: infra
 runtime:
   name: go
-  options:
-    main: ./lib
 description: Infrastructure for personal website on Oracle Cloud Free Tier
