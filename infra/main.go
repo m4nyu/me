@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/base64"
 	"fmt"
+	"os"
 
 	"github.com/pulumi/pulumi-oci/sdk/go/oci/core"
 	"github.com/pulumi/pulumi-oci/sdk/go/oci/identity"
