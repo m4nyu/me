@@ -4,7 +4,7 @@
 
 ```bash
 oci setup config
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/oci
+ssh-keygen -t ed25519 -f ~/.ssh/oci
 ```
 
 ## configure
