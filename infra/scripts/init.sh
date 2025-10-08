@@ -1,63 +1,54 @@
 #!/bin/bash
 set -e
 
-# Update system
 apt-get update
 apt-get upgrade -y
 
-# Install Go
-wget https://go.dev/dl/go1.24.7.linux-arm64.tar.gz
-rm -rf /usr/local/go && tar -C /usr/local -xzf go1.24.7.linux-arm64.tar.gz
-echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/profile
-export PATH=$PATH:/usr/local/go/bin
+apt-get install -y docker.io git
 
-# Install Git
-apt-get install -y git
+systemctl enable docker
+systemctl start docker
 
-# Create app user
 useradd -m -s /bin/bash appuser
+usermod -aG docker appuser
 
-# Clone and setup application
 su - appuser << 'EOF'
 cd ~
 git clone https://github.com/yourusername/yourrepo.git app
 cd app
-/usr/local/go/bin/go mod download
-/usr/local/go/bin/go build -o /home/appuser/app/server ./src/cmd/server
+docker build -t me-app .
 EOF
 
-# Create systemd service
 cat > /etc/systemd/system/me-app.service << 'EOF'
 [Unit]
 Description=Personal Website
-After=network.target
+After=docker.service
+Requires=docker.service
 
 [Service]
 Type=simple
 User=appuser
-WorkingDirectory=/home/appuser/app
-ExecStart=/home/appuser/app/server
+ExecStartPre=-/usr/bin/docker stop me-app
+ExecStartPre=-/usr/bin/docker rm me-app
+ExecStart=/usr/bin/docker run --name me-app -p 3000:3000 me-app
+ExecStop=/usr/bin/docker stop me-app
 Restart=always
 RestartSec=10
-Environment="PORT=3000"
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-# Enable and start service
 systemctl daemon-reload
 systemctl enable me-app
 systemctl start me-app
 
-# Setup firewall
 ufw allow 22/tcp
 ufw allow 80/tcp
 ufw allow 443/tcp
 ufw allow 3000/tcp
 ufw --force enable
 
-# Install and setup nginx as reverse proxy
 apt-get install -y nginx
 cat > /etc/nginx/sites-available/default << 'EOF'
 server {
