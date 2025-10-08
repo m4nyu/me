@@ -7,27 +7,23 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		// Load configuration
-		cfg := LoadConfig(config.New(ctx, ""))
+		cfg := load(config.New(ctx, ""))
 
-		// Create network resources
-		network, err := CreateNetwork(ctx, cfg)
+		network, err := setup_network(ctx, cfg)
 		if err != nil {
 			return err
 		}
 
-		// Create compute resources
-		compute, err := CreateCompute(ctx, cfg, network)
+		compute, err := setup_compute(ctx, cfg, network)
 		if err != nil {
 			return err
 		}
 
-		// Export outputs
-		ctx.Export("vncId", network.VCN.ID())
-		ctx.Export("subnetId", network.Subnet.ID())
-		ctx.Export("instanceId", compute.Instance.ID())
-		ctx.Export("instancePublicIp", compute.Instance.PublicIp)
-		ctx.Export("instancePrivateIp", compute.Instance.PrivateIp)
+		ctx.Export("vcn", network.VCN.ID())
+		ctx.Export("subnet", network.Subnet.ID())
+		ctx.Export("instance", compute.Instance.ID())
+		ctx.Export("publicIp", compute.Instance.PublicIp)
+		ctx.Export("privateIp", compute.Instance.PrivateIp)
 
 		return nil
 	})
