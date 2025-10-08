@@ -9,66 +9,85 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// ComputeResources holds compute-related resources
-type ComputeResources struct {
+type Compute struct {
 	Instance *core.Instance
 }
 
-// CreateCompute creates the compute instance with cloud-init
-func CreateCompute(ctx *pulumi.Context, cfg *Config, network *NetworkResources) (*ComputeResources, error) {
-	// Get the latest Ubuntu ARM image
-	imageID, err := getUbuntuImage(ctx, cfg)
+type Image struct {
+	OS      string
+	Version string
+	Shape   string
+}
+
+type Shape struct {
+	Name   string
+	Cpus   float64
+	Memory float64
+}
+
+var ubuntu = Image{
+	OS:      "Canonical Ubuntu",
+	Version: "22.04",
+	Shape:   "VM.Standard.A1.Flex",
+}
+
+var shape = Shape{
+	Name:   "VM.Standard.A1.Flex",
+	Cpus:   1,
+	Memory: 6,
+}
+
+func setup_compute(ctx *pulumi.Context, cfg *Config, net *Network) (*Compute, error) {
+	image, err := find_image(ctx, cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	// Load cloud-init script
-	cloudInitBase64, err := loadCloudInitScript()
+	script, err := load_script()
 	if err != nil {
 		return nil, err
 	}
 
-	// Create compute instance
 	instance, err := core.NewInstance(ctx, "me-instance", &core.InstanceArgs{
-		AvailabilityDomain: pulumi.String(cfg.AvailabilityDomain),
-		CompartmentId:      pulumi.String(cfg.CompartmentID),
+		AvailabilityDomain: pulumi.String(cfg.Domain),
+		CompartmentId:      pulumi.String(cfg.Compartment),
 		DisplayName:        pulumi.String("me-server"),
-		Shape:              pulumi.String("VM.Standard.A1.Flex"),
+		Shape:              pulumi.String(shape.Name),
 		ShapeConfig: &core.InstanceShapeConfigArgs{
-			Ocpus:       pulumi.Float64(1), // Free tier allows up to 4 OCPUs
-			MemoryInGbs: pulumi.Float64(6), // Free tier allows up to 24 GB
+			Ocpus:       pulumi.Float64(shape.Cpus),
+			MemoryInGbs: pulumi.Float64(shape.Memory),
 		},
 		SourceDetails: &core.InstanceSourceDetailsArgs{
 			SourceType: pulumi.String("image"),
-			SourceId:   pulumi.String(imageID),
+			SourceId:   pulumi.String(image),
 		},
 		CreateVnicDetails: &core.InstanceCreateVnicDetailsArgs{
-			SubnetId:               network.Subnet.ID(),
+			SubnetId:               net.Subnet.ID(),
 			AssignPublicIp:         pulumi.String("true"),
 			DisplayName:            pulumi.String("me-vnic"),
 			SkipSourceDestCheck:    pulumi.Bool(false),
 			AssignPrivateDnsRecord: pulumi.Bool(true),
 		},
 		Metadata: pulumi.StringMap{
-			"ssh_authorized_keys": pulumi.String(cfg.SSHPublicKey),
-			"user_data":           pulumi.String(cloudInitBase64),
+			"ssh_authorized_keys": pulumi.String(cfg.Key),
+			"user_data":           pulumi.String(script),
 		},
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return &ComputeResources{
+	return &Compute{
 		Instance: instance,
 	}, nil
 }
 
-func getUbuntuImage(ctx *pulumi.Context, cfg *Config) (string, error) {
+func find_image(ctx *pulumi.Context, cfg *Config) (string, error) {
 	images, err := core.GetImages(ctx, &core.GetImagesArgs{
-		CompartmentId:          cfg.CompartmentID,
-		OperatingSystem:        pulumi.StringRef("Canonical Ubuntu"),
-		OperatingSystemVersion: pulumi.StringRef("22.04"),
-		Shape:                  pulumi.StringRef("VM.Standard.A1.Flex"), // ARM-based free tier
+		CompartmentId:          cfg.Compartment,
+		OperatingSystem:        pulumi.StringRef(ubuntu.OS),
+		OperatingSystemVersion: pulumi.StringRef(ubuntu.Version),
+		Shape:                  pulumi.StringRef(ubuntu.Shape),
 		SortBy:                 pulumi.StringRef("TIMECREATED"),
 		SortOrder:              pulumi.StringRef("DESC"),
 	})
@@ -77,16 +96,16 @@ func getUbuntuImage(ctx *pulumi.Context, cfg *Config) (string, error) {
 	}
 
 	if len(images.Images) == 0 {
-		return "", fmt.Errorf("no Ubuntu images found")
+		return "", fmt.Errorf("no images found")
 	}
 
 	return images.Images[0].Id, nil
 }
 
-func loadCloudInitScript() (string, error) {
-	cloudInitBytes, err := os.ReadFile("../scripts/init.sh")
+func load_script() (string, error) {
+	bytes, err := os.ReadFile("../scripts/init.sh")
 	if err != nil {
-		return "", fmt.Errorf("failed to read init script: %w", err)
+		return "", fmt.Errorf("script read failed: %w", err)
 	}
-	return base64.StdEncoding.EncodeToString(cloudInitBytes), nil
+	return base64.StdEncoding.EncodeToString(bytes), nil
 }
