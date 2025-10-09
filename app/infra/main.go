@@ -1,20 +1,22 @@
 package main
 
 import (
+	"infra/lib"
+
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 )
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		cfg := load(config.New(ctx, ""))
+		cfg := lib.Load(config.New(ctx, ""))
 
-		network, err := setup_network(ctx, cfg)
+		network, err := lib.SetupNetwork(ctx, cfg)
 		if err != nil {
 			return err
 		}
 
-		compute, err := setup_compute(ctx, cfg, network)
+		compute, err := lib.SetupCompute(ctx, cfg, network)
 		if err != nil {
 			return err
 		}

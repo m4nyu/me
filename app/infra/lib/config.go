@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
@@ -12,7 +12,7 @@ type Config struct {
 	Region      string
 }
 
-func load(c *config.Config) *Config {
+func Load(c *config.Config) *Config {
 	return &Config{
 		Compartment: c.Require("compartmentId"),
 		Tenancy:     c.Require("tenancyId"),

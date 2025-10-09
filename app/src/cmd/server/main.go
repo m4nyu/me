@@ -1,9 +1,9 @@
 package main
 
 import (
-	"engineer/src/internal/components"
-	"engineer/src/internal/handlers"
-	"engineer/src/internal/middleware"
+	"engineer/app/src/internal/components"
+	"engineer/app/src/internal/handlers"
+	"engineer/app/src/internal/middleware"
 	"fmt"
 	"log"
 	"net/http"
@@ -22,7 +22,7 @@ func main() {
 	r.Use(middleware.CookieMiddleware)
 
 	// Static files
-	fileServer := http.FileServer(http.Dir("./src/static"))
+	fileServer := http.FileServer(http.Dir("./app/src/static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 
 	// Language routes - explicit routes for each language

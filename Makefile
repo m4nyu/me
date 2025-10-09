@@ -5,7 +5,7 @@ dev: ## Start development server with hot reloading
 	@~/go/bin/air -c air.toml
 
 build: ## Build the application
-	@go build -o ./.air/main ./src/cmd/server
+	@go build -o ./.air/main ./app/src/cmd/server
 
 run: build ## Build and run the application
 	@./.air/main

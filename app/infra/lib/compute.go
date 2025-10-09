@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"encoding/base64"
@@ -37,13 +37,13 @@ var shape = Shape{
 	Memory: 6,
 }
 
-func setup_compute(ctx *pulumi.Context, cfg *Config, net *Network) (*Compute, error) {
-	image, err := find_image(ctx, cfg)
+func SetupCompute(ctx *pulumi.Context, cfg *Config, net *Network) (*Compute, error) {
+	image, err := findImage(ctx, cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	script, err := load_script()
+	script, err := loadScript()
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +68,10 @@ func setup_compute(ctx *pulumi.Context, cfg *Config, net *Network) (*Compute, er
 			SkipSourceDestCheck:    pulumi.Bool(false),
 			AssignPrivateDnsRecord: pulumi.Bool(true),
 		},
-		Metadata: pulumi.StringMap{
+		Metadata: pulumi.ToMap(map[string]interface{}{
 			"ssh_authorized_keys": pulumi.String(cfg.Key),
 			"user_data":           pulumi.String(script),
-		},
+		}),
 	})
 	if err != nil {
 		return nil, err
@@ -82,7 +82,7 @@ func setup_compute(ctx *pulumi.Context, cfg *Config, net *Network) (*Compute, er
 	}, nil
 }
 
-func find_image(ctx *pulumi.Context, cfg *Config) (string, error) {
+func findImage(ctx *pulumi.Context, cfg *Config) (string, error) {
 	images, err := core.GetImages(ctx, &core.GetImagesArgs{
 		CompartmentId:          cfg.Compartment,
 		OperatingSystem:        pulumi.StringRef(ubuntu.OS),
@@ -102,7 +102,7 @@ func find_image(ctx *pulumi.Context, cfg *Config) (string, error) {
 	return images.Images[0].Id, nil
 }
 
-func load_script() (string, error) {
+func loadScript() (string, error) {
 	bytes, err := os.ReadFile("scripts/init.sh")
 	if err != nil {
 		return "", fmt.Errorf("script read failed: %w", err)
