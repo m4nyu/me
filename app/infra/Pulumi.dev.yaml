@@ -1,0 +1,8 @@
+encryptionsalt: v1:GUEIJwtUeDo=:v1:d/t4UH3SUXxMfwRQ:oM6ZSeP6OSioKE267X8XHbto7IP/Jg==
+config:
+  oci:region: us-phoenix-1
+  infra:compartmentId: placeholder
+  infra:tenancyId: placeholder
+  infra:availabilityDomain: placeholder
+  infra:sshPublicKey:
+    secure: v1:AKcdoy8D8nRbwJ5x:FusAlA+zyHGJe8RatFDRIdDluci9MN87hfpa
