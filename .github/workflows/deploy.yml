@@ -1,0 +1,91 @@
+name: Deploy Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: 'Stack to deploy'
+        required: true
+        default: 'prod'
+        type: choice
+        options:
+          - prod
+          - staging
+  schedule:
+    - cron: '*/30 * * * *'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Install Pulumi
+        uses: pulumi/setup-pulumi@v2
+
+      - name: Configure OCI
+        run: |
+          mkdir -p ~/.oci
+          echo "${{ secrets.OCI_CONFIG }}" > ~/.oci/config
+          echo "${{ secrets.OCI_PRIVATE_KEY }}" > ~/.oci/pulumi.pem
+          chmod 600 ~/.oci/pulumi.pem
+
+      - name: Check Deployment Status
+        id: check
+        working-directory: app/infra
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+        run: |
+          STACK="${{ github.event.inputs.stack || 'prod' }}"
+          pulumi stack select $STACK
+
+          RESOURCE_COUNT=$(pulumi stack --show-urns 2>/dev/null | grep -c "oci:Core/instance:Instance" || echo "0")
+
+          if [ "$RESOURCE_COUNT" -gt 0 ]; then
+            echo "deployed=true" >> $GITHUB_OUTPUT
+            echo "Instance already deployed"
+          else
+            echo "deployed=false" >> $GITHUB_OUTPUT
+            echo "Instance not yet deployed"
+          fi
+
+      - name: Deploy Infrastructure
+        if: steps.check.outputs.deployed == 'false'
+        working-directory: app/infra
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+        run: |
+          STACK="${{ github.event.inputs.stack || 'prod' }}"
+          pulumi stack select $STACK
+
+          if pulumi up --yes --skip-preview; then
+            echo "Deployment successful!"
+            echo "PUBLIC_IP=$(pulumi stack output publicIp --show-secrets)" >> $GITHUB_ENV
+          else
+            echo "Deployment failed - will retry on next schedule"
+            exit 0
+          fi
+
+      - name: Output Results
+        if: steps.check.outputs.deployed == 'false' && success()
+        run: |
+          echo "✅ Infrastructure deployed successfully!"
+          echo "Public IP: ${{ env.PUBLIC_IP }}"
+          echo ""
+          echo "Update DNS at Namecheap:"
+          echo "A @ ${{ env.PUBLIC_IP }}"
+          echo "A www ${{ env.PUBLIC_IP }}"
+
+      - name: Skip Deployment
+        if: steps.check.outputs.deployed == 'true'
+        run: |
+          echo "⏭️ Infrastructure already deployed. Skipping."
