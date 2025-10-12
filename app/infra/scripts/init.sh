@@ -49,11 +49,12 @@ ufw allow 443/tcp
 ufw allow 3000/tcp
 ufw --force enable
 
-apt-get install -y nginx
+apt-get install -y nginx certbot python3-certbot-nginx
+
 cat > /etc/nginx/sites-available/default << 'EOF'
 server {
     listen 80;
-    server_name _;
+    server_name m4nuel.net www.m4nuel.net;
 
     location / {
         proxy_pass http://localhost:3000;
@@ -61,9 +62,16 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
         proxy_cache_bypass $http_upgrade;
     }
 }
 EOF
 
 systemctl restart nginx
+
+sleep 10
+
+certbot --nginx -d m4nuel.net -d www.m4nuel.net --non-interactive --agree-tos --email admin@m4nuel.net --redirect || true

@@ -24,30 +24,51 @@
 
 ## ▲ Installation
 
+Go 1.24 version verification or higher:
+
 ```bash
-# Install Go 1.24 or higher
-go version  # Verify installation
+go version
+```
 
-# Install Air for hot-reloading (development)
+Air installation for hot-reloading during development:
+
+```bash
 go install github.com/air-verse/air@latest
+```
 
-# Install dependencies
+Project dependencies download:
+
+```bash
 go mod download
 ```
 
 ## ▶ Run
 
+### Development (with hot-reload)
+
+Development server start with automatic reloading on file changes:
+
 ```bash
-# Development server with hot-reload (default)
-make dev        # Starts at http://localhost:3000
+make dev
+```
 
-# Alternative: run without hot-reload
-make run        # Build and run
+### Build and Run
 
-# Build only
-make build      # Output: .air/main
+Application compilation:
 
-# Clean build artifacts
+```bash
+make build
+```
+
+Compiled binary execution:
+
+```bash
+make run
+```
+
+Build artifacts removal:
+
+```bash
 make clean
 ```
 
@@ -58,30 +79,50 @@ make clean
 This project includes Pulumi infrastructure for automated deployment to Oracle Cloud Free Tier.
 
 1. **Prerequisites**
+
+   OCI CLI configuration with credentials:
+
    ```bash
-   # Install OCI CLI and configure
    oci setup config
+   ```
 
-   # Generate SSH key for instance access
+   SSH key pair generation for instance access:
+
+   ```bash
    ssh-keygen -t ed25519 -f ~/.ssh/oci
+   ```
 
-   # Install Pulumi
+   Pulumi installation for infrastructure management:
+
+   ```bash
    curl -fsSL https://get.pulumi.com | sh
    ```
 
 2. **Configure Infrastructure**
+
+   Infrastructure directory navigation and environment setup:
+
    ```bash
    cd app/infra
    cp .env.example .env
    source .env
+   ```
 
-   # Login to Pulumi
+   Pulumi authentication:
+
+   ```bash
    pulumi login
+   ```
 
-   # Initialize stack
+   New Pulumi stack creation for development:
+
+   ```bash
    pulumi stack init dev
+   ```
 
-   # Set configuration
+   OCI settings configuration (replace placeholders with your actual values):
+
+   ```bash
    pulumi config set oci:region us-phoenix-1
    pulumi config set compartmentId <your-compartment-ocid>
    pulumi config set tenancyId <your-tenancy-ocid>
@@ -90,50 +131,45 @@ This project includes Pulumi infrastructure for automated deployment to Oracle C
    ```
 
 3. **Deploy**
+
+   Infrastructure preview and deployment:
+
    ```bash
-   source .env
    pulumi up
    ```
 
 4. **Access Your Instance**
-   ```bash
-   # Get the public IP
-   pulumi stack output publicIp
 
-   # SSH into the instance
+   Public IP retrieval of deployed instance:
+
+   ```bash
+   pulumi stack output publicIp
+   ```
+
+   Instance SSH connection:
+
+   ```bash
    ssh -i ~/.ssh/oci ubuntu@$(pulumi stack output publicIp)
    ```
 
 5. **Destroy Infrastructure**
+
+   Resource teardown:
+
    ```bash
-   source .env
    pulumi destroy
    ```
 
 ### Deploy with Docker
 
-```bash
-# Build image
-docker build -t me-app .
+Docker image build:
 
-# Run container
-docker run -p 3000:3000 me-app
+```bash
+docker build -t me-app .
 ```
 
-## 🌍 Features
+Container execution with port 3000 exposure:
 
-- **Multi-language Support**: 12 languages (EN, DE, FR, ES, IT, PT, NL, RU, JA, KO, ZH, AR)
-- **URL-based i18n**: Language routing with cookie preferences
-- **Theme Switching**: Light/Dark/System modes
-- **Server-Side Rendering**: Pure Go with gomponents
-- **Live Reload**: WebSocket-based development workflow
-- **Production Ready**: Docker containerization + OCI cloud-init
-
-## 📚 Documentation
-
-- **Development Guidelines**: See [CLAUDE.md](./CLAUDE.md)
-- **Infrastructure Setup**: See [app/infra/README.md](./app/infra/README.md)
-
-## 📄 License
-
-MIT
+```bash
+docker run -p 3000:3000 me-app
+```

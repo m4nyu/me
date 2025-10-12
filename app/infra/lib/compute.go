@@ -48,10 +48,10 @@ func SetupCompute(ctx *pulumi.Context, cfg *Config, net *Network) (*Compute, err
 		return nil, err
 	}
 
-	instance, err := core.NewInstance(ctx, "me-instance", &core.InstanceArgs{
+	instance, err := core.NewInstance(ctx, "m4nuel-instance", &core.InstanceArgs{
 		AvailabilityDomain: pulumi.String(cfg.Domain),
 		CompartmentId:      pulumi.String(cfg.Compartment),
-		DisplayName:        pulumi.String("me-server"),
+		DisplayName:        pulumi.String("m4nuel"),
 		Shape:              pulumi.String(shape.Name),
 		ShapeConfig: &core.InstanceShapeConfigArgs{
 			Ocpus:       pulumi.Float64(shape.Cpus),
@@ -64,7 +64,7 @@ func SetupCompute(ctx *pulumi.Context, cfg *Config, net *Network) (*Compute, err
 		CreateVnicDetails: &core.InstanceCreateVnicDetailsArgs{
 			SubnetId:               net.Subnet.ID(),
 			AssignPublicIp:         pulumi.String("true"),
-			DisplayName:            pulumi.String("me-vnic"),
+			DisplayName:            pulumi.String("m4nuel-vnic"),
 			SkipSourceDestCheck:    pulumi.Bool(false),
 			AssignPrivateDnsRecord: pulumi.Bool(true),
 		},

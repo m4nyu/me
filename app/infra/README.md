@@ -1,49 +1,111 @@
-# infra
+# Infrastructure
 
-## setup
+Oracle Cloud Infrastructure deployment for m4nuel.net
+
+## ▲ Setup
+
+OCI CLI configuration with credentials:
 
 ```bash
-cp .env.example .env
 oci setup config
+```
+
+SSH key pair generation for instance access:
+
+```bash
 ssh-keygen -t ed25519 -f ~/.ssh/oci
 ```
 
-## configure
+Environment file creation from template:
 
 ```bash
-source .env
-pulumi login
-pulumi stack init dev
-pulumi config set oci:region us-phoenix-1
-pulumi config set compartmentId <ocid>
-pulumi config set tenancyId <ocid>
-pulumi config set availabilityDomain <domain>
-pulumi config set --secret sshPublicKey "$(cat ~/.ssh/oci.pub)"
+cp .env.example .env
 ```
 
-## deploy
+Pulumi authentication:
+
+```bash
+pulumi login
+```
+
+## ▶ Deploy
+
+### Production
+
+Production stack selection:
 
 ```bash
 source .env
+pulumi stack select prod
+```
+
+Infrastructure deployment:
+
+```bash
 pulumi up
 ```
 
-## outputs
+### Staging
+
+Staging stack selection:
 
 ```bash
 source .env
+pulumi stack select staging
+```
+
+Infrastructure deployment:
+
+```bash
+pulumi up
+```
+
+**Automated deployment via GitHub Actions in `.github/workflows/deploy.yml`**
+
+## ▲ Access
+
+Public IP retrieval:
+
+```bash
 pulumi stack output publicIp
 ```
 
-## access
+SSH connection to instance:
 
 ```bash
 ssh -i ~/.ssh/oci ubuntu@$(pulumi stack output publicIp)
 ```
 
-## destroy
+## ▼ Destroy
+
+Production teardown:
 
 ```bash
 source .env
+pulumi stack select prod
 pulumi destroy
 ```
+
+Staging teardown:
+
+```bash
+source .env
+pulumi stack select staging
+pulumi destroy
+```
+
+## DNS Configuration
+
+Namecheap DNS records update after deployment:
+
+```
+Type: A
+Host: @
+Value: <production-public-ip>
+
+Type: A
+Host: www
+Value: <production-public-ip>
+```
+
+SSL certificate automatic provisioning via Let's Encrypt.
