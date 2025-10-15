@@ -36,14 +36,8 @@ func main() {
 			return err
 		}
 
-		monitoring, err := lib.SetupMonitoring(ctx, cfg, container.Provider)
-		if err != nil {
-			return err
-		}
-
 		ctx.Export("domain", pulumi.String(cfg.Domain))
 		ctx.Export("vpsHost", pulumi.String(cfg.VPSHost))
-		ctx.Export("sshTunnel", pulumi.Sprintf("ssh -L 19999:localhost:19999 %s@%s", cfg.VPSUser, cfg.VPSHost))
 		ctx.Export("firewallRulesId", firewall.Rules.ID())
 		ctx.Export("rootRecordId", dns.RootRecord.ID())
 		ctx.Export("wwwRecordId", dns.WWWRecord.ID())
@@ -51,7 +45,6 @@ func main() {
 		ctx.Export("rateLimitId", security.RateLimiting.ID())
 		ctx.Export("containerId", container.Container.ID())
 		ctx.Export("imageId", container.Image.ID())
-		ctx.Export("netdataId", monitoring.Netdata.ID())
 
 		return nil
 	})
