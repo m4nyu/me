@@ -1,23 +1,44 @@
 package lib
 
-import (
-	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-)
+import "github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 
 type Config struct {
-	Compartment string
-	Tenancy     string
-	Domain      string
-	Key         string
-	Region      string
+	VPSHost            string
+	VPSUser            string
+	CloudflareAPIToken string
+	CloudflareZoneID   string
+	Domain             string
+	GitRepo            string
+	GitBranch          string
+	ProdContainer      string
+	StagContainer      string
 }
 
 func Load(c *config.Config) *Config {
-	return &Config{
-		Compartment: c.Require("compartmentId"),
-		Tenancy:     c.Require("tenancyId"),
-		Domain:      c.Require("availabilityDomain"),
-		Key:         c.Require("sshPublicKey"),
-		Region:      c.Get("region"),
+	cfg := &Config{
+		VPSHost:            c.Get("vpsHost"),
+		VPSUser:            c.Get("vpsUser"),
+		CloudflareAPIToken: c.Require("cloudflareApiToken"),
+		CloudflareZoneID:   c.Require("cloudflareZoneId"),
+		Domain:             c.Require("domain"),
+		GitRepo:            c.Get("gitRepo"),
+		GitBranch:          c.Get("gitBranch"),
+		ProdContainer:      c.Get("prodContainer"),
+		StagContainer:      c.Get("stagContainer"),
 	}
+
+	if cfg.GitRepo == "" {
+		cfg.GitRepo = "m4nyu/me"
+	}
+	if cfg.GitBranch == "" {
+		cfg.GitBranch = "main"
+	}
+	if cfg.ProdContainer == "" {
+		cfg.ProdContainer = "prod"
+	}
+	if cfg.StagContainer == "" {
+		cfg.StagContainer = "staging"
+	}
+
+	return cfg
 }
