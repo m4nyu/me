@@ -50,16 +50,18 @@ func Logo(size string) g.Node {
 					g.Attr("viewBox", "0 0 32 32"),
 					g.Attr("shape-rendering", "crispEdges"),
 					g.Attr("style", fmt.Sprintf(
-						"position: absolute; width: %.2f%%; height: %.2f%%; left: -%.2f%%; top: -%.2f%%; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;",
+						"position: absolute; width: %.2f%%; height: %.2f%%; left: -%.2f%%; top: -%.2f%%; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(0); -webkit-transform: translateZ(0);",
 						(100.0/tileBaseSize)*100, (100.0/tileBaseSize)*100, (x/tileBaseSize)*100, (y/tileBaseSize)*100,
 					)),
 					g.El("rect",
 						g.Attr("width", "32"),
 						g.Attr("height", "32"),
 						Class("fill-foreground"),
+						g.Attr("shape-rendering", "crispEdges"),
 					),
 					g.El("g",
 						g.Attr("transform", "translate(16,16) rotate(40.5) translate(-16,-16)"),
+						g.Attr("shape-rendering", "crispEdges"),
 						g.El("path",
 							g.Attr("d", "M8.5 24 L8.5 8 L10.5 8 L15.2 18 L16.8 18 L21.5 8 L23.5 8 L23.5 24 L21.5 24 L21.5 10.5 L17.2 20.5 L14.8 20.5 L10.5 10.5 L10.5 24 L8.5 24 Z"),
 							Class("fill-background"),
@@ -86,6 +88,23 @@ func Logo(size string) g.Node {
 			.logo-tile {
 				animation: tile-reveal 0.1s ease-in forwards;
 				opacity: 0;
+			}
+
+			.logo-tile svg {
+				-webkit-font-smoothing: none;
+				-moz-osx-font-smoothing: grayscale;
+				text-rendering: optimizeLegibility;
+				shape-rendering: crispEdges;
+			}
+
+			.logo-tile path {
+				shape-rendering: crispEdges;
+			}
+
+			.animated-logo {
+				image-rendering: -webkit-optimize-contrast;
+				image-rendering: crisp-edges;
+				image-rendering: pixelated;
 			}
 
 			.animated-logo .logo-tile:nth-child(1) { animation-delay: 0.826s; }
