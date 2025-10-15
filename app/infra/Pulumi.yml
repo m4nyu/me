@@ -1,4 +1,4 @@
-name: infra
+name: me
 runtime:
   name: go
 description: Infrastructure for personal website on OVH VPS with Cloudflare CDN
