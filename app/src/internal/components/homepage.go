@@ -338,26 +338,6 @@ func MobileSection1Swiper(props HomePageProps) g.Node {
 	)
 }
 
-func MobileSection2Swiper(props HomePageProps) g.Node {
-	return Div(
-		Class("min-w-full flex-shrink-0 h-full w-full"),
-		Div(
-			Class("w-full h-full p-3 pb-8"),
-			Div(
-				Class("w-full h-full flex flex-col justify-center bg-background rounded-xl p-4 overflow-hidden"),
-				Div(
-					Class("max-w-2xl mx-auto text-center px-4"),
-					H2(Class("text-lg font-light mb-3 text-foreground"), g.Text(i18n.T(props.CurrentLang, "tagline"))),
-					P(
-						Class("text-xs text-foreground mb-4 font-light leading-relaxed"),
-						g.Text(i18n.T(props.CurrentLang, "intro_desc")),
-					),
-				),
-			),
-		),
-	)
-}
-
 func MobileSection3Swiper(props HomePageProps) g.Node {
 	return Div(
 		Class("min-w-full flex-shrink-0 h-full w-full"),
@@ -558,36 +538,6 @@ func DesktopSectionDot(index int) g.Node {
 	)
 }
 
-func DesktopSection(id, title, description string, withButton bool) g.Node {
-	children := []g.Node{
-		H2(
-			Class("text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-4 lg:mb-6 text-foreground"),
-			g.Text(title),
-		),
-		P(
-			Class("text-xs md:text-sm lg:text-base xl:text-lg text-foreground mb-6 lg:mb-8 font-light leading-relaxed"),
-			g.Text(description),
-		),
-	}
-
-	if withButton {
-		children = append(children, Button(
-			Type("button"),
-			Class("bg-foreground text-background border-0 outline-none cursor-pointer text-xs md:text-sm lg:text-base px-4 lg:px-6 py-2 lg:py-3 font-light transition-colors h-auto rounded-none shadow-none hover:bg-foreground hover:opacity-80"),
-			g.Text("Get in Touch"),
-		))
-	}
-
-	return Div(
-		ID(id),
-		Class("snap-start snap-always min-h-screen h-screen flex items-center justify-center bg-background"),
-		Div(
-			Class("max-w-2xl mx-auto text-center px-4 lg:px-8"),
-			g.Group(children),
-		),
-	)
-}
-
 func DesktopSkillsSection(props HomePageProps) g.Node {
 	return Div(
 		ID("skills"),
@@ -626,14 +576,6 @@ func DesktopQASection(props HomePageProps, faqItems []AccordionItem) g.Node {
 }
 
 // Helper Components
-func LegalLink(href, text string) g.Node {
-	return A(
-		Href(href),
-		Class("text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-all p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"),
-		g.Text(text),
-	)
-}
-
 func MobilePricingCard(title, price, period, description string, highlighted bool) g.Node {
 	bgClass := "p-2 text-center border border-foreground"
 	textClass := "text-foreground"
