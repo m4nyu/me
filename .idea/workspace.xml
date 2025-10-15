@@ -5,9 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d24d176e-2fc0-489c-8b14-23341d42eedf" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/codeql.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/codeql.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/infra/Pulumi.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/Pulumi.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/infra/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/infra/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/.env.example" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/app/infra/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/Pulumi.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app/infra/Pulumi.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/app/infra/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/app/infra/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/lib/compute.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/lib/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/infra/lib/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/lib/network.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/infra/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infra/scripts/init.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/internal/components/homepage.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/internal/components/homepage.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/internal/components/logo.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/internal/components/logo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/internal/i18n/translations.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/internal/i18n/translations.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +48,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHELLCHECK.PATH": "/home/manuel/.local/share/JetBrains/IdeaIC2025.2/Shell Script/shellcheck",
     "git-widget-placeholder": "feature/accordion-fix",
     "js.debugger.nextJs.config.created.client": "true",
     "js.debugger.nextJs.config.created.server": "true",
@@ -55,7 +73,7 @@
       <recent name="$PROJECT_DIR$/src/lib" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.Next.js: server-side">
+  <component name="RunManager">
     <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
       <method v="2" />
     </configuration>
@@ -69,13 +87,6 @@
       <envs />
       <method v="2" />
     </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-WS-252.26830.93" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -93,7 +104,10 @@
       <workItem from="1759319888494" duration="14000" />
       <workItem from="1759339447981" duration="16734000" />
       <workItem from="1759736135416" duration="7000" />
-      <workItem from="1759736177052" duration="31494000" />
+      <workItem from="1759736177052" duration="36409000" />
+      <workItem from="1760045559713" duration="3169000" />
+      <workItem from="1760080270210" duration="12912000" />
+      <workItem from="1760186394077" duration="23262000" />
     </task>
     <servers />
   </component>
