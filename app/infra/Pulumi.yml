@@ -1,4 +1,4 @@
 name: infra
 runtime:
   name: go
-description: Infrastructure for personal website on Oracle Cloud Free Tier
+description: Infrastructure for personal website on OVH VPS with Cloudflare CDN

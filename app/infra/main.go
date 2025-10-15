@@ -11,21 +11,47 @@ func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
 		cfg := lib.Load(config.New(ctx, ""))
 
-		network, err := lib.SetupNetwork(ctx, cfg)
+		firewall, err := lib.SetupFirewall(ctx, cfg)
 		if err != nil {
 			return err
 		}
 
-		compute, err := lib.SetupCompute(ctx, cfg, network)
+		dns, err := lib.SetupDNS(ctx, cfg)
 		if err != nil {
 			return err
 		}
 
-		ctx.Export("vcn", network.VCN.ID())
-		ctx.Export("subnet", network.Subnet.ID())
-		ctx.Export("instance", compute.Instance.ID())
-		ctx.Export("publicIp", compute.Instance.PublicIp)
-		ctx.Export("privateIp", compute.Instance.PrivateIp)
+		cdn, err := lib.SetupCDN(ctx, cfg)
+		if err != nil {
+			return err
+		}
+
+		security, err := lib.SetupSecurity(ctx, cfg)
+		if err != nil {
+			return err
+		}
+
+		container, err := lib.SetupContainer(ctx, cfg)
+		if err != nil {
+			return err
+		}
+
+		monitoring, err := lib.SetupMonitoring(ctx, cfg, container.Provider)
+		if err != nil {
+			return err
+		}
+
+		ctx.Export("domain", pulumi.String(cfg.Domain))
+		ctx.Export("vpsHost", pulumi.String(cfg.VPSHost))
+		ctx.Export("sshTunnel", pulumi.Sprintf("ssh -L 19999:localhost:19999 %s@%s", cfg.VPSUser, cfg.VPSHost))
+		ctx.Export("firewallRulesId", firewall.Rules.ID())
+		ctx.Export("rootRecordId", dns.RootRecord.ID())
+		ctx.Export("wwwRecordId", dns.WWWRecord.ID())
+		ctx.Export("cdnSettingsId", cdn.Settings.ID())
+		ctx.Export("rateLimitId", security.RateLimiting.ID())
+		ctx.Export("containerId", container.Container.ID())
+		ctx.Export("imageId", container.Image.ID())
+		ctx.Export("netdataId", monitoring.Netdata.ID())
 
 		return nil
 	})

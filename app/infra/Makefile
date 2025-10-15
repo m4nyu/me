@@ -1,7 +1,16 @@
-.PHONY: init preview deploy destroy refresh outputs help
+.PHONY: help install preview deploy update destroy clean config ssh logs
 
-init: ## Initialize Pulumi stack
-	pulumi stack init dev || pulumi stack select dev
+help: ## Show this help message
+	@echo "Available targets:"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
+
+install: ## Install Go dependencies
+	go mod download
+
+config: ## Show current stack configuration
+	@pulumi config
+	@echo "\nStack info:"
+	@pulumi stack
 
 preview: ## Preview infrastructure changes
 	pulumi preview
@@ -9,17 +18,40 @@ preview: ## Preview infrastructure changes
 deploy: ## Deploy infrastructure
 	pulumi up
 
-destroy: ## Destroy all infrastructure
-	pulumi destroy
+update: ## Update deployment (refresh and deploy)
+	pulumi up --refresh
 
-refresh: ## Refresh infrastructure state
-	pulumi refresh
+destroy: ## Destroy infrastructure
+	@echo "Warning: This will remove Cloudflare DNS records"
+	@read -p "Are you sure? [y/N] " -n 1 -r; \
+	echo; \
+	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
+		pulumi destroy; \
+	fi
 
-outputs: ## Show stack outputs
+ssh: ## SSH into VPS
+	@HOST=$$(pulumi config get vpsHost 2>/dev/null || echo "158.69.218.225"); \
+	USER=$$(pulumi config get vpsUser 2>/dev/null || echo "debian"); \
+	KEY=$$(pulumi config get sshKeyPath 2>/dev/null || echo "~/.ssh/id_rsa"); \
+	ssh -i $$KEY $$USER@$$HOST
+
+logs: ## View application logs on VPS
+	@HOST=$$(pulumi config get vpsHost 2>/dev/null || echo "158.69.218.225"); \
+	USER=$$(pulumi config get vpsUser 2>/dev/null || echo "debian"); \
+	KEY=$$(pulumi config get sshKeyPath 2>/dev/null || echo "~/.ssh/id_rsa"); \
+	ssh -i $$KEY $$USER@$$HOST "docker logs -f me-app"
+
+status: ## Check application status
+	@HOST=$$(pulumi config get vpsHost 2>/dev/null || echo "158.69.218.225"); \
+	USER=$$(pulumi config get vpsUser 2>/dev/null || echo "debian"); \
+	KEY=$$(pulumi config get sshKeyPath 2>/dev/null || echo "~/.ssh/id_rsa"); \
+	ssh -i $$KEY $$USER@$$HOST "docker ps && echo '\n--- Nginx Status ---' && sudo systemctl status nginx --no-pager"
+
+outputs: ## Show deployment outputs
 	pulumi stack output
 
-help: ## Show this help message
-	@echo "Available targets:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
+clean: ## Clean up local build artifacts
+	@rm -rf bin/
+	@echo "Cleaned build artifacts"
 
 .DEFAULT_GOAL := help
