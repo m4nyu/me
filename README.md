@@ -1,12 +1,12 @@
 <div align="center">
 
 <pre style="background: transparent;">
-██╗     ██╗███╗   ██╗██╗  ██╗███████╗
-██║     ██║████╗  ██║██║ ██╔╝██╔════╝
-██║     ██║██╔██╗ ██║█████╔╝ ███████╗
-██║     ██║██║╚██╗██║██╔═██╗ ╚════██║
-███████╗██║██║ ╚████║██║  ██╗███████║
-╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+███╗   ███╗███████╗
+████╗ ████║██╔════╝
+██╔████╔██║█████╗
+██║╚██╔╝██║██╔══╝
+██║ ╚═╝ ██║███████╗
+╚═╝     ╚═╝╚══════╝
 </pre>
 [![Go](https://img.shields.io/badge/Go-1.24-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://go.dev)
 [![Chi](https://img.shields.io/badge/Chi-v5-00ADD8?style=for-the-badge)](https://github.com/go-chi/chi)
