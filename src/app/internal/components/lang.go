@@ -1,7 +1,7 @@
 package components
 
 import (
-	"engineer/app/src/internal/i18n"
+	"engineer/src/app/internal/i18n"
 	"strings"
 
 	g "maragu.dev/gomponents"

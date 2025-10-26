@@ -4,7 +4,7 @@ dev: ## Start development server with hot reloading
 	@~/go/bin/air -c air.toml
 
 build: ## Build the application
-	@go build -o ./.air/main ./app/src/cmd/server
+	@go build -o ./.air/main ./src/app/cmd/server
 
 run: build ## Build and run the application
 	@./.air/main
@@ -15,10 +15,10 @@ clean: ## Clean build artifacts
 	@echo "Cleaned build artifacts"
 
 deploy-prod: ## Deploy production infrastructure
-	@cd app/infra && make deploy-prod
+	@cd src/infra && make deploy-prod
 
 deploy-staging: ## Deploy staging infrastructure
-	@cd app/infra && make deploy-staging
+	@cd src/infra && make deploy-staging
 
 help: ## Show this help message
 	@echo "Available targets:"

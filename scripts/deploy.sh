@@ -2,7 +2,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INFRA_DIR="$SCRIPT_DIR/../app/infra"
+INFRA_DIR="$SCRIPT_DIR/../src/infra"
 
 echo "1) deploy"
 echo "2) update"
