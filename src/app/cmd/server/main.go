@@ -1,12 +1,14 @@
 package main
 
 import (
-	"engineer/app/src/internal/components"
-	"engineer/app/src/internal/handlers"
-	"engineer/app/src/internal/middleware"
+	"engineer/src/app/internal/components"
+	"engineer/src/app/internal/handlers"
+	"engineer/src/app/internal/middleware"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
@@ -22,7 +24,7 @@ func main() {
 	r.Use(middleware.CookieMiddleware)
 
 	// Static files
-	fileServer := http.FileServer(http.Dir("./app/src/static"))
+	fileServer := http.FileServer(http.Dir("./src/app/static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 
 	// Language routes - explicit routes for each language
@@ -46,11 +48,33 @@ func main() {
 	// Live reload WebSocket endpoint (development only)
 	r.Get("/livereload", middleware.LiveReloadHandler)
 
-	port := ":3000"
+	port := getPort()
 	fmt.Printf("Server starting on http://localhost%s\n", port)
 	if err := http.ListenAndServe(port, r); err != nil {
 		log.Fatal(err)
 	}
+}
+
+// getPort returns an available port, starting from 3000
+func getPort() string {
+	// Check if PORT env var is set (production)
+	if envPort := os.Getenv("PORT"); envPort != "" {
+		return ":" + envPort
+	}
+
+	// For local dev, try ports starting from 3000
+	startPort := 3000
+	for port := startPort; port < startPort+10; port++ {
+		addr := fmt.Sprintf(":%d", port)
+		listener, err := net.Listen("tcp", addr)
+		if err == nil {
+			listener.Close()
+			return addr
+		}
+	}
+
+	// Fallback to 3000 if all ports are taken
+	return ":3000"
 }
 
 // handleHomeWithLang handles homepage with a specific language code

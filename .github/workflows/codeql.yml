@@ -42,11 +42,11 @@ jobs:
 
       - name: build-app
         run: |
-          cd app && go build -v ./...
+          cd src/app && go build -v ./...
 
       - name: build-infra
         run: |
-          cd app/infra && go build -v ./...
+          cd src/infra && go build -v ./...
 
       - name: codeql-analyze
         uses: github/codeql-action/analyze@v3
