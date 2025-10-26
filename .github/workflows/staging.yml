@@ -12,8 +12,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container:
-      image: debian:bookworm
 
     steps:
       - uses: actions/checkout@v4

@@ -12,8 +12,6 @@ on:
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    container:
-      image: debian:bookworm
     permissions:
       actions: read
       contents: read
