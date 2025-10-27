@@ -2,13 +2,11 @@ package components
 
 import (
 	"fmt"
-	"math/rand"
 
 	g "maragu.dev/gomponents"
 	. "maragu.dev/gomponents/html"
 )
 
-// Logo creates the animated logo component with tile reveal effect
 func Logo(size string) g.Node {
 	sizeClass := "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32"
 	if size == "small" {
@@ -19,11 +17,9 @@ func Logo(size string) g.Node {
 		sizeClass = "w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-40 xl:h-40"
 	}
 
-	// Generate tiles with random delays (matching Next.js seeded random)
 	gridSize := 6
 	tileBaseSize := 100.0 / float64(gridSize)
 
-	// Seeded random to match Next.js
 	seed := int64(12345)
 	seededRandom := func() float64 {
 		seed = (seed*9301 + 49297) % 233280
@@ -74,7 +70,6 @@ func Logo(size string) g.Node {
 	}
 
 	return g.Group([]g.Node{
-		// Component-specific styles
 		g.El("style", g.Raw(`
 			@keyframes tile-reveal {
 				from {
@@ -149,8 +144,4 @@ func Logo(size string) g.Node {
 			g.Group(tiles),
 		),
 	})
-}
-
-func init() {
-	rand.Seed(12345)
 }
