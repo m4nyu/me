@@ -14,7 +14,6 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-// LiveReloadHandler handles WebSocket connections for live reload
 func LiveReloadHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -23,7 +22,6 @@ func LiveReloadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 
-	// Keep connection alive with ping/pong
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 
