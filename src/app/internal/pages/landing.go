@@ -1,6 +1,7 @@
-package components
+package pages
 
 import (
+	"engineer/src/app/internal/components"
 	"engineer/src/app/internal/i18n"
 	"fmt"
 
@@ -9,14 +10,12 @@ import (
 )
 
 type HomePageProps struct {
-	Theme        string
-	CurrentLang  string
-	OnNavigate   func(string) string
+	Theme       string
+	CurrentLang string
 }
 
-// HomePage creates the complete homepage with mobile carousel and desktop scroll layout
 func HomePage(props HomePageProps) g.Node {
-	faqItems := []AccordionItem{
+	faqItems := []components.AccordionItem{
 		{
 			Question: i18n.T(props.CurrentLang, "faq_q1"),
 			Answer:   i18n.T(props.CurrentLang, "faq_a1"),
@@ -60,7 +59,6 @@ func HomePage(props HomePageProps) g.Node {
 	}
 
 	return g.Group([]g.Node{
-		// Component-specific styles
 		g.El("style", g.Raw(`
 			/* Scrollbar hiding */
 			.scrollbar-hide {
@@ -102,38 +100,27 @@ func HomePage(props HomePageProps) g.Node {
 				color: #000000;
 			}
 		`)),
-		// Mobile Carousel Layout
 		MobileCarouselLayout(props, faqItems),
-		// Desktop Layout
 		DesktopLayout(props, faqItems),
-		// Language Drawer (rendered at body level to avoid overflow issues)
-		LanguageDrawer(props.CurrentLang),
+		components.LanguageDrawer(props.CurrentLang),
 	})
 }
 
-// MobileCarouselLayout creates the mobile carousel view with swipe support
-func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node {
+func MobileCarouselLayout(props HomePageProps, faqItems []components.AccordionItem) g.Node {
 	return Div(
 		Class("lg:hidden h-screen bg-foreground dark:bg-foreground text-black relative overflow-hidden"),
 		ID("mobile-carousel"),
-		// Carousel Container
 		Div(
 			Class("relative overflow-hidden h-full w-full mb-12"),
-			// Hidden radio buttons for carousel control
 			Input(Type("radio"), ID("slide1"), Name("mobile-carousel"), Checked(), g.Attr("style", "display: none;")),
 			Input(Type("radio"), ID("slide2"), Name("mobile-carousel"), g.Attr("style", "display: none;")),
 			Input(Type("radio"), ID("slide3"), Name("mobile-carousel"), g.Attr("style", "display: none;")),
-			// Slides wrapper
 			Div(
 				Class("carousel-slides flex h-full transition-transform duration-300 ease-in-out"),
-				// Section 1: Main content
 				MobileSection1Swiper(props),
-				// Section 2: Core Strengths
 				MobileSection3Swiper(props),
-				// Section 3: Opinions
 				MobileSection4Swiper(props, faqItems),
 			),
-			// Section Indicators
 			Div(
 				Class("carousel-indicators absolute bottom-2 left-1/2 -translate-x-1/2 z-50 flex gap-1"),
 				g.Group([]g.Node{
@@ -143,7 +130,6 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 				}),
 			),
 		),
-		// Minimal custom styles (only radio button states that Tailwind can't handle)
 		g.El("style", g.Raw(`
 			/* Radio button controls */
 			#slide1:checked ~ .carousel-slides {
@@ -176,7 +162,6 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 				border-color: black;
 			}
 		`)),
-		// JavaScript for swipe detection
 		g.El("script", g.Raw(`
 			(function() {
 				const carousel = document.getElementById('mobile-carousel');
@@ -200,7 +185,6 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 					}
 				}
 
-				// Touch events
 				carousel.addEventListener('touchstart', function(e) {
 					startX = e.touches[0].clientX;
 					startY = e.touches[0].clientY;
@@ -224,7 +208,6 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 					const timeDiff = endTime - startTime;
 					const velocity = Math.abs(diffX) / timeDiff;
 
-					// Trigger on: horizontal swipe (15px+) OR fast swipe (velocity > 0.3)
 					const isHorizontalSwipe = Math.abs(diffX) > Math.abs(diffY);
 					const isSignificantDistance = Math.abs(diffX) > 15;
 					const isFastSwipe = velocity > 0.3 && Math.abs(diffX) > 5;
@@ -232,16 +215,13 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 					if (isHorizontalSwipe && (isSignificantDistance || isFastSwipe)) {
 						const currentSlide = getCurrentSlide();
 						if (diffX > 0) {
-							// Swipe left - next slide
 							goToSlide(currentSlide + 1);
 						} else {
-							// Swipe right - previous slide
 							goToSlide(currentSlide - 1);
 						}
 					}
 				}, { passive: true });
 
-				// Mouse events for desktop testing
 				carousel.addEventListener('mousedown', function(e) {
 					startX = e.clientX;
 					startY = e.clientY;
@@ -267,7 +247,6 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 					const timeDiff = endTime - startTime;
 					const velocity = Math.abs(diffX) / timeDiff;
 
-					// Trigger on: horizontal swipe (15px+) OR fast swipe (velocity > 0.3)
 					const isHorizontalSwipe = Math.abs(diffX) > Math.abs(diffY);
 					const isSignificantDistance = Math.abs(diffX) > 15;
 					const isFastSwipe = velocity > 0.3 && Math.abs(diffX) > 5;
@@ -275,10 +254,8 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 					if (isHorizontalSwipe && (isSignificantDistance || isFastSwipe)) {
 						const currentSlide = getCurrentSlide();
 						if (diffX > 0) {
-							// Swipe left - next slide
 							goToSlide(currentSlide + 1);
 						} else {
-							// Swipe right - previous slide
 							goToSlide(currentSlide - 1);
 						}
 					}
@@ -292,7 +269,6 @@ func MobileCarouselLayout(props HomePageProps, faqItems []AccordionItem) g.Node 
 	)
 }
 
-// CarouselDot creates a navigation label for the carousel (pure CSS)
 func CarouselDot(index int) g.Node {
 	return g.El("label",
 		g.Attr("for", fmt.Sprintf("slide%d", index)),
@@ -301,7 +277,6 @@ func CarouselDot(index int) g.Node {
 	)
 }
 
-// Mobile Sections (Carousel Slides)
 func MobileSection1Swiper(props HomePageProps) g.Node {
 	return Div(
 		Class("min-w-full flex-shrink-0 h-full w-full"),
@@ -309,12 +284,11 @@ func MobileSection1Swiper(props HomePageProps) g.Node {
 			Class("w-full h-full p-3 pb-8"),
 			Div(
 				Class("w-full h-full flex flex-col justify-between bg-background rounded-xl p-4 overflow-hidden"),
-				// Main content
 				Div(
 					Class("text-center flex-1 flex flex-col justify-center"),
 					Div(
 						Class("flex items-center justify-center space-x-3 mb-4"),
-						Logo("medium"),
+						components.Logo("medium"),
 						Span(Class("text-5xl font-thin text-foreground"), g.Text("4nuel")),
 					),
 					H1(Class("text-lg font-light mb-3 text-foreground"), g.Text(i18n.T(props.CurrentLang, "tagline"))),
@@ -323,14 +297,12 @@ func MobileSection1Swiper(props HomePageProps) g.Node {
 						g.Text(i18n.T(props.CurrentLang, "intro_desc")),
 					),
 				),
-				// Footer
 				Div(
 					Class("flex items-end justify-center w-full pb-4"),
-					// Theme and Language switchers
 					Div(
 						Class("flex flex-row gap-2"),
-						ThemeSwitcher(props.Theme),
-						LanguageSwitcher(props.CurrentLang),
+						components.ThemeSwitcher(props.Theme),
+						components.LanguageSwitcher(props.CurrentLang),
 					),
 				),
 			),
@@ -364,7 +336,7 @@ func MobileSection3Swiper(props HomePageProps) g.Node {
 	)
 }
 
-func MobileSection4Swiper(props HomePageProps, faqItems []AccordionItem) g.Node {
+func MobileSection4Swiper(props HomePageProps, faqItems []components.AccordionItem) g.Node {
 	return Div(
 		Class("min-w-full flex-shrink-0 h-full w-full"),
 		Div(
@@ -378,20 +350,17 @@ func MobileSection4Swiper(props HomePageProps, faqItems []AccordionItem) g.Node 
 						H2(Class("text-lg font-light mb-2 text-foreground"), g.Text(i18n.T(props.CurrentLang, "opinions"))),
 						P(Class("text-xs text-foreground font-light"), g.Text(i18n.T(props.CurrentLang, "opinions_subtitle"))),
 					),
-					Accordion("border border-foreground", faqItems),
+					components.Accordion("border border-foreground", faqItems),
 				),
 			),
 		),
 	)
 }
 
-// Desktop Layout
-func DesktopLayout(props HomePageProps, faqItems []AccordionItem) g.Node {
+func DesktopLayout(props HomePageProps, faqItems []components.AccordionItem) g.Node {
 	return Div(
 		Class("hidden lg:grid min-h-screen bg-foreground dark:bg-foreground text-black grid-cols-5 selectable-content relative"),
-		// Left Column - Fixed
 		DesktopLeftColumn(props),
-		// Right Column - Scrollable
 		DesktopRightColumn(props, faqItems),
 	)
 }
@@ -401,12 +370,11 @@ func DesktopLeftColumn(props HomePageProps) g.Node {
 		Class("h-screen p-6 lg:pl-10 lg:pr-3 col-span-2 bg-foreground dark:bg-foreground"),
 		Div(
 			Class("p-8 w-full h-full flex flex-col justify-between bg-background rounded-2xl"),
-			// Main content
 			Div(
 				Class("text-center flex-1 flex flex-col justify-center"),
 				Div(
 					Class("flex items-center justify-center space-x-4 mb-8"),
-					Logo("medium"),
+					components.Logo("medium"),
 					Span(Class("text-4xl md:text-6xl lg:text-8xl xl:text-9xl font-thin text-foreground"), g.Text("4nuel")),
 				),
 				H1(
@@ -418,38 +386,32 @@ func DesktopLeftColumn(props HomePageProps) g.Node {
 					g.Text(i18n.T(props.CurrentLang, "intro_desc")),
 				),
 			),
-			// Footer
 			Div(
 				Class("flex items-end justify-center w-full pb-0"),
-				// Theme and Language switchers
 				Div(
 					Class("flex flex-row gap-1 sm:gap-2 md:gap-3 lg:gap-4"),
-					ThemeSwitcher(props.Theme),
-					LanguageSwitcher(props.CurrentLang),
+					components.ThemeSwitcher(props.Theme),
+					components.LanguageSwitcher(props.CurrentLang),
 				),
 			),
 		),
 	)
 }
 
-func DesktopRightColumn(props HomePageProps, faqItems []AccordionItem) g.Node {
+func DesktopRightColumn(props HomePageProps, faqItems []components.AccordionItem) g.Node {
 	return Div(
 		Class("h-screen relative col-span-3 p-6 lg:pl-3 lg:pr-10 bg-foreground dark:bg-foreground"),
 		Div(
 			Class("h-full bg-background rounded-2xl overflow-hidden"),
-			// Scrollable content
 			Div(
 				ID("scroll-container"),
 				Class("h-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide bg-background rounded-2xl"),
 				Main(
 					Class("w-full bg-background"),
-					// Section 1: Core Strengths
 					DesktopSkillsSection(props),
-					// Section 2: Opinions
 					DesktopQASection(props, faqItems),
 				),
 			),
-			// Section Navigation Dots
 			Div(
 				Class("absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-40 flex-col gap-1 hidden lg:flex"),
 				g.Group([]g.Node{
@@ -457,7 +419,6 @@ func DesktopRightColumn(props HomePageProps, faqItems []AccordionItem) g.Node {
 					DesktopSectionDot(1),
 				}),
 			),
-			// Desktop navigation indicator active state
 			g.El("style", g.Raw(`
 				.desktop-nav-dot.active {
 					background-color: white;
@@ -472,7 +433,6 @@ func DesktopRightColumn(props HomePageProps, faqItems []AccordionItem) g.Node {
 					border-color: black;
 				}
 			`)),
-			// JavaScript for scroll-based indicator highlighting
 			g.El("script", g.Raw(`
 				(function() {
 					const container = document.getElementById('scroll-container');
@@ -502,7 +462,6 @@ func DesktopRightColumn(props HomePageProps, faqItems []AccordionItem) g.Node {
 						});
 					}
 
-					// Add click handlers to dots
 					dots.forEach((dot) => {
 						dot.addEventListener('click', function() {
 							const sectionId = this.getAttribute('data-section');
@@ -559,7 +518,7 @@ func DesktopSkillsSection(props HomePageProps) g.Node {
 	)
 }
 
-func DesktopQASection(props HomePageProps, faqItems []AccordionItem) g.Node {
+func DesktopQASection(props HomePageProps, faqItems []components.AccordionItem) g.Node {
 	return Div(
 		ID("qa"),
 		Class("snap-start snap-always min-h-screen h-screen flex items-center justify-center bg-background"),
@@ -570,12 +529,11 @@ func DesktopQASection(props HomePageProps, faqItems []AccordionItem) g.Node {
 				H2(Class("text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light mb-3 lg:mb-4 text-foreground"), g.Text(i18n.T(props.CurrentLang, "opinions"))),
 				P(Class("text-xs md:text-sm lg:text-base xl:text-lg text-foreground font-light"), g.Text(i18n.T(props.CurrentLang, "opinions_subtitle"))),
 			),
-			Accordion("border border-foreground", faqItems),
+			components.Accordion("border border-foreground", faqItems),
 		),
 	)
 }
 
-// Helper Components
 func MobilePricingCard(title, price, period, description string, highlighted bool) g.Node {
 	bgClass := "p-2 text-center border border-foreground"
 	textClass := "text-foreground"
