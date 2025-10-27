@@ -26,9 +26,7 @@ var languages = []struct {
 	{"AR", "العربية"},
 }
 
-// ThemeSwitcher creates a theme mode switcher (server-side with cookies)
 func ThemeSwitcher(currentTheme string) g.Node {
-	// Determine next theme in cycle: light -> dark -> system -> light
 	nextTheme := "light"
 	if currentTheme == "light" {
 		nextTheme = "dark"
@@ -36,7 +34,6 @@ func ThemeSwitcher(currentTheme string) g.Node {
 		nextTheme = "system"
 	}
 
-	// Theme icon based on current theme
 	var themeIcon g.Node
 	themeLabel := currentTheme
 	if currentTheme == "system" {
@@ -61,7 +58,7 @@ func ThemeSwitcher(currentTheme string) g.Node {
 			Class("text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-all flex items-center gap-1 sm:gap-2 p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"),
 			g.Attr("aria-label", "Toggle dark/light/auto mode"),
 			Div(
-				Class("w-[14px] h-[14px] sm:w-4 sm:h-4 flex items-center justify-center"),
+				Class("w-[14px] h-[14px] sm:w-4 sm:h-4 flex items-center justify-center pointer-events-none"),
 				themeIcon,
 			),
 			Span(
@@ -72,7 +69,6 @@ func ThemeSwitcher(currentTheme string) g.Node {
 	)
 }
 
-// LanguageSwitcher creates just the trigger for the language drawer
 func LanguageSwitcher(currentLang string) g.Node {
 	return g.El("label",
 		g.Attr("for", "language-drawer"),
@@ -85,7 +81,6 @@ func LanguageSwitcher(currentLang string) g.Node {
 	)
 }
 
-// LanguageDrawer creates the drawer for language selection
 func LanguageDrawer(currentLang string) g.Node {
 	languageItems := []g.Node{}
 
@@ -116,7 +111,6 @@ func LanguageDrawer(currentLang string) g.Node {
 	}
 
 	return g.Group([]g.Node{
-		// Minimal custom styles (only checkbox state selectors that Tailwind can't handle)
 		g.El("style", g.Raw(`
 			.drawer-toggle:checked ~ .drawer-overlay {
 				display: block;
@@ -129,32 +123,26 @@ func LanguageDrawer(currentLang string) g.Node {
 		`)),
 		Div(
 			Class("relative"),
-			// Hidden checkbox to control drawer state
 			Input(
 				Type("checkbox"),
 				ID("language-drawer"),
 				Class("drawer-toggle"),
 				g.Attr("style", "display: none;"),
 			),
-		// Overlay (clicking closes drawer)
 		Div(
 			Class("drawer-overlay hidden fixed inset-0 bg-black/50 z-50 opacity-0 transition-opacity duration-300"),
 			ID("language-drawer-overlay"),
 			g.Attr("aria-label", "Close drawer"),
 		),
-		// Drawer content
 		Div(
 			Class("drawer-content fixed bottom-0 left-0 right-0 z-[51] bg-background border-t border-foreground max-h-[80vh] translate-y-full transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"),
 			ID("language-drawer-content"),
-			// Draggable header area
 			Div(
 				ID("drawer-drag-handle"),
 				Class("pb-2"),
-				// Handle bar
 				Div(
 					Class("mx-auto mt-4 mb-2 h-1 w-[100px] rounded-full bg-foreground"),
 				),
-				// Title
 				Div(
 					Class("flex flex-row items-center justify-between relative px-4"),
 					H2(
@@ -163,7 +151,6 @@ func LanguageDrawer(currentLang string) g.Node {
 					),
 				),
 			),
-			// Drawer body
 			Div(
 				Class("overflow-y-auto max-h-[calc(80vh-8rem)] p-4 pt-2"),
 				Div(
@@ -172,7 +159,6 @@ func LanguageDrawer(currentLang string) g.Node {
 				),
 			),
 		),
-		// JavaScript for drag-to-close and overlay click
 		g.El("script", g.Raw(`
 			(function() {
 				const drawer = document.getElementById('language-drawer-content');
@@ -181,7 +167,6 @@ func LanguageDrawer(currentLang string) g.Node {
 				const overlay = document.getElementById('language-drawer-overlay');
 				if (!drawer || !handle || !toggle || !overlay) return;
 
-				// Overlay click to close
 				overlay.addEventListener('click', function() {
 					toggle.checked = false;
 				});
@@ -219,7 +204,6 @@ func LanguageDrawer(currentLang string) g.Node {
 					const timeDiff = endTime - startTime;
 					const velocity = Math.abs(diffY) / timeDiff;
 
-					// Close if dragged down >80px OR fast swipe (velocity > 0.4)
 					if (diffY > 80 || (velocity > 0.4 && diffY > 30)) {
 						toggle.checked = false;
 					}
@@ -231,47 +215,6 @@ func LanguageDrawer(currentLang string) g.Node {
 		`)),
 		),
 	})
-}
-
-// Icon components
-func SunIcon() g.Node {
-	return g.El("svg",
-		g.Attr("xmlns", "http://www.w3.org/2000/svg"),
-		g.Attr("width", "14"),
-		g.Attr("height", "14"),
-		g.Attr("viewBox", "0 0 24 24"),
-		g.Attr("fill", "none"),
-		g.Attr("stroke", "currentColor"),
-		g.Attr("stroke-width", "2"),
-		g.Attr("stroke-linecap", "round"),
-		g.Attr("stroke-linejoin", "round"),
-		Class("sm:w-4 sm:h-4 text-foreground"),
-		g.El("circle", g.Attr("cx", "12"), g.Attr("cy", "12"), g.Attr("r", "4")),
-		g.El("path", g.Attr("d", "M12 2v2")),
-		g.El("path", g.Attr("d", "M12 20v2")),
-		g.El("path", g.Attr("d", "m4.93 4.93 1.41 1.41")),
-		g.El("path", g.Attr("d", "m17.66 17.66 1.41 1.41")),
-		g.El("path", g.Attr("d", "M2 12h2")),
-		g.El("path", g.Attr("d", "M20 12h2")),
-		g.El("path", g.Attr("d", "m6.34 17.66-1.41 1.41")),
-		g.El("path", g.Attr("d", "m19.07 4.93-1.41 1.41")),
-	)
-}
-
-func MoonIcon() g.Node {
-	return g.El("svg",
-		g.Attr("xmlns", "http://www.w3.org/2000/svg"),
-		g.Attr("width", "14"),
-		g.Attr("height", "14"),
-		g.Attr("viewBox", "0 0 24 24"),
-		g.Attr("fill", "none"),
-		g.Attr("stroke", "currentColor"),
-		g.Attr("stroke-width", "2"),
-		g.Attr("stroke-linecap", "round"),
-		g.Attr("stroke-linejoin", "round"),
-		Class("sm:w-4 sm:h-4 text-foreground"),
-		g.El("path", g.Attr("d", "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z")),
-	)
 }
 
 func LanguagesIcon() g.Node {
@@ -292,60 +235,5 @@ func LanguagesIcon() g.Node {
 		g.El("path", g.Attr("d", "M7 2h1")),
 		g.El("path", g.Attr("d", "m22 22-5-10-5 10")),
 		g.El("path", g.Attr("d", "M14 18h6")),
-	)
-}
-
-func XIcon() g.Node {
-	return g.El("svg",
-		g.Attr("xmlns", "http://www.w3.org/2000/svg"),
-		g.Attr("width", "16"),
-		g.Attr("height", "16"),
-		g.Attr("viewBox", "0 0 24 24"),
-		g.Attr("fill", "none"),
-		g.Attr("stroke", "currentColor"),
-		g.Attr("stroke-width", "2"),
-		g.Attr("stroke-linecap", "round"),
-		g.Attr("stroke-linejoin", "round"),
-		Class("w-4 h-4 text-foreground"),
-		g.El("path", g.Attr("d", "M18 6 6 18")),
-		g.El("path", g.Attr("d", "m6 6 12 12")),
-	)
-}
-
-func BotIcon() g.Node {
-	return g.El("svg",
-		g.Attr("xmlns", "http://www.w3.org/2000/svg"),
-		g.Attr("width", "14"),
-		g.Attr("height", "14"),
-		g.Attr("viewBox", "0 0 24 24"),
-		g.Attr("fill", "none"),
-		g.Attr("stroke", "currentColor"),
-		g.Attr("stroke-width", "2"),
-		g.Attr("stroke-linecap", "round"),
-		g.Attr("stroke-linejoin", "round"),
-		Class("sm:w-4 sm:h-4 text-foreground"),
-		g.El("path", g.Attr("d", "M12 8V4H8")),
-		g.El("rect", g.Attr("width", "16"), g.Attr("height", "12"), g.Attr("x", "4"), g.Attr("y", "8"), g.Attr("rx", "2")),
-		g.El("path", g.Attr("d", "M2 14h2")),
-		g.El("path", g.Attr("d", "M20 14h2")),
-		g.El("path", g.Attr("d", "M15 13v2")),
-		g.El("path", g.Attr("d", "M9 13v2")),
-	)
-}
-
-func ArrowLeftIcon() g.Node {
-	return g.El("svg",
-		g.Attr("xmlns", "http://www.w3.org/2000/svg"),
-		g.Attr("width", "20"),
-		g.Attr("height", "20"),
-		g.Attr("viewBox", "0 0 24 24"),
-		g.Attr("fill", "none"),
-		g.Attr("stroke", "currentColor"),
-		g.Attr("stroke-width", "2"),
-		g.Attr("stroke-linecap", "round"),
-		g.Attr("stroke-linejoin", "round"),
-		Class("text-foreground"),
-		g.El("path", g.Attr("d", "m12 19-7-7 7-7")),
-		g.El("path", g.Attr("d", "M19 12H5")),
 	)
 }
