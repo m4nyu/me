@@ -47,21 +47,17 @@ pulumi stack select staging 2>/dev/null || {
     pulumi stack init staging
 }
 
+VPS_HOST=${VPS_HOST:-158.69.218.225}
+VPS_USER=${VPS_USER:-debian}
+GIT_REPO=${GIT_REPO:-m4nyu/me}
+GIT_BRANCH=${GIT_BRANCH:-main}
+
 echo ""
 echo "Configuration:"
-echo "-------------"
-
-read -p "VPS Host [158.69.218.225]: " VPS_HOST
-VPS_HOST=${VPS_HOST:-158.69.218.225}
-
-read -p "VPS User [debian]: " VPS_USER
-VPS_USER=${VPS_USER:-debian}
-
-read -p "Git Repo [m4nyu/me]: " GIT_REPO
-GIT_REPO=${GIT_REPO:-m4nyu/me}
-
-read -p "Git Branch [main]: " GIT_BRANCH
-GIT_BRANCH=${GIT_BRANCH:-main}
+echo "  VPS Host: $VPS_HOST"
+echo "  VPS User: $VPS_USER"
+echo "  Git Repo: $GIT_REPO"
+echo "  Git Branch: $GIT_BRANCH"
 
 pulumi config set vpsHost "$VPS_HOST"
 pulumi config set vpsUser "$VPS_USER"
@@ -69,7 +65,7 @@ pulumi config set gitRepo "$GIT_REPO"
 pulumi config set gitBranch "$GIT_BRANCH"
 
 echo ""
-echo "✓ Configuration saved"
+echo "✓ Configuration applied"
 echo ""
 echo "Preview changes..."
 echo ""

@@ -48,48 +48,51 @@ pulumi stack select prod 2>/dev/null || {
     pulumi stack init prod
 }
 
+VPS_HOST=${VPS_HOST:-158.69.218.225}
+VPS_USER=${VPS_USER:-debian}
+DOMAIN=${DOMAIN:-m4nuel.net}
+GIT_REPO=${GIT_REPO:-m4nyu/me}
+GIT_BRANCH=${GIT_BRANCH:-main}
+CF_ZONE=${CLOUDFLARE_ZONE_ID}
+
+if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+    echo ""
+    read -p "Cloudflare API Token: " CLOUDFLARE_API_TOKEN
+    if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+        echo "Error: Cloudflare API Token is required for production"
+        exit 1
+    fi
+fi
+
+if [ -z "$CF_ZONE" ]; then
+    echo ""
+    read -p "Cloudflare Zone ID: " CF_ZONE
+    if [ -z "$CF_ZONE" ]; then
+        echo "Error: Cloudflare Zone ID is required for production"
+        exit 1
+    fi
+fi
+
 echo ""
 echo "Configuration:"
-echo "-------------"
-
-read -p "VPS Host [158.69.218.225]: " VPS_HOST
-VPS_HOST=${VPS_HOST:-158.69.218.225}
-
-read -p "VPS User [debian]: " VPS_USER
-VPS_USER=${VPS_USER:-debian}
-
-read -p "Domain [m4nuel.net]: " DOMAIN
-DOMAIN=${DOMAIN:-m4nuel.net}
-
-read -p "Cloudflare API Token: " CF_TOKEN
-if [ -z "$CF_TOKEN" ]; then
-    echo "Error: Cloudflare API Token is required for production"
-    exit 1
-fi
-
-read -p "Cloudflare Zone ID: " CF_ZONE
-if [ -z "$CF_ZONE" ]; then
-    echo "Error: Cloudflare Zone ID is required for production"
-    exit 1
-fi
-
-read -p "Git Repo [m4nyu/me]: " GIT_REPO
-GIT_REPO=${GIT_REPO:-m4nyu/me}
-
-read -p "Git Branch [main]: " GIT_BRANCH
-GIT_BRANCH=${GIT_BRANCH:-main}
+echo "  VPS Host: $VPS_HOST"
+echo "  VPS User: $VPS_USER"
+echo "  Domain: $DOMAIN"
+echo "  Git Repo: $GIT_REPO"
+echo "  Git Branch: $GIT_BRANCH"
+echo "  Cloudflare Zone: $CF_ZONE"
 
 pulumi config set vpsHost "$VPS_HOST"
 pulumi config set vpsUser "$VPS_USER"
 pulumi config set domain "$DOMAIN"
-pulumi config set --secret cloudflareApiToken "$CF_TOKEN"
+pulumi config set --secret cloudflareApiToken "$CLOUDFLARE_API_TOKEN"
 pulumi config set cloudflareZoneId "$CF_ZONE"
-pulumi config set --secret cloudflare:apiToken "$CF_TOKEN"
+pulumi config set --secret cloudflare:apiToken "$CLOUDFLARE_API_TOKEN"
 pulumi config set gitRepo "$GIT_REPO"
 pulumi config set gitBranch "$GIT_BRANCH"
 
 echo ""
-echo "✓ Configuration saved"
+echo "✓ Configuration applied"
 echo ""
 echo "Preview changes..."
 echo ""
