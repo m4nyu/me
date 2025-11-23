@@ -2,7 +2,12 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INFRA_DIR="$SCRIPT_DIR/../infra"
+PROJECT_ROOT="$SCRIPT_DIR/../.."
+INFRA_DIR="$PROJECT_ROOT/src/infra"
+
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    source "$PROJECT_ROOT/.env"
+fi
 
 echo "======================================"
 echo "  Production Deployment Script"
