@@ -1,4 +1,4 @@
-.PHONY: help install preview deploy update destroy clean config ssh logs
+.PHONY: help install preview deploy update destroy clean config ssh logs deploy-prod deploy-staging
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -53,5 +53,11 @@ outputs: ## Show deployment outputs
 clean: ## Clean up local build artifacts
 	@rm -rf bin/
 	@echo "Cleaned build artifacts"
+
+deploy-prod: ## Deploy production using script
+	@../scripts/deploy-prod.sh
+
+deploy-staging: ## Deploy staging using script
+	@../scripts/deploy-staging.sh
 
 .DEFAULT_GOAL := help

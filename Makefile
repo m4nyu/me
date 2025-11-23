@@ -15,10 +15,10 @@ clean: ## Clean build artifacts
 	@echo "Cleaned build artifacts"
 
 deploy-prod: ## Deploy production infrastructure
-	@cd src/infra && make deploy-prod
+	@./src/scripts/deploy-prod.sh
 
 deploy-staging: ## Deploy staging infrastructure
-	@cd src/infra && make deploy-staging
+	@./src/scripts/deploy-staging.sh
 
 help: ## Show this help message
 	@echo "Available targets:"
