@@ -55,9 +55,9 @@ clean: ## Clean up local build artifacts
 	@echo "Cleaned build artifacts"
 
 deploy-prod: ## Deploy production using script
-	@../scripts/deploy-prod.sh
+	@../scripts/prod.sh
 
 deploy-staging: ## Deploy staging using script
-	@../scripts/deploy-staging.sh
+	@../scripts/staging.sh
 
 .DEFAULT_GOAL := help
