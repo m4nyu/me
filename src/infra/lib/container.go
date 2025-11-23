@@ -36,15 +36,28 @@ func SetupContainer(ctx *pulumi.Context, cfg *Config) (*Container, error) {
 		return nil, err
 	}
 
-	container, err := docker.NewContainer(ctx, "container", &docker.ContainerArgs{
-		Name:  pulumi.String(containerName),
-		Image: image.ImageId,
-		Ports: docker.ContainerPortArray{
+	var portConfig docker.ContainerPortArray
+	if ctx.Stack() == "prod" {
+		portConfig = docker.ContainerPortArray{
 			&docker.ContainerPortArgs{
 				Internal: pulumi.Int(3000),
 				External: pulumi.Int(80),
 			},
-		},
+		}
+	} else {
+		portConfig = docker.ContainerPortArray{
+			&docker.ContainerPortArgs{
+				Internal: pulumi.Int(3000),
+				External: pulumi.Int(8080),
+				Ip:       pulumi.String("127.0.0.1"),
+			},
+		}
+	}
+
+	container, err := docker.NewContainer(ctx, "container", &docker.ContainerArgs{
+		Name:  pulumi.String(containerName),
+		Image: image.ImageId,
+		Ports: portConfig,
 		Restart:       pulumi.String("always"),
 		MustRun:       pulumi.Bool(true),
 		NetworkMode:   pulumi.String("bridge"),
