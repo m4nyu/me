@@ -91,7 +91,6 @@ func LanguageSwitcher(currentLang string) g.Node {
 	return g.El("label",
 		g.Attr("for", "language-drawer"),
 		Class("text-foreground hover:text-foreground text-xs sm:text-sm font-light cursor-pointer transition-all flex items-center gap-1 sm:gap-2 p-0 h-auto rounded-none shadow-none border-0 bg-transparent hover:bg-transparent hover:[text-shadow:_0_0_10px_rgba(0,0,0,0.3)] dark:hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.5)] active:[text-shadow:_0_0_15px_rgba(0,0,0,0.5)] dark:active:[text-shadow:_0_0_15px_rgba(255,255,255,0.7)]"),
-		LanguagesIcon(),
 		Span(
 			Class("inline-flex rounded-md px-1 sm:px-2 py-0 text-[10px] sm:text-xs font-light border-0 text-foreground"),
 			g.Text(currentLang),
