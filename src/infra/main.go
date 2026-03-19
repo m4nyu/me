@@ -37,8 +37,10 @@ func main() {
 			ctx.Export("firewallRulesId", firewall.Rules.ID())
 			ctx.Export("rootRecordId", dns.RootRecord.ID())
 			ctx.Export("wwwRecordId", dns.WWWRecord.ID())
-			ctx.Export("cdnSettingsId", cdn.Settings.ID())
-			ctx.Export("rateLimitId", security.RateLimiting.ID())
+			ctx.Export("staticCacheId", cdn.StaticCacheRule.ID())
+			ctx.Export("htmlCacheId", cdn.HTMLCacheRule.ID())
+			ctx.Export("wafRulesetId", security.WAF.ID())
+			ctx.Export("rateLimitRulesetId", security.RateLimit.ID())
 		}
 
 		container, err := lib.SetupContainer(ctx, cfg)
@@ -48,8 +50,8 @@ func main() {
 
 		ctx.Export("domain", pulumi.String(cfg.Domain))
 		ctx.Export("vpsHost", pulumi.String(cfg.VPSHost))
-		ctx.Export("containerId", container.Container.ID())
-		ctx.Export("imageId", container.Image.ID())
+		ctx.Export("buildId", container.Build.ID())
+		ctx.Export("runId", container.Run.ID())
 
 		return nil
 	})
