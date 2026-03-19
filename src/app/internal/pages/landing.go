@@ -264,6 +264,18 @@ func MobileCarouselLayout(props HomePageProps, faqItems []components.AccordionIt
 				carousel.addEventListener('mouseleave', function() {
 					isDragging = false;
 				});
+
+				document.addEventListener('keydown', function(e) {
+					if (window.innerWidth >= 1024) return;
+					var current = getCurrentSlide();
+					if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+						e.preventDefault();
+						goToSlide(current + 1);
+					} else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+						e.preventDefault();
+						goToSlide(current - 1);
+					}
+				});
 			})();
 		`)),
 	)
@@ -474,6 +486,32 @@ func DesktopRightColumn(props HomePageProps, faqItems []components.AccordionItem
 
 					container.addEventListener('scroll', updateActiveIndicator);
 					updateActiveIndicator();
+
+					document.addEventListener('keydown', function(e) {
+						if (window.innerWidth < 1024) return;
+						var scrollTop = container.scrollTop;
+						var containerHeight = container.clientHeight;
+						if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+							e.preventDefault();
+							var nextSection = null;
+							sections.forEach(function(section) {
+								if (!nextSection && section.offsetTop > scrollTop + 10) {
+									nextSection = section;
+								}
+							});
+							if (nextSection) nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+						} else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+							e.preventDefault();
+							var prevSection = null;
+							for (var i = sections.length - 1; i >= 0; i--) {
+								if (sections[i].offsetTop < scrollTop - 10) {
+									prevSection = sections[i];
+									break;
+								}
+							}
+							if (prevSection) prevSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+						}
+					});
 				})();
 			`)),
 		),
