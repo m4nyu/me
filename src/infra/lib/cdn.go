@@ -6,45 +6,11 @@ import (
 )
 
 type CDN struct {
-	Settings        *cloudflare.ZoneSettingsOverride
 	StaticCacheRule *cloudflare.PageRule
 	HTMLCacheRule   *cloudflare.PageRule
 }
 
 func SetupCDN(ctx *pulumi.Context, cfg *Config) (*CDN, error) {
-	settings, err := cloudflare.NewZoneSettingsOverride(ctx, "cdn-settings", &cloudflare.ZoneSettingsOverrideArgs{
-		ZoneId: pulumi.String(cfg.CloudflareZoneID),
-		Settings: &cloudflare.ZoneSettingsOverrideSettingsArgs{
-			AlwaysOnline:              pulumi.String("on"),
-			BrowserCacheTtl:           pulumi.Int(14400),
-			Brotli:                    pulumi.String("on"),
-			CacheLevel:                pulumi.String("aggressive"),
-			DevelopmentMode:           pulumi.String("off"),
-			Http2:                     pulumi.String("on"),
-			Http3:                     pulumi.String("on"),
-			MinTlsVersion:             pulumi.String("1.2"),
-			SecurityLevel:             pulumi.String("high"),
-			Ssl:                       pulumi.String("full"),
-			Tls13:                     pulumi.String("on"),
-			Websockets:                pulumi.String("on"),
-			AlwaysUseHttps:            pulumi.String("on"),
-			AutomaticHttpsRewrites:    pulumi.String("on"),
-			OpportunisticEncryption:   pulumi.String("on"),
-			UniversalSsl:              pulumi.String("on"),
-			BrowserCheck:              pulumi.String("on"),
-			ChallengeTtl:              pulumi.Int(1800),
-			EmailObfuscation:          pulumi.String("on"),
-			HotlinkProtection:         pulumi.String("on"),
-			IpGeolocation:             pulumi.String("on"),
-			Ipv6:                      pulumi.String("on"),
-			ServerSideExclude:         pulumi.String("on"),
-			TrueClientIpHeader:        pulumi.String("on"),
-		},
-	})
-	if err != nil {
-		return nil, err
-	}
-
 	staticCache, err := createCacheRule(ctx, "static-cache", cfg, "/static/*", 1)
 	if err != nil {
 		return nil, err
@@ -56,7 +22,6 @@ func SetupCDN(ctx *pulumi.Context, cfg *Config) (*CDN, error) {
 	}
 
 	return &CDN{
-		Settings:        settings,
 		StaticCacheRule: staticCache,
 		HTMLCacheRule:   htmlCache,
 	}, nil
