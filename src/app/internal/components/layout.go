@@ -20,7 +20,7 @@ func BaseLayout(title string, theme string, content ...g.Node) g.Node {
 		faviconPath = "/static/dark.svg"
 	}
 
-	bodyContent := append([]g.Node{Class("font-sans antialiased font-normal bg-background text-foreground select-none")}, content...)
+	bodyContent := append([]g.Node{Class("font-sans antialiased font-medium bg-background text-foreground select-none")}, content...)
 
 	return Doctype(
 		HTML(
