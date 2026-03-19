@@ -35,6 +35,7 @@ func SetTheme(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
 
+
 func SetLanguage(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
