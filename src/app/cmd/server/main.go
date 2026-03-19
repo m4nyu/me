@@ -69,6 +69,14 @@ func getPort() string {
 }
 
 func handleHomeWithLang(w http.ResponseWriter, r *http.Request, langCode string) {
+	if r.URL.Query().Get("mode") == "engineer" {
+		w.Header().Set("Content-Type", "text/html")
+		_ = pages.EngineerPage(pages.HomePageProps{
+			CurrentLang: langCode,
+		}).Render(w)
+		return
+	}
+
 	theme := middleware.GetTheme(r)
 
 	page := components.BaseLayout("4nuel", theme,
