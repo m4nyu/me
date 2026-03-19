@@ -10,7 +10,7 @@ on:
       - reopened
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,29 @@ jobs:
       - name: go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24'
+          go-version: '1.26'
+
+      - name: test
+        run: go test ./src/app/... -v -count=1
+
+      - name: build app
+        run: go build -o /dev/null ./src/app/cmd/server
+
+      - name: build infra
+        working-directory: src/infra
+        run: go build -o /dev/null .
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
 
       - name: pulumi
         uses: pulumi/setup-pulumi@v2
@@ -64,8 +86,8 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `✅ **Staging deployment successful!**\n\n` +
-                    `🔒 **Private staging environment** (not accessible from internet)\n\n` +
+              body: `**Staging deployment successful!**\n\n` +
+                    `**Private staging environment** (not accessible from internet)\n\n` +
                     `**Access via SSH tunnel:**\n` +
                     `\`\`\`bash\n` +
                     `ssh -L 8080:localhost:8080 debian@${vpsHost}\n` +
