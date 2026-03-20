@@ -1,0 +1,16 @@
+config:
+  me:vpsHost: "158.69.218.225"
+  me:vpsUser: "debian"
+  me:domain: "m4nuel.net"
+  me:gitRepo: "m4nyu/me"
+  me:gitBranch: "main"
+  me:prodContainer: "prod"
+  me:stagContainer: "staging"
+  me:cloudflareApiToken:
+    secure: v1:avRuD+bp5/KBOXSg:8YeKYrYHv/yQOTvovCcoslkJQ6DP0kNUWOTpEt7Y8qvPi6zfgFr4r6y4vBhj3LCkA1b83XDxXUT0SVtv5oS2f2kCG9my
+  me:cloudflareZoneId: 38a673c2639fdce392b7e88e31db3219
+  cloudflare:apiToken:
+    secure: v1:THZVHRnNkum+1pQu:Kg7t0ruVQFBJc8CmKnAr8dJspYcXtDTSkMgHcKeTLcNPs+UKdNa0wuMOqK51Z7JuXaIKkBo5KEP2kZ1zlh31lgS3eSk8
+  me:vpsPassword:
+    secure: v1:niHHTgrXhThf7swE:YZHFnzylAhj8CNT3N1AmnL0qM1hsZg5KPfbt/fDjYVCiUn3FrzYk+/kUDoDcrL0xM4josPkcD+2OwCF4
+encryptionsalt: v1:GibNVErnGsY=:v1:L3inZl9X6DLr9/hw:jrPj4/oI3WlFT1oVjhWl6MdtBEWclQ==

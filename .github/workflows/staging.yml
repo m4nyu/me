@@ -9,8 +9,12 @@ on:
       - synchronize
       - reopened
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +23,29 @@ jobs:
       - name: go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24'
+          go-version: '1.26'
+
+      - name: test
+        run: go test ./src/app/... -v -count=1
+
+      - name: build app
+        run: go build -o /dev/null ./src/app/cmd/server
+
+      - name: build infra
+        working-directory: src/infra
+        run: go build -o /dev/null .
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
 
       - name: pulumi
         uses: pulumi/setup-pulumi@v2
@@ -37,29 +63,41 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         run: |
+          pulumi login
           pulumi stack select staging
           pulumi up --yes
 
       - name: output
         if: success()
+        id: deploy-output
         working-directory: src/infra
         env:
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         run: |
+          pulumi login
           pulumi stack select staging
           echo "Deployment to staging successful!"
           echo ""
           pulumi stack output
+          echo "vps_host=${{ secrets.VPS_HOST }}" >> $GITHUB_OUTPUT
 
       - name: comment
         if: success()
         uses: actions/github-script@v7
         with:
           script: |
+            const vpsHost = '${{ steps.deploy-output.outputs.vps_host }}';
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '✅ Deployed to **staging** successfully!'
+              body: `**Staging deployment successful!**\n\n` +
+                    `**Private staging environment** (not accessible from internet)\n\n` +
+                    `**Access via SSH tunnel:**\n` +
+                    `\`\`\`bash\n` +
+                    `ssh -L 8080:localhost:8080 debian@${vpsHost}\n` +
+                    `\`\`\`\n\n` +
+                    `Then visit: http://localhost:8080\n\n` +
+                    `The staging container is running on port 8080 (localhost-only binding).`
             })

@@ -4,7 +4,6 @@ import (
 	"net/http"
 )
 
-// SetTheme handles setting the theme cookie via POST
 func SetTheme(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -16,12 +15,10 @@ func SetTheme(w http.ResponseWriter, r *http.Request) {
 		theme = "light"
 	}
 
-	// Validate theme value
 	if theme != "light" && theme != "dark" && theme != "system" {
 		theme = "system"
 	}
 
-	// Set cookie with 1 year expiration
 	http.SetCookie(w, &http.Cookie{
 		Name:     "theme",
 		Value:    theme,
@@ -31,7 +28,6 @@ func SetTheme(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteLaxMode,
 	})
 
-	// Redirect back to referrer or home
 	referer := r.Header.Get("Referer")
 	if referer == "" {
 		referer = "/"
@@ -39,7 +35,7 @@ func SetTheme(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
 
-// SetLanguage handles setting the language cookie via POST
+
 func SetLanguage(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -51,7 +47,6 @@ func SetLanguage(w http.ResponseWriter, r *http.Request) {
 		lang = "EN"
 	}
 
-	// Validate language value
 	validLangs := map[string]bool{
 		"EN": true, "DE": true, "FR": true, "ES": true, "IT": true, "PT": true,
 		"NL": true, "RU": true, "JA": true, "KO": true, "ZH": true, "AR": true,
@@ -60,7 +55,6 @@ func SetLanguage(w http.ResponseWriter, r *http.Request) {
 		lang = "EN"
 	}
 
-	// Set cookie with 1 year expiration
 	http.SetCookie(w, &http.Cookie{
 		Name:     "lang",
 		Value:    lang,
@@ -70,7 +64,6 @@ func SetLanguage(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteLaxMode,
 	})
 
-	// Redirect back to referrer or home
 	referer := r.Header.Get("Referer")
 	if referer == "" {
 		referer = "/"

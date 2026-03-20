@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,7 +15,30 @@ jobs:
       - name: go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24'
+          go-version: '1.26'
+
+      - name: test
+        run: go test ./src/app/... -v -count=1
+
+      - name: build app
+        run: go build -o /dev/null ./src/app/cmd/server
+
+      - name: build infra
+        working-directory: src/infra
+        run: go build -o /dev/null .
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
 
       - name: pulumi
         uses: pulumi/setup-pulumi@v2
@@ -33,6 +56,7 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         run: |
+          pulumi login
           pulumi stack select prod
           pulumi up --yes
 
@@ -43,6 +67,7 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         run: |
+          pulumi login
           pulumi stack select prod
           echo "Deployment to production successful!"
           echo ""

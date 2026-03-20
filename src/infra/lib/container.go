@@ -3,79 +3,71 @@ package lib
 import (
 	"fmt"
 
-	"github.com/pulumi/pulumi-docker/sdk/v4/go/docker"
+	"github.com/pulumi/pulumi-command/sdk/go/command/remote"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 type Container struct {
-	Provider  *docker.Provider
-	Image     *docker.RemoteImage
-	Container *docker.Container
+	Build *remote.Command
+	Run   *remote.Command
 }
 
 func SetupContainer(ctx *pulumi.Context, cfg *Config) (*Container, error) {
-	provider, err := docker.NewProvider(ctx, "docker", &docker.ProviderArgs{
-		Host: pulumi.Sprintf("ssh://%s@%s", cfg.VPSUser, cfg.VPSHost),
+	conn := remote.ConnectionArgs{
+		Host: pulumi.String(cfg.VPSHost),
+		User: pulumi.String(cfg.VPSUser),
+	}
+
+	containerName := ctx.Stack()
+	imageName := fmt.Sprintf("%s:%s", containerName, cfg.GitBranch)
+	gitURL := fmt.Sprintf("https://github.com/%s.git#%s", cfg.GitRepo, cfg.GitBranch)
+
+	build, err := remote.NewCommand(ctx, "docker-build", &remote.CommandArgs{
+		Connection: conn,
+		Create:     pulumi.Sprintf("docker build --platform linux/amd64 -t %s %s 2>&1", imageName, gitURL),
+		Delete:     pulumi.Sprintf("docker rmi %s 2>/dev/null || true", imageName),
+		Triggers:   pulumi.Array{pulumi.String(imageName)},
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	containerName := ctx.Stack()
-
-	image, err := docker.NewRemoteImage(ctx, "image", &docker.RemoteImageArgs{
-		Name: pulumi.String(fmt.Sprintf("%s:%s", containerName, cfg.GitBranch)),
-		Build: docker.RemoteImageBuildArgs{
-			Context:    pulumi.Sprintf("https://github.com/%s.git#%s", cfg.GitRepo, cfg.GitBranch),
-			Dockerfile: pulumi.String("Dockerfile"),
-			Platform:   pulumi.String("linux/amd64"),
-		},
-		KeepLocally: pulumi.Bool(true),
-	}, pulumi.Provider(provider))
-	if err != nil {
-		return nil, err
+	var portFlag string
+	if ctx.Stack() == "prod" {
+		portFlag = "-p 80:3000"
+	} else {
+		portFlag = "-p 127.0.0.1:8080:3000"
 	}
 
-	container, err := docker.NewContainer(ctx, "container", &docker.ContainerArgs{
-		Name:  pulumi.String(containerName),
-		Image: image.ImageId,
-		Ports: docker.ContainerPortArray{
-			&docker.ContainerPortArgs{
-				Internal: pulumi.Int(3000),
-				External: pulumi.Int(80),
-			},
-		},
-		Restart:       pulumi.String("always"),
-		MustRun:       pulumi.Bool(true),
-		NetworkMode:   pulumi.String("bridge"),
-		RemoveVolumes: pulumi.Bool(false),
-		ReadOnly:      pulumi.Bool(false),
-		Memory:        pulumi.Int(512),
-		MemorySwap:    pulumi.Int(1024),
-		CpuShares:     pulumi.Int(1024),
-		Healthcheck: &docker.ContainerHealthcheckArgs{
-			Tests: pulumi.StringArray{
-				pulumi.String("CMD"),
-				pulumi.String("wget"),
-				pulumi.String("--spider"),
-				pulumi.String("http://localhost:3000"),
-			},
-			Interval:    pulumi.String("30s"),
-			Timeout:     pulumi.String("10s"),
-			StartPeriod: pulumi.String("40s"),
-			Retries:     pulumi.Int(3),
-		},
-		SecurityOpts: pulumi.StringArray{
-			pulumi.String("no-new-privileges:true"),
-		},
-	}, pulumi.Provider(provider), pulumi.ReplaceOnChanges([]string{"image"}))
+	run, err := remote.NewCommand(ctx, "docker-run", &remote.CommandArgs{
+		Connection: conn,
+		Create: pulumi.Sprintf(`
+			docker rm -f %s 2>/dev/null || true
+			docker run -d \
+				--name %s \
+				%s \
+				--restart always \
+				--network bridge \
+				--memory 512m \
+				--memory-swap 1g \
+				--cpu-shares 1024 \
+				--health-cmd "wget --spider http://localhost:3000 || exit 1" \
+				--health-interval 30s \
+				--health-timeout 10s \
+				--health-start-period 40s \
+				--health-retries 3 \
+				--security-opt no-new-privileges:true \
+				%s
+			docker ps --filter name=%s --format '{{.ID}}'
+		`, containerName, containerName, portFlag, imageName, containerName),
+		Delete: pulumi.Sprintf("docker rm -f %s 2>/dev/null || true", containerName),
+	}, pulumi.DependsOn([]pulumi.Resource{build}))
 	if err != nil {
 		return nil, err
 	}
 
 	return &Container{
-		Provider:  provider,
-		Image:     image,
-		Container: container,
+		Build: build,
+		Run:   run,
 	}, nil
 }

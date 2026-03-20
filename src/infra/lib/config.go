@@ -16,11 +16,11 @@ type Config struct {
 
 func Load(c *config.Config) *Config {
 	cfg := &Config{
-		VPSHost:            c.Get("vpsHost"),
-		VPSUser:            c.Get("vpsUser"),
-		CloudflareAPIToken: c.Require("cloudflareApiToken"),
-		CloudflareZoneID:   c.Require("cloudflareZoneId"),
-		Domain:             c.Require("domain"),
+		VPSHost:            c.Require("vpsHost"),
+		VPSUser:            c.Require("vpsUser"),
+		CloudflareAPIToken: c.Get("cloudflareApiToken"),
+		CloudflareZoneID:   c.Get("cloudflareZoneId"),
+		Domain:             c.Get("domain"),
 		GitRepo:            c.Get("gitRepo"),
 		GitBranch:          c.Get("gitBranch"),
 		ProdContainer:      c.Get("prodContainer"),
@@ -38,6 +38,9 @@ func Load(c *config.Config) *Config {
 	}
 	if cfg.StagContainer == "" {
 		cfg.StagContainer = "staging"
+	}
+	if cfg.Domain == "" {
+		cfg.Domain = "m4nuel.net"
 	}
 
 	return cfg

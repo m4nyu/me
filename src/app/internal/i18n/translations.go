@@ -1,6 +1,5 @@
 package i18n
 
-// Translations holds all translations for the application
 var Translations = map[string]map[string]string{
 	"EN": {
 		"title":                   "4nuel",
@@ -508,14 +507,12 @@ var Translations = map[string]map[string]string{
 	},
 }
 
-// T translates a key for the given language
 func T(lang, key string) string {
 	if translations, ok := Translations[lang]; ok {
 		if translation, ok := translations[key]; ok {
 			return translation
 		}
 	}
-	// Fallback to English
 	if translations, ok := Translations["EN"]; ok {
 		if translation, ok := translations[key]; ok {
 			return translation
