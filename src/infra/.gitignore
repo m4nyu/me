@@ -1,3 +1,2 @@
 .env
-Pulumi.*.yml
-!Pulumi.yaml
+.pulumi/
