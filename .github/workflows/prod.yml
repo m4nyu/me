@@ -56,7 +56,8 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         run: |
-          pulumi stack select manuel/prod
+          pulumi login
+          pulumi stack select prod
           pulumi up --yes
 
       - name: output
@@ -66,7 +67,8 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         run: |
-          pulumi stack select manuel/prod
+          pulumi login
+          pulumi stack select prod
           echo "Deployment to production successful!"
           echo ""
           pulumi stack output
