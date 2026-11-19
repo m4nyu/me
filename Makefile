@@ -1,4 +1,4 @@
-.PHONY: dev build run clean help prod staging
+.PHONY: dev build run clean help
 
 dev: ## Start development server with hot reloading
 	@~/go/bin/air -c air.toml
@@ -14,11 +14,6 @@ clean: ## Clean build artifacts
 	@rm -f build-errors.log
 	@echo "Cleaned build artifacts"
 
-prod: ## Deploy production infrastructure
-	@./src/scripts/prod.sh
-
-staging: ## Deploy staging infrastructure
-	@./src/scripts/staging.sh
 
 help: ## Show this help message
 	@echo "Available targets:"
