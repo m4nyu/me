@@ -1,13 +1,15 @@
 package components
 
 import (
+	"strings"
+
 	g "maragu.dev/gomponents"
 	. "maragu.dev/gomponents/html"
 )
 
 // BaseLayout renders the document shell. theme is "light", "dark" or "system";
 // system sets no class, so CSS and the favicon follow the OS colour scheme.
-func BaseLayout(title string, theme string, content ...g.Node) g.Node {
+func BaseLayout(title, theme, lang string, head []g.Node, content ...g.Node) g.Node {
 	themeClass := ""
 	favicon := "/static/icon.svg" // adapts to the OS scheme by itself
 	switch theme {
@@ -21,7 +23,7 @@ func BaseLayout(title string, theme string, content ...g.Node) g.Node {
 
 	return Doctype(
 		HTML(
-			Lang("en"),
+			Lang(strings.ToLower(lang)),
 			Class(themeClass+" scroll-smooth"),
 			g.Attr("style", "scroll-snap-type: y mandatory; scroll-behavior: smooth;"),
 			Head(
@@ -31,6 +33,7 @@ func BaseLayout(title string, theme string, content ...g.Node) g.Node {
 				TitleEl(g.Text(title)),
 				Link(Rel("icon"), Type("image/svg+xml"), Href(favicon)),
 				Link(Rel("stylesheet"), Href("/static/css/app.css")),
+				g.Group(head),
 			),
 			Body(bodyContent...),
 		),

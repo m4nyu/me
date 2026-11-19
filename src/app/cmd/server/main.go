@@ -5,6 +5,7 @@ import (
 	"engineer/src/app/internal/handlers"
 	"engineer/src/app/internal/middleware"
 	"engineer/src/app/internal/pages"
+	"engineer/src/app/internal/seo"
 	"fmt"
 	"log"
 	"net"
@@ -40,6 +41,10 @@ func main() {
 
 	r.Post("/api/theme", handlers.SetTheme)
 	r.Post("/api/lang", handlers.SetLanguage)
+
+	r.Get("/robots.txt", seo.Robots)
+	r.Get("/sitemap.xml", seo.Sitemap)
+	r.Get("/llms.txt", seo.LLMs)
 
 	port := getPort()
 	fmt.Printf("Server starting on http://localhost%s\n", port)
@@ -77,7 +82,7 @@ func handleHomeWithLang(w http.ResponseWriter, r *http.Request, langCode string)
 
 	theme := middleware.GetTheme(r)
 
-	page := components.BaseLayout("4nuel", theme,
+	page := components.BaseLayout("4nuel", theme, langCode, seo.Tags(langCode),
 		pages.HomePage(pages.HomePageProps{
 			Theme:       theme,
 			CurrentLang: langCode,
