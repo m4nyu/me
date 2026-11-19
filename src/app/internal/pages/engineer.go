@@ -1,7 +1,11 @@
 package pages
 
 import (
+	"strings"
+
+	"engineer/src/app/internal/components"
 	"engineer/src/app/internal/i18n"
+	"engineer/src/app/internal/seo"
 
 	g "maragu.dev/gomponents"
 	. "maragu.dev/gomponents/html"
@@ -12,11 +16,14 @@ func EngineerPage(props HomePageProps) g.Node {
 
 	return Doctype(
 		HTML(
-			Lang("en"),
+			Lang(strings.ToLower(lang)),
 			Head(
 				Meta(Charset("utf-8")),
 				Meta(Name("viewport"), Content("width=device-width, initial-scale=1.0")),
-				TitleEl(g.Text("Manuel — Engineer Mode")),
+				TitleEl(g.Text("4nuel")),
+				Link(Rel("icon"), Type("image/svg+xml"), Href(components.Favicon(props.Theme))),
+				// Same content as the styled page: let search engines index that one.
+				Link(Rel("canonical"), Href(seo.SiteURL+"/"+strings.ToLower(lang))),
 			),
 			Body(
 				Header(
