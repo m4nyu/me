@@ -37,3 +37,7 @@ Thumbs.db
 infra/.pulumi/
 infra/Pulumi.*.yaml
 !infra/Pulumi.yaml
+
+# compiled by `make css` / the Docker build
+src/app/static/css/app.css
+node_modules/

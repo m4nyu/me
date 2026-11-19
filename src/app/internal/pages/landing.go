@@ -291,7 +291,7 @@ func CarouselDot(index int) g.Node {
 
 func MobileSection1Swiper(props HomePageProps) g.Node {
 	return Div(
-		Class("min-w-full flex-shrink-0 h-full w-full"),
+		Class("min-w-full shrink-0 h-full w-full"),
 		Div(
 			Class("w-full h-full p-3 pb-8"),
 			Div(
@@ -324,7 +324,7 @@ func MobileSection1Swiper(props HomePageProps) g.Node {
 
 func MobileSection3Swiper(props HomePageProps) g.Node {
 	return Div(
-		Class("min-w-full flex-shrink-0 h-full w-full"),
+		Class("min-w-full shrink-0 h-full w-full"),
 		Div(
 			Class("w-full h-full p-3 pb-8 overflow-hidden"),
 			Div(
@@ -350,7 +350,7 @@ func MobileSection3Swiper(props HomePageProps) g.Node {
 
 func MobileSection4Swiper(props HomePageProps, faqItems []components.AccordionItem) g.Node {
 	return Div(
-		Class("min-w-full flex-shrink-0 h-full w-full"),
+		Class("min-w-full shrink-0 h-full w-full"),
 		Div(
 			Class("w-full h-full p-3 pb-8"),
 			Div(
