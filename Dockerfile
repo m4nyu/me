@@ -1,6 +1,6 @@
 # Static Go binary on distroless: non-root, no shell, no package manager.
 # CSS is compiled at build time; nothing compiles styles in the browser.
-FROM node:24-slim AS css
+FROM node:26-slim AS css
 WORKDIR /src
 # Versions come from package-lock.json, which Dependabot keeps current.
 COPY package.json package-lock.json ./
