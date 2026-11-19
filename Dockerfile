@@ -2,7 +2,9 @@
 # CSS is compiled at build time; nothing compiles styles in the browser.
 FROM node:24-slim AS css
 WORKDIR /src
-RUN npm install --no-save --no-audit --no-fund tailwindcss@4.3.5 @tailwindcss/cli@4.3.5
+# Versions come from package-lock.json, which Dependabot keeps current.
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
 COPY src/app ./src/app
 RUN npx @tailwindcss/cli -i src/app/static/css/input.css -o /app.css --minify
 

@@ -1,34 +1,40 @@
 version: 2
+# Every dependency, daily, one grouped PR per ecosystem. CI's automerge job
+# merges it once the checks pass; main then deploys.
 updates:
   - package-ecosystem: gomod
     directory: /
     schedule:
-      interval: weekly
-      day: saturday
-    labels:
-      - dependencies
+      interval: daily
+    groups:
+      gomod:
+        patterns: ["*"]
     commit-message:
-      prefix: "chore(deps):"
-    open-pull-requests-limit: 5
-
-  - package-ecosystem: github-actions
+      prefix: "deps"
+  - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-      day: saturday
-    labels:
-      - dependencies
+      interval: daily
+    groups:
+      npm:
+        patterns: ["*"]
     commit-message:
-      prefix: "chore(deps):"
-    open-pull-requests-limit: 5
-
+      prefix: "deps"
   - package-ecosystem: docker
     directory: /
     schedule:
-      interval: weekly
-      day: saturday
-    labels:
-      - dependencies
+      interval: daily
+    groups:
+      docker:
+        patterns: ["*"]
     commit-message:
-      prefix: "chore(deps):"
-    open-pull-requests-limit: 5
+      prefix: "deps"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+    groups:
+      github-actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "deps"

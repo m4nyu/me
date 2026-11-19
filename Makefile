@@ -4,7 +4,7 @@ dev: ## Start development server with hot reloading
 	@~/go/bin/air -c air.toml
 
 css: ## Compile Tailwind to src/app/static/css/app.css (add --watch while developing)
-	@npm install --no-save --no-audit --no-fund tailwindcss@4.3.5 @tailwindcss/cli@4.3.5
+	@npm ci --no-audit --no-fund
 	@npx @tailwindcss/cli -i src/app/static/css/input.css -o src/app/static/css/app.css --minify
 
 build: ## Build the application
