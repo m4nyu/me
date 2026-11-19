@@ -1,7 +1,11 @@
-.PHONY: dev build run clean help
+.PHONY: dev css build run clean help
 
 dev: ## Start development server with hot reloading
 	@~/go/bin/air -c air.toml
+
+css: ## Compile Tailwind to src/app/static/css/app.css (add --watch while developing)
+	@npm ci --no-audit --no-fund
+	@npx @tailwindcss/cli -i src/app/static/css/input.css -o src/app/static/css/app.css --minify
 
 build: ## Build the application
 	@go build -o ./.air/main ./src/app/cmd/server

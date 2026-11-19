@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "description": "Build-time only: compiles src/app/static/css/input.css. Nothing here ships to the browser.",
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.5",
+    "tailwindcss": "4.3.5"
+  }
+}

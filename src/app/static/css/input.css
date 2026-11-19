@@ -1,0 +1,89 @@
+/* Compiled at build time to app.css (see Dockerfile and `make css`). */
+@import "tailwindcss";
+@source "../../internal";
+
+/* dark: utilities follow an explicit .dark theme, or the OS unless .light is chosen. */
+@custom-variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not(.light), :root:not(.light) *) {
+      @slot;
+    }
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+/* Tailwind 4.3 changed the default sans stack; keep the system UI font. */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: oklch(0 0 0);
+    --foreground: oklch(1 0 0);
+  }
+}
+
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+}
+
+.light {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+}
+
+@layer base {
+  /* Tailwind 3 default border colour, so bare `border` keeps its look. */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  /* Selection stays possible on interactive elements. */
+  button,
+  a,
+  label,
+  input,
+  select,
+  textarea {
+    user-select: auto;
+    -webkit-user-select: auto;
+    pointer-events: auto;
+  }
+}
+
+/* The M mark fades in; reduced-motion users get it at once. */
+.logo-mark {
+  animation: logo-in 0.6s ease-out both;
+}
+
+@keyframes logo-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-mark {
+    animation: none;
+  }
+}
