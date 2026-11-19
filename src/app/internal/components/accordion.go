@@ -10,8 +10,6 @@ type AccordionItem struct {
 	Answer   string
 }
 
-// Accordion creates an accordion component with JavaScript-controlled exclusive opening
-// Uses <details>/<summary> elements with a script to close others when one opens
 func Accordion(class string, items []AccordionItem) g.Node {
 	accordionItems := []g.Node{}
 
@@ -22,7 +20,6 @@ func Accordion(class string, items []AccordionItem) g.Node {
 	}
 
 	return g.Group([]g.Node{
-		// Minimal custom styles (only what Tailwind can't handle)
 		g.El("style", g.Raw(`
 			details summary::-webkit-details-marker {
 				display: none;
@@ -41,47 +38,54 @@ func Accordion(class string, items []AccordionItem) g.Node {
 			Class(class+" accordion-group"),
 			g.Group(accordionItems),
 		),
-		// JavaScript to handle closing other accordions and smooth transitions
 		g.El("script", g.Raw(`
-			document.querySelectorAll('.accordion-group details').forEach(details => {
-				const content = details.querySelector('.accordion-content');
+			(function() {
+				const allDetails = document.querySelectorAll('.accordion-group details');
+				let isInitializing = true;
 
-				// Set initial height for smooth transitions
-				if (details.open) {
-					content.style.maxHeight = content.scrollHeight + 'px';
-				}
+				allDetails.forEach(details => {
+					const content = details.querySelector('.accordion-content');
 
-				details.addEventListener('toggle', function() {
-					const content = this.querySelector('.accordion-content');
-
-					if (this.open) {
-						// Close other accordions
-						document.querySelectorAll('.accordion-group details').forEach(other => {
-							if (other !== this && other.open) {
-								const otherContent = other.querySelector('.accordion-content');
-								otherContent.style.maxHeight = '0px';
-								setTimeout(() => {
-									other.open = false;
-								}, 300);
-							}
-						});
-
-						// Open this accordion with smooth transition
-						content.style.maxHeight = '0px';
-						setTimeout(() => {
-							content.style.maxHeight = content.scrollHeight + 'px';
-						}, 10);
-					} else {
-						// Close this accordion
-						content.style.maxHeight = '0px';
+					if (details.open) {
+						content.style.maxHeight = content.scrollHeight + 'px';
 					}
 				});
-			});
+
+				setTimeout(() => {
+					isInitializing = false;
+				}, 100);
+
+				allDetails.forEach(details => {
+					details.addEventListener('click', function(e) {
+						if (isInitializing) return;
+						if (e.target.tagName !== 'SUMMARY' && !e.target.closest('summary')) return;
+
+						e.preventDefault();
+
+						const wasOpen = this.open;
+						const content = this.querySelector('.accordion-content');
+
+						if (!wasOpen) {
+							allDetails.forEach(other => {
+								if (other !== this && other.open) {
+									const otherContent = other.querySelector('.accordion-content');
+									otherContent.style.maxHeight = '0px';
+									setTimeout(() => {
+										other.open = false;
+									}, 300);
+								}
+							});
+
+							this.open = true;
+							content.style.maxHeight = content.scrollHeight + 'px';
+						}
+					});
+				});
+			})();
 		`)),
 	})
 }
 
-// AccordionItemComponent creates a single accordion item using details/summary
 func AccordionItemComponent(index int, item AccordionItem) g.Node {
 	isFirst := index == 0
 
@@ -98,7 +102,6 @@ func AccordionItemComponent(index int, item AccordionItem) g.Node {
 		g.El("summary",
 			Class("w-full text-left text-sm md:text-base font-light hover:text-foreground py-3 px-4 cursor-pointer text-foreground flex justify-between items-center list-none transition-all duration-200"),
 			Span(g.Text(item.Question)),
-			// Chevron icon
 			g.El("svg",
 				Class("w-4 h-4 accordion-chevron transition-transform duration-200"),
 				g.Attr("fill", "none"),
@@ -113,7 +116,6 @@ func AccordionItemComponent(index int, item AccordionItem) g.Node {
 				),
 			),
 		),
-		// Content
 		Div(
 			Class("accordion-content overflow-hidden text-foreground text-xs md:text-sm leading-relaxed font-light"),
 			Div(

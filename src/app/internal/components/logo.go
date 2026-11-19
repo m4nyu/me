@@ -2,13 +2,11 @@ package components
 
 import (
 	"fmt"
-	"math/rand"
 
 	g "maragu.dev/gomponents"
 	. "maragu.dev/gomponents/html"
 )
 
-// Logo creates the animated logo component with tile reveal effect
 func Logo(size string) g.Node {
 	sizeClass := "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32"
 	if size == "small" {
@@ -19,11 +17,9 @@ func Logo(size string) g.Node {
 		sizeClass = "w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-40 xl:h-40"
 	}
 
-	// Generate tiles with random delays (matching Next.js seeded random)
 	gridSize := 6
 	tileBaseSize := 100.0 / float64(gridSize)
 
-	// Seeded random to match Next.js
 	seed := int64(12345)
 	seededRandom := func() float64 {
 		seed = (seed*9301 + 49297) % 233280
@@ -47,25 +43,21 @@ func Logo(size string) g.Node {
 				g.El("svg",
 					g.Attr("width", "100%"),
 					g.Attr("height", "100%"),
-					g.Attr("viewBox", "0 0 32 32"),
-					g.Attr("shape-rendering", "crispEdges"),
+					g.Attr("viewBox", "0 0 256 256"),
 					g.Attr("style", fmt.Sprintf(
-						"position: absolute; width: %.2f%%; height: %.2f%%; left: -%.2f%%; top: -%.2f%%; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(0); -webkit-transform: translateZ(0);",
+						"position: absolute; width: %.2f%%; height: %.2f%%; left: -%.2f%%; top: -%.2f%%;",
 						(100.0/tileBaseSize)*100, (100.0/tileBaseSize)*100, (x/tileBaseSize)*100, (y/tileBaseSize)*100,
 					)),
 					g.El("rect",
-						g.Attr("width", "32"),
-						g.Attr("height", "32"),
+						g.Attr("width", "256"),
+						g.Attr("height", "256"),
 						Class("fill-foreground"),
-						g.Attr("shape-rendering", "crispEdges"),
 					),
 					g.El("g",
-						g.Attr("transform", "translate(16,16) rotate(40.5) translate(-16,-16)"),
-						g.Attr("shape-rendering", "crispEdges"),
+						g.Attr("transform", "translate(128,128) rotate(40.5) translate(-128,-128)"),
 						g.El("path",
-							g.Attr("d", "M8.5 24 L8.5 8 L10.5 8 L15.2 18 L16.8 18 L21.5 8 L23.5 8 L23.5 24 L21.5 24 L21.5 10.5 L17.2 20.5 L14.8 20.5 L10.5 10.5 L10.5 24 L8.5 24 Z"),
+							g.Attr("d", "M68 192 L68 64 L84 64 L121.6 144 L134.4 144 L172 64 L188 64 L188 192 L172 192 L172 84 L137.6 164 L118.4 164 L84 84 L84 192 Z"),
 							Class("fill-background"),
-							g.Attr("shape-rendering", "crispEdges"),
 						),
 					),
 				),
@@ -73,16 +65,31 @@ func Logo(size string) g.Node {
 		}
 	}
 
+	// Clean single SVG shown after animation completes
+	cleanSVG := g.El("svg",
+		g.Attr("width", "100%"),
+		g.Attr("height", "100%"),
+		g.Attr("viewBox", "0 0 256 256"),
+		g.Attr("class", "logo-clean absolute inset-0 w-full h-full"),
+		g.El("rect",
+			g.Attr("width", "256"),
+			g.Attr("height", "256"),
+			Class("fill-foreground"),
+		),
+		g.El("g",
+			g.Attr("transform", "translate(128,128) rotate(40.5) translate(-128,-128)"),
+			g.El("path",
+				g.Attr("d", "M68 192 L68 64 L84 64 L121.6 144 L134.4 144 L172 64 L188 64 L188 192 L172 192 L172 84 L137.6 164 L118.4 164 L84 84 L84 192 Z"),
+				Class("fill-background"),
+			),
+		),
+	)
+
 	return g.Group([]g.Node{
-		// Component-specific styles
 		g.El("style", g.Raw(`
 			@keyframes tile-reveal {
-				from {
-					opacity: 0;
-				}
-				to {
-					opacity: 1;
-				}
+				from { opacity: 0; }
+				to { opacity: 1; }
 			}
 
 			.logo-tile {
@@ -90,21 +97,13 @@ func Logo(size string) g.Node {
 				opacity: 0;
 			}
 
-			.logo-tile svg {
-				-webkit-font-smoothing: none;
-				-moz-osx-font-smoothing: grayscale;
-				text-rendering: optimizeLegibility;
-				shape-rendering: crispEdges;
+			.logo-clean {
+				opacity: 0;
+				transition: opacity 0.15s ease-in;
 			}
 
-			.logo-tile path {
-				shape-rendering: crispEdges;
-			}
-
-			.animated-logo {
-				image-rendering: -webkit-optimize-contrast;
-				image-rendering: crisp-edges;
-				image-rendering: pixelated;
+			.logo-clean.visible {
+				opacity: 1;
 			}
 
 			.animated-logo .logo-tile:nth-child(1) { animation-delay: 0.826s; }
@@ -146,11 +145,19 @@ func Logo(size string) g.Node {
 		`)),
 		Div(
 			Class(sizeClass+" flex-shrink-0 relative animated-logo"),
+			cleanSVG,
 			g.Group(tiles),
 		),
+		g.El("script", g.Raw(`
+			(function() {
+				setTimeout(function() {
+					document.querySelectorAll('.animated-logo').forEach(function(logo) {
+						var clean = logo.querySelector('.logo-clean');
+						if (clean) clean.classList.add('visible');
+						logo.querySelectorAll('.logo-tile').forEach(function(t) { t.remove(); });
+					});
+				}, 2200);
+			})();
+		`)),
 	})
-}
-
-func init() {
-	rand.Seed(12345)
 }

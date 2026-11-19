@@ -26,14 +26,20 @@ go mod download
 go install github.com/air-verse/air@latest
 ```
 
-## ▶ Run
+## ▶ Dev
 
 ```bash
 make dev
 ```
 
-## ▲ Deploy
+## ▲ Staging
 
 ```bash
-./scripts/deploy.sh
+make staging
+```
+
+## ▲ Prod
+
+```bash
+make prod
 ```

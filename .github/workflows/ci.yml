@@ -1,0 +1,175 @@
+name: CI
+
+# Pull requests into main (drafts included) deploy the staging stack; pushes
+# to main deploy prod. Nothing deploys unless the checks pass.
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}
+  PULUMI_VERSION: 3.277.0
+  VPS: debian@158.69.218.225
+  VPS_HOST_KEY: 158.69.218.225 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEjpObIuSVN3TC00jbHxg8wnawZpvcSJ70jiZ9aUGjmt
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: go.mod
+      - run: test -z "$(gofmt -l src)"
+      - run: go vet ./src/app/...
+      - run: go test ./src/app/... -count=1
+      - run: go run golang.org/x/vuln/cmd/govulncheck@v1.10.0 ./...
+
+  image:
+    needs: check
+    # Fork PRs get no secrets and must not push images.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    outputs:
+      ref: ${{ steps.ref.outputs.ref }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true
+      - id: ref
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: echo "ref=${IMAGE}@${DIGEST}" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: image
+    runs-on: ubuntu-24.04
+    environment: ${{ github.event_name == 'push' && 'production' || 'staging' }}
+    concurrency:
+      group: deploy-${{ github.event_name == 'push' && 'prod' || 'staging' }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      packages: read
+      pull-requests: write
+    env:
+      STACK: ${{ github.event_name == 'push' && 'prod' || 'staging' }}
+      PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pulumi/actions@96c7761824268174e0d2a4e8c7d75671eebd24a7 # v7.1.0
+        with:
+          pulumi-version: ${{ env.PULUMI_VERSION }}
+
+      - name: ssh
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_HOST_KEY" > ~/.ssh/known_hosts
+
+      # One-time: hand the old Go stacks over without running their delete hooks
+      # (the firewall resource would reset UFW). Removed once both stacks are gone.
+      - name: retire legacy stack
+        working-directory: infra/legacy
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+        run: |
+          if pulumi stack select "$STACK" 2>/dev/null; then
+            # Dependents first: docker-run depends on docker-build. Skip only
+            # resources that are not in state; any other error fails the step.
+            state=$(pulumi stack export)
+            for r in docker-run docker-build firewall-rules; do
+              urn="urn:pulumi:${STACK}::me::command:remote:Command::${r}"
+              if grep -qF "\"${urn}\"" <<<"$state"; then
+                pulumi state delete --yes "$urn"
+              fi
+            done
+            if [ "$STACK" = staging ]; then
+              ssh -o StrictHostKeyChecking=yes "$VPS" 'docker rm -f staging >/dev/null 2>&1 || true'
+            fi
+            pulumi destroy --yes --suppress-progress
+            pulumi stack rm --yes "$STACK"
+          fi
+
+      - name: app
+        working-directory: infra/app
+        env:
+          IMAGE_REF: ${{ needs.image.outputs.ref }}
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          pulumi stack select --create "$STACK"
+          pulumi config set image "$IMAGE_REF"
+          pulumi config set registryUser "$ACTOR"
+          printf '%s' "$REGISTRY_TOKEN" | pulumi config set --secret registryToken
+          printf '%s' "$SSH_KEY" | pulumi config set --secret sshKey
+          pulumi up --yes --diff --suppress-progress
+
+      - name: edge
+        if: env.STACK == 'prod'
+        working-directory: infra/edge
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          pulumi stack select --create prod
+          printf '%s' "$SSH_KEY" | pulumi config set --secret sshKey
+          pulumi up --yes --diff --suppress-progress
+          # The old prod container published :80; with the tunnel up it can go.
+          ssh -o StrictHostKeyChecking=yes "$VPS" 'docker rm -f prod >/dev/null 2>&1 || true'
+
+      - name: comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          REF: ${{ needs.image.outputs.ref }}
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body: [
+                `Staging deployed: \`${process.env.REF}\``,
+                '',
+                'It listens on the VPS loopback only. Open it through SSH:',
+                '```bash',
+                'ssh -N -L 8080:127.0.0.1:8080 debian@158.69.218.225',
+                '```',
+                'then http://127.0.0.1:8080',
+              ].join('\n'),
+            });

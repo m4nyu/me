@@ -1,3 +1,0 @@
-.env
-Pulumi.*.yml
-!Pulumi.yaml

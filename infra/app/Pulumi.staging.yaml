@@ -1,0 +1,2 @@
+config:
+  me-app:publish: -p 127.0.0.1:8080:3000

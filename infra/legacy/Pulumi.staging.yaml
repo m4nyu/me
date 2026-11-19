@@ -1,0 +1,6 @@
+config:
+  me:vpsHost: "158.69.218.225"
+  me:vpsUser: "debian"
+  me:gitRepo: "m4nyu/me"
+  me:gitBranch: "main"
+encryptionsalt: v1:RTlIej6Av4s=:v1:fDO7i26eIZJbjza/:LvIdhBp4hKeW+MURRW9/eCnLXC1/ng==
