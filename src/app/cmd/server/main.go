@@ -41,8 +41,6 @@ func main() {
 	r.Post("/api/theme", handlers.SetTheme)
 	r.Post("/api/lang", handlers.SetLanguage)
 
-	r.Get("/livereload", middleware.LiveReloadHandler)
-
 	port := getPort()
 	fmt.Printf("Server starting on http://localhost%s\n", port)
 	if err := http.ListenAndServe(port, r); err != nil {
@@ -89,4 +87,3 @@ func handleHomeWithLang(w http.ResponseWriter, r *http.Request, langCode string)
 	w.Header().Set("Content-Type", "text/html")
 	_ = page.Render(w)
 }
-

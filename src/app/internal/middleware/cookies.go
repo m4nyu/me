@@ -63,7 +63,6 @@ func GetLang(r *http.Request) string {
 	return "EN"
 }
 
-
 func detectLanguageFromHeader(r *http.Request) string {
 	acceptLang := r.Header.Get("Accept-Language")
 	if acceptLang == "" {

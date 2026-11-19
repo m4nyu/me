@@ -24,7 +24,7 @@ func SetTheme(w http.ResponseWriter, r *http.Request) {
 		Value:    theme,
 		Path:     "/",
 		MaxAge:   365 * 24 * 60 * 60, // 1 year
-		HttpOnly: false,               // Allow JavaScript to read for client-side logic if needed
+		HttpOnly: false,              // Allow JavaScript to read for client-side logic if needed
 		SameSite: http.SameSiteLaxMode,
 	})
 
@@ -34,7 +34,6 @@ func SetTheme(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
-
 
 func SetLanguage(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

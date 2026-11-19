@@ -146,37 +146,37 @@ func LanguageDrawer(currentLang string) g.Node {
 				Class("drawer-toggle"),
 				g.Attr("style", "display: none;"),
 			),
-		Div(
-			Class("drawer-overlay hidden fixed inset-0 bg-black/50 z-50 opacity-0 transition-opacity duration-300"),
-			ID("language-drawer-overlay"),
-			g.Attr("aria-label", "Close drawer"),
-		),
-		Div(
-			Class("drawer-content fixed bottom-0 left-0 right-0 z-[51] bg-background border-t border-foreground max-h-[80vh] translate-y-full transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"),
-			ID("language-drawer-content"),
 			Div(
-				ID("drawer-drag-handle"),
-				Class("pb-2"),
+				Class("drawer-overlay hidden fixed inset-0 bg-black/50 z-50 opacity-0 transition-opacity duration-300"),
+				ID("language-drawer-overlay"),
+				g.Attr("aria-label", "Close drawer"),
+			),
+			Div(
+				Class("drawer-content fixed bottom-0 left-0 right-0 z-[51] bg-background border-t border-foreground max-h-[80vh] translate-y-full transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"),
+				ID("language-drawer-content"),
 				Div(
-					Class("mx-auto mt-4 mb-2 h-1 w-[100px] rounded-full bg-foreground"),
+					ID("drawer-drag-handle"),
+					Class("pb-2"),
+					Div(
+						Class("mx-auto mt-4 mb-2 h-1 w-[100px] rounded-full bg-foreground"),
+					),
+					Div(
+						Class("flex flex-row items-center justify-between relative px-4"),
+						H2(
+							Class("text-foreground font-light text-lg"),
+							g.Text(i18n.T(currentLang, "choose_language")),
+						),
+					),
 				),
 				Div(
-					Class("flex flex-row items-center justify-between relative px-4"),
-					H2(
-						Class("text-foreground font-light text-lg"),
-						g.Text(i18n.T(currentLang, "choose_language")),
+					Class("overflow-y-auto max-h-[calc(80vh-8rem)] p-4 pt-2"),
+					Div(
+						Class("grid grid-cols-4 gap-1"),
+						g.Group(languageItems),
 					),
 				),
 			),
-			Div(
-				Class("overflow-y-auto max-h-[calc(80vh-8rem)] p-4 pt-2"),
-				Div(
-					Class("grid grid-cols-4 gap-1"),
-					g.Group(languageItems),
-				),
-			),
-		),
-		g.El("script", g.Raw(`
+			g.El("script", g.Raw(`
 			(function() {
 				const drawer = document.getElementById('language-drawer-content');
 				const handle = document.getElementById('drawer-drag-handle');
