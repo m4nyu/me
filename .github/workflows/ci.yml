@@ -109,8 +109,14 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
         run: |
           if pulumi stack select "$STACK" 2>/dev/null; then
-            for r in firewall-rules docker-build docker-run; do
-              pulumi state delete --yes "urn:pulumi:${STACK}::me::command:remote:Command::${r}" || true
+            # Dependents first: docker-run depends on docker-build. Skip only
+            # resources that are not in state; any other error fails the step.
+            state=$(pulumi stack export)
+            for r in docker-run docker-build firewall-rules; do
+              urn="urn:pulumi:${STACK}::me::command:remote:Command::${r}"
+              if grep -qF "\"${urn}\"" <<<"$state"; then
+                pulumi state delete --yes "$urn"
+              fi
             done
             if [ "$STACK" = staging ]; then
               ssh -o StrictHostKeyChecking=yes "$VPS" 'docker rm -f staging >/dev/null 2>&1 || true'
